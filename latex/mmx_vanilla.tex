@@ -1,0 +1,164 @@
+\section{Relation between Euclidean Steiner Tree and MMX}
+
+\subsection{Euclidean Steiner Tree}
+
+Given a set of points $P$ in $\mathbb{R}^N$, the Euclidean Steiner Tree problem is to find the shortest tree (possibly
+adding new points) that connects all points in $P$. Calling the resulting graph $G = (V, E)$, the cost of the tree is
+\begin{equation}
+    \sum_{(u, v) \in E} \|u - v\|
+\end{equation}
+Where $\| \cdot \|$ is the Euclidean norm.
+
+\subsection{MMX}
+The MMX is defined in \ref{Paper linkato} as follows: given a set of points $P$ in $\mathcal{R}^N$, the minimization problem is:
+
+\begin{align}
+    \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|a^i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} \|x^i - x^j\| y_{ij}, \\
+    & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+    & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
+    & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+    & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S.
+\end{align}
+
+Where: \begin{itemize}
+           \item $P$ is the set of terminals,
+           \item $S$ is the set of Steiner points (in this case $S = \{|P| + 1, ..., 2|P|-2\}$),
+           \item $E_1$ is the set of edges connecting terminals to Steiner points,
+           \item $E_2$ is the set of edges connecting Steiner points
+\end{itemize}
+
+\subsection{Relation between the two problems}
+
+The MMX problem "solves" the ESTP in the sense that under certain conditions, the optimal solution of MMX corresponds to
+the optimal EST.
+Explicitly, we can construct a function $\phi$ that maps feasible solutions of MMX to feasible solutions of ESTP and such
+that the following commutative diagram holds:
+
+\[
+    \begin{tikzcd}
+        & \mathbb{R}  \\
+        MMX \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & EST  \arrow[ul, "Obj"]
+    \end{tikzcd}
+\]
+
+Where $Obj$ is the objective function of the respective problems and MMX and EST are the feasible regions.
+
+\subsection{Definition of $\phi$}
+The function $\phi$ maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|}$ to a graph in $\mathbb{R}^N$ as follows:
+
+\begin{enumerate}
+    \item For each $i \in P$, add a terminal at $a^i$.
+    \item For each $j \in S$, add a vertex $v_j$ at $x^j$.
+    \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
+\end{enumerate}
+
+There are a few issues with this identification: $\phi$ is neither injective (there is a permutation invariance in the index of both
+Steiner points and terminals) nor surjective, as for instance, the number of vertices is fixed. It is known \ref{Boh} that the number of Steiner points
+in an optimal EST cannot be bigger than the ones included in MMX, but it could be lower (in the paper it is specified that
+this formulation only holds for full Steiner topologies).
+It is easy to see that the objective functions are the same as they both sum the Euclidean distances of the active edges.
+
+
+\textbf{Claim} Calling MMX and EST the respective feasible regions, we have that $\phi(MMX) \subseteq EST$.
+
+\begin{proof}
+    Let $x \in MMX$ and $G = \phi(x)$. We need to show that $G$ is a tree (so connected and loop-free).
+    By the first constraints, we know each terminal is connected to a Steiner point and constraint (\ref{MMX:connectivity_steiner}) ensures that
+    all Steiner points are connected, so $G$ is connected.
+    By edge counting, we deduce that $G$ is a tree.
+\end{proof}
+
+
+
+\textbf{Claim} The optimal solution of MMX is also optimal for ESTP.
+
+\begin{proof}
+    We know from \ref{Libro di optimal transport} that the optimal solution for the ESTP is a tree with
+    number of vertices $|V| \le 2|P| - 2$ and degree of each vertex $d(v) \le 3$.
+    We can show that for each graph with those properties there is an element in $MMX$ that maps to it.
+    In $MMX$ the degree of terminals is fixed to 1 but we can add a Steiner point with coordinates equal to the terminal
+    (so allowing a degenerate solution) and make the following construction (for the case $d(v) = 2$):
+
+    OLD PART:
+    We add a vertex $i$ with coordinate $x_i = a_j$, we activate edge (of length 0) connecting $i$ to $j$. Then the two
+    edges connecting $j$ to the other points are attached to $i$, in this way the degree of the degenerate Steiner point is
+    3 and the degree of the terminal is 1.
+    We can do a similar construction (but with 2 Steiner points) for the case $d(v) = 3$.
+    We still need to do some edges and vertices counting to finish the proof (maybe an induction on the number of vertices?).
+
+    NEW PART:
+    We will not do an induction but provide a procedure to add Steiner points until there are enough of them, while keeping
+    the graph structure the same. We will then show that those operation preserve all the properties of the MMX problem.
+
+    By doing some edge counting we know that
+    \begin{equation}
+        |E| = \frac{1}{2} \left( 3|S| + \sum_{i \in P} d(i) \right)
+    \end{equation}
+    Which implies that:
+    \begin{equation}
+        \sum_{i \in P} d(i) = 2|P| - 2 - |S|
+    \end{equation}
+    If $|S| = 2|P| - 2$ we are done, otherwise we can find a terminal $i$ with $d(i) = 2,3$ and add 1 or 2 Steiner points respectively.
+    \begin{itemize}
+
+        \item Case $d(i) = 1 $: we add a Steiner point $s$ with connection to the two points connected to $i$ and remove the edge
+        connecting $i$ to the other terminal. We also connect $s$ to the terminal $i$.
+
+        \item Case $d(i) = 2$: Calling the points connected to $i$ $z_1, z_2, z_3$ we add two Steiner points $s_1, s_2$ and connect
+        $s_1$ to $(z_1, s_2, i)$ and $s_2$ to $(s_1, z_2, z_3)$.
+    \end{itemize}
+
+    In this way we preserve connectedness, loop-freeness and the number of (non-degenerate) vertices. Connectedness implies
+    \ref{MMX:connectivity_steiner} up to reordering of the Steiner points.
+    We can repeat the procedure until $|S| = |P| - 2$ which is our desired number of Steiner points.
+    We get that the degree of every terminal is 1 and the degree of every Steiner point is 3, so all the conditions
+    of MMX are satisfied.
+
+
+\end{proof}
+
+
+\section{Relation between Euclidean Steiner Tree and branched transport}
+
+\subsection{Definition of branched transport}
+For now, I will use the Lagrangian formulation of branched transport, as defined in \ref{Libro di branched transport}.
+
+Given $X \subset \mathbb{R}^N$ compact and two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is
+a measure $P$ on $K$ that transports $\mu^+$ to $\mu^-$.
+Formally, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$,
+$P$ is a traffic plan if:
+\[
+    \mu^+ = (\pi_0)_{\#}P, \quad \mu^- = (\pi_\infty)_{\#}P
+\]
+
+\subsection{Parameterized Traffic Plans}
+The next paragraph is copied from the book:
+
+
+According to Skorokhod theorem (Theorem A.3 p. 185), we can parameterize any traffic plan $P$ by a measurable function
+$\chi : \Omega = [0, |\Omega|] \rightarrow K$ such that $P = \chi_{\#} \lambda$, where $\lambda$ is the Lebesgue measure
+on $[0, |\Omega|]$. We shall set $\chi(\omega, t) := \chi(\omega)(t)$ and consider it as a function of the variable pair
+$(\omega, t)$.
+
+With this formulation the energy (or cost) of a parametrized traffic plan is:
+\begin{equation}
+    E^{\alpha}(P) = \int_{\mathbb{R}^N} |x|_P^{\alpha} d \mathcal{H}^1(x)
+\end{equation}
+There are also other formulations and under some assumptions they are equivalent. In particular there should be no problem
+for finite atomic measures.
+
+\subsection{Relation between branched transport and ESTP}
+
+We can reduce any ESTP (in the algorithmic sense) to an instance of a branched transport problem.
+Given a set of terminals $P = \{a^1, ..., a^{|P|}\}$ we can define:
+\begin{equation}
+    \mu^+ = \delta_{a^1} \quad \mu^- = \frac{1}{|P| - 1}\sum_{i = 2}^{|P|} \delta_{a^i}
+\end{equation}
+and set $\alpha =0$ in the cost function.
+We can then use results from branched transport to say that the optimal parametrized
+traffic plan is a graph and it is loop-free. We will now prove that it is connected and conclude that it is a tree.
+
+For each terminal $a^i$ (with $i>1$) we have a subset $A_i \subset [0,1]$ such that $\chi(A_i)$ are all paths terminating at $a^i$ and
+$\chi(A_i)(0) = a_1$.
+We can easily conclude that every terminal is connected to $a_1$ and therefore the graph is connected.
+

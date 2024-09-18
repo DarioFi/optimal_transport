@@ -1,0 +1,232 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Branched optimal transport}
+\author{Antonio De Rosa, Dario Filatrella, Aida Khajavirad}
+\date{August 2024}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{tikz-cd}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+% Document
+
+\renewcommand\qedsymbol{$\cdot$}
+
+
+\begin{document}
+
+    \maketitle
+
+
+
+    \input{mmx_vanilla}
+
+
+    \section{Generalization of MMX}
+
+    \subsection{Things to do}
+    \begin{itemize}
+        \item Write down formulation for alpha different from 0
+        \item Show it is correct
+        \item Add degree constraint
+        \item Run computations for the degree
+        \item Look into the other optimization to see if the closest points rule is also ok
+        \item Use theoretical results for LB improvement (Wesserstein distance)
+    \end{itemize}
+
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|a^i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|x^i - x^j\| y_{ij} \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \\
+        & f_{ij} \le y_{ij} \quad \text{for } i,j \in S \cup P \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S. \\
+        & y_{ij} = y_{ji} \quad \text{for } i,j \in S \cup P \\
+        & f_{ij} \in [0,1] \quad \text{for } i,j \in S \cup P\\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N) \quad \text{for } j \in S \\
+    \end{align}
+
+    \subsection{Correctedness of the formulation}
+    We first prove that this formulation includes all topologies where leaves are terminals.
+    We know that the degree of each Steiner point is at least 3 and that the solutions are loop-free.
+    Therefore $|E| \le |V| - 1$, calling $S$ the number of Steiner points we have:
+    \begin{equation}
+        2|E| \ge 3S + |P| - 1
+        |V| = |P| + S
+    \end{equation}
+    Which implies
+    \begin{equation}
+        |P| -2 \ge S
+    \end{equation}
+
+    So we have enough Steiner points.
+    For the same topology with even fewer Steiner points we can just remove one by giving
+    flow 0 to all the edges connected to it.
+    \\
+
+    If a terminal has degree bigger than 1 we should be able to do a similar construction as above (todo formalize this).
+    Assume a terminal $t$ has degree $d$. We add a Steiner point $s$ connecting $(t,s), (s, s_1), (s, s_2)$ where $s_1, s_2$
+    are two nodes connected to $t$. In this way we added a new Steiner point and we reduced the degree of $t$ by 1.
+    We can repeat this process until all terminals have degree 1. We only need to test that we have enough steiner points.
+
+    \subsection{Angle constraint}
+    Depending on $\alpha$ and $N$ we have a different constant that bounds the degree of each Steiner point and terminal.
+    Using results from \cite[12.15]{Bernot} we know that two branches having angle $\theta$ satisfy:
+    \begin{equation}
+        \cos(\theta) \le \max(2^{2\alpha - 1} -1,0)
+    \end{equation}
+
+    We know that for dim 2 the degree is at most 3 (\cite{paper mandato per mail che si chiama così}).
+
+    In the case where $B$ is the source for $A_1, A_2$ \cite[lemma 12.2]{Bernot} tells us:
+    \begin{equation}
+        \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+    \end{equation}
+
+    This bound holds for every instance of the problem.
+
+
+    \section{Improving the bound with instance specific information}
+
+    \subsection{Known result}
+    We also know from \cite[lemma 12.16]{Bernot} that:
+    Let $e^+ = A + B$ and $ e^- = B - A$  be two oriented edges with length $r$ . Let $P$ be a traffic plan made of the two
+    edges  $e^+$  and $ e^-$  with masses $m$ and $m'$ , $m \geq m'$. If $ P$  is optimal, the angle
+    $\theta$  between  $e^+$  and  $e^- $ is such that
+
+    \begin{equation}
+        \cos(\theta) \leq \left( \frac{m}{m'} - 1 \right)^\alpha - \left( \frac{m}{m'} \right)^\alpha.
+    \end{equation}
+    In particular, $ \theta$  is strictly superior to $\frac{\pi}{2}$.
+
+    There is a known result that in 2d there can only be 3 branches (for all alfa) \cite{Paper mandato via mail}.
+
+    \subsection{Attempt to improve lemma 12.16}
+
+    In the book they add a branching point on one of the already existing branches. Here I try to add it in the span of the
+    two branches.
+
+    Assuming $A^+$ and $A^-$ lie on the unit circle and that the branching point is called $x$ and that $B$ is at the origin we get
+    \begin{equation}
+        f(x) = m^{\alpha}\|A^+ - x \| + M^{\alpha} \|A^- - x\| + (M-m)^{\alpha} \|x\|
+    \end{equation}
+    By setting $x = \epsilon v$ with $\|v\|=1$ and expanding to the first order around $\epsilon=0$:
+    \begin{equation}
+        f(\epsilon v) = f(0) - \epsilon m^{\alpha} v \cdot A^+ - \epsilon M^{\alpha} v \cdot A^- + (M-m)^{\alpha} \epsilon + o(\epsilon)
+    \end{equation}
+
+    Given that we only want to see that $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
+    \begin{wrapfigure}{r}{0.5\textwidth}  % 'r' places the figure on the right; '0.5\textwidth' sets the width        \centering
+        \includegraphics[width=0.5\textwidth]{circle}
+        \caption{Diagram of $A^+$, $A^-$ and $B$}
+    \end{wrapfigure}
+
+    We can parametrize $v$ with the angle $\beta$ from $A^+$ (going toward $A^-$) and get to the following equation:
+    \begin{equation}
+        f(\epsilon) - f(0) = \epsilon \left[ (M-m)^\alpha - m^\alpha \cos\beta - M^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
+    \end{equation}
+
+    To prove that $\theta$ is not optimal we can either have $\exists \beta$ such that the above expression is negative or
+    that $g(\beta) \ge 0$ for all $\beta$.
+
+    Now we want to fix $\theta, M, m$ and study the minimum of this function:
+    \begin{equation}
+    (M-m)
+        ^\alpha - m^\alpha \cos\beta - M^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
+    \end{equation}
+
+    Calling $t = \cos(\beta)$ we get the following equations needs to have a solution for $\beta$:
+    \begin{equation}
+    (M-m)
+        ^{\alpha} + \cos\beta(-m^\alpha-M^\alpha t) + \sin\beta(M^\alpha \sqrt{1-t^2}) = 0
+    \end{equation}
+
+    Having a value of $\beta$ such that the above equation evaluates to 0 is not enough, we should also check if on one side there is
+    a minimum.
+    We also know there is a $\beta$ such that the value is negative (take beta outside of span of $A^+, A^-$ contradicting the convex
+    hull property of the optimal solution). This implies that in case of non-optimal $\theta$ this function needs to pass
+    through 0.
+
+
+    By solving this equation (todo check condition $c^2 \le a^2 + b^2$) we get the condition:
+    \begin{equation}
+        t \ge \frac{(M-m)^{2\alpha} - M^{2\alpha} - m^{2\alpha}}{2m^\alpha M^\alpha}
+    \end{equation}
+    Which is almost the same as lemma 12.2. There are some signs which are different so maybe I should check the computation but the
+    assumptions are also slightly different (in particular one of the flows is in the other direction, which explains the $M-m$ instead
+    of $M+m$).
+
+    General observation:
+    this new bound can be used on every Steiner point, but we should be careful because due to degeneracy those points
+    can also be in the support of the distribution.
+
+    \subsection{Recap}
+    We have two conditions, depending on the direction of the flows.
+    If both flows are going in the same direction we have:
+    \begin{equation}
+        \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+    \end{equation}
+
+    If one flow is going in the opposite direction we have:
+    \begin{equation}
+        \cos(\theta) \le \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+    \end{equation}
+
+    We are just left to compute the maximum possible given the constraint that $m_1, m_2$ need to be a combination of the masses
+    of the specific instance.
+
+    \subsection{Solving the maximization problem}
+
+    For the first case, we have two different behaviorurs depending on the value of $\alpha$:
+    \begin{itemize}
+        \item If $\alpha \le 1/2$ we have that the function is decreasing in $m_1$ for fixed $m_2$. Therefore the maximum is achieved when $m_1$ is the smallest and $m_2 = 1 - m_1$ (assuming the sum of the masses is 1).
+        \item If $\alpha > 1/2$ we have that the function is increasing in $m_1$ for fixed $m_2$ and $m_1 \le m_2$. The maximum is achieved at $m_1 = m_2$ and we should aim to solve a closest subset sum problem.
+    \end{itemize}
+
+    The first case is easy, the second appears to be NP complete. In practice by the pigeonhole principle we have an upper bound on the distance of
+    $1/n$ if there are n masses. Combining with the flatness of the function around $m_1 = m_2$ it might not be worth solving the problem exactly.
+    We need a lower bound on the distance (rather than an upper bound) so it could be more difficult to obtain one, but if the upper bound is very close
+    to the theoretical best (which is 0) we might just use the known sup $2^{2\alpha-1}-1$.
+
+    It also seems that we could put a tolerance, as all values close to 0 give a very similar bound. (Maybe
+    computing the second or third derivative around $m_1=m_2$ w.r.t. $m_1-m_2$ will give us a quantitative measure of).
+    \\
+    For the second case, we know this bound will be tighter than the first. We cannot know in advance the kind of angle we will encounter
+    so we should just take the maximum among the two. This function exhibits a similar behaviour neverthless and we can refer to the
+    graphs in the jupyter notebook.
+
+    \subsection{From angle to degree}
+
+    We know from \cite{coso sui cap sferici} that we can fit at most $C(\theta/2)$ arcs with distance among them at least $\beta$ where the expression for $C(\cdot)$
+    is given by:
+    \begin{enumerate}
+        \item[(i)] \( C(\beta) = 1 \text{ for } \frac{1}{2}\pi < \beta \leq \pi; \)
+        \item[(ii)] \( C(\beta) = \left\lfloor \frac{2 \sin^2 \beta}{2 \sin^2 \beta - 1} \right\rfloor \text{ for } \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N} \leq \beta \leq \frac{1}{2}\pi; \)
+        \item[(iii)] \( C(\beta) = N + 1 \text{ for } \frac{1}{4}\pi < \beta \leq \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N}; \)
+        \item[(iv)] \( C\left(\frac{1}{4}\pi\right) = 2N. \)
+    \end{enumerate}
+
+    If $0 < \beta < \frac{1}{4}\pi$ and $\gamma = \sin^{-1}\left(\frac{\sqrt{2} \sin \beta}{2}\right)$, then
+    \begin{equation}
+        C(\beta) \leq \frac{\pi \Gamma\left(\frac{N-1}{2}\right) \sin \gamma \tan \gamma}{2 \Gamma\left(\frac{N}{2}\right) \int_0^{\gamma} (\sin \phi)^{N-2} (\cos \phi - \cos \gamma) \, d\phi} = C^*(\beta)
+    \end{equation}
+
+    Further, for large $N$
+    \begin{equation}
+        C^*(\beta) \sim \frac{\frac{1}{2}\pi N^3 \cos 2\beta}{(\frac{\sqrt{2} \sin \beta}{2})^{N-1}}
+    \end{equation}
+
+    Provided that $\sec 2\beta = o(N)$.
+
+    If two branches cannot have an angle smaller than $\theta$, then each one occupies a spherical cap of angle $\theta/2$, so we have:
+
+    \begin{equation}
+        deg(\beta, N) \leq C(\theta/2)
+    \end{equation}
+
+\end{document}

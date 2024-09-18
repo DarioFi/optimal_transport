@@ -1,0 +1,88 @@
+%! Author = dario
+%! Date = 7/27/24
+
+% Preamble
+\documentclass[11pt]{article}
+
+\title{Optimal Transport}
+\author{Dario Filatrella}
+\date{July 2024}
+% Packages
+\usepackage{amsmath}
+
+% Document
+\begin{document}
+    \maketitle
+
+
+    \section{Equiboundedness of length of fibers}
+
+    What we want to show is that, for fixed $\alpha$, $\mu^+$ and $\mu^-$, the optimal transport parametrization $\chi$
+    is equibounded in the sense that there is no path $\gamma$ that is non self-intersecting and such that $|\gamma(t)|_\chi$ is decreasing and positive
+    for every $t$.
+    The idea of the proof is to assume that there is such a path and show that it is not optimal by finding a better competitor.
+    Without loss of generality, we can assume that $\gamma$ is parametrized by arc length and that $\gamma(0) = 1$.
+    We define a competitor $\tilde\chi$ as the union of two paths, $\tilde{\gamma}$ and $\tilde{\psi}$, defined as follows:
+    \begin{align*}
+        |\tilde{\gamma}(t)| &= |\gamma(t)| - |\gamma(K)| \quad \text{for } t \in [0, K] \\
+        |\tilde{\gamma}(t)| &= |\gamma(t)| \quad \text{for } t \in [K, \infty) \\
+        \tilde{\gamma}(t) &= \gamma(t) \quad \text{for } t \in [0, \infty) \\
+        |\tilde{\psi}(t)| &= \gamma(K) \\
+        \tilde{\psi}(t) &= \text{Straight line from } \gamma(0) \text{ to } \gamma(K)
+    \end{align*}
+
+    Basically, we cut from the beginning of $\gamma$ the part that is longer than $|\gamma(K)|$ and we add a straight line from
+    $\gamma(0)$ to $\gamma(K)$. We can arbitrarily start from 0 as we can just shift the path to the right and look at the restriction,
+    rescaling it so that it has mass 1.
+
+    We can now compute the cost of $\tilde{\chi}$:
+
+    \begin{align*}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) &= \int_0^K |\psi(t)|^\alpha \psi'(t) \, dt - \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \\
+        &\quad - \int_0^K \gamma(t)^\alpha \, dt \\
+        &\le |\gamma(K)|^\alpha diam(X) +  \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \\
+        &\quad - \int_0^K \gamma(t)^\alpha \, dt \\
+    \end{align*}
+
+    We can now use the concavity of the function $x \mapsto x^\alpha$ to expand to the first order the second term in the right hand side:
+
+    \begin{equation}
+        \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \le \int_0^K \gamma(t)^\alpha - \alpha \gamma(t)^{\alpha - 1} \gamma(K) \, dt
+    \end{equation}
+
+    by linearity of the integral, two terms cancel out and we are left with:
+
+    \begin{equation}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) \le |\gamma(K)|^\alpha diam(X) - \alpha \int_0^K \gamma(t)^{\alpha - 1} \gamma(K) \, dt
+    \end{equation}
+
+    We are left to prove that this is negative for some $K$. Here I got stuck, if we assume that there exist $\epsilon,\epsilon' > 0$ such that
+    $$t^{-\frac{1}{\alpha} - \epsilon'} \le |\gamma(t)| \le t^{-\frac{1}{\alpha} + \epsilon}$$
+    For convenience, we assume that the path starts from 1 instead of 0.
+    then the following computations will yield the desired result. However, I am not sure how to proceed for functions that decrease faster or slower than any power law.
+    I have tried expanding to first and second order the integral at different points but without any good result. What often happens is that
+    after some bounding, I get to an inequality that is too strong and fails for exponentials.
+
+    Here there are the computations for the power law case (setting $d=diam(X)$):
+    \begin{align*}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) &\le d|\gamma(K)|^\alpha - \alpha \int_0^K \gamma(t)^{\alpha - 1} \gamma(K) \, dt \\
+        &\le dK^{(-\frac{1}{\alpha} - \epsilon)\alpha} - \alpha\gamma(K)\int_1^K t^{(-\frac{1}{\alpha} - \epsilon)(\alpha - 1)} \, dt \\
+        &\le dK^{-1 - \epsilon\alpha} - \frac{\alpha}{-\epsilon\alpha + 1/\alpha + \epsilon} \left( \gamma(K) K^{-\epsilon\alpha + 1/\alpha + \epsilon} - \gamma(K) \right) \\
+        &\le dK^{-1 - \epsilon\alpha} - \frac{\alpha}{-\epsilon\alpha + 1/\alpha + \epsilon} \left( K^{-\epsilon\alpha + \epsilon - \epsilon'} - K^{-1/\alpha + \epsilon} \right) \\
+    \end{align*}
+
+    Observe that $\epsilon$ and $\epsilon'$ can be arbitrarily close which implies that $-\epsilon\alpha + \epsilon - \epsilon' > -1/\alpha - \epsilon$.
+    This means that for $K$ sufficiently large the sum of the two terms will be negative and we will have the contradiction.
+
+    We did not really use that the domain $X$ is compact, apart from the fact that the diameter is finite. I tried to use the fact
+    that the path $\gamma$ will get arbitrarily close to itself but without much success. I got to this result: //
+    Let $\gamma$: [0, $\infty$) $\to$ X be a continuous path. Then there exists $x \in X$ and $(t_n)_{n \in  \mathcal{N}} \to \infty$ such that
+    $\gamma(t_n) \to x$.
+    Proof: Consider the set $\{\gamma(n): n \in \mathcal{N}\}$, by compactness we can extract a subsequence that converges to some $x$.
+
+    This also allows us to do the "cut and jump" around a fixed point, but it didn't seem to help. Another thing I tried is to quantify how often
+    it can pass again but I did not find any known result online, and by a volume argument it seems that the time between intersections is too large.
+    Obviously, this cut would not be optimal either as if we zoom close enough this path should look like a Lebesgue segment
+    and its optimal transport parametrization is more complex than a straight line but I wouldn't know how to use this.
+
+\end{document}
