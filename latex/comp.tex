@@ -170,11 +170,13 @@
     If both flows are going in the same direction we have:
     \begin{equation}
         \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+        \label{eq:bound1}
     \end{equation}
 
     If one flow is going in the opposite direction we have:
     \begin{equation}
         \cos(\theta) \le \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+        \label{eq:bound2}
     \end{equation}
 
     We are just left to compute the maximum possible given the constraint that $m_1, m_2$ need to be a combination of the masses
@@ -223,8 +225,8 @@
 
     Provided that $\sec 2\beta = o(N)$.
 
-    If two branches cannot have an angle smaller than $\theta$, then each one occupies a spherical cap of angle $\theta/2$, so we have:
 
+    Therefore, if we have a bound on the angle $\theta$ (given by the max of (\ref{eq:bound1}) and (\ref{eq:bound2})) the degree of the Steiner points is given by:
     \begin{equation}
         deg(\beta, N) \leq C(\theta/2)
     \end{equation}

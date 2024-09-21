@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Define the range of alpha values
-N = 4
+N = 3
 
-alpha_vals = np.linspace(0, .999, 1000)
+alpha_vals = np.linspace(0, .9, 1000)
 
 # Calculate the corresponding N values
 
@@ -17,8 +17,8 @@ print(N_vals[500])
 
 # Plot the results
 plt.plot(alpha_vals, N_vals)
-plt.yscale('log')
-plt.xlabel(r'$\alpha$')
+# plt.yscale('log')
+plt.xlabel(r'$a_1$')
 plt.ylabel(r'$N(\alpha)$')
 plt.title(fr'$N(\alpha)$ for $N = {N}$')
 plt.show()

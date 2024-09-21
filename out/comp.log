@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  18 SEP 2024 10:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  18 SEP 2024 16:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -585,7 +585,7 @@ or  <return>  to continue without it.
 [7 <./circle.png>] [8]
 
 LaTeX Warning: Citation `coso sui cap sferici' on page 9 undefined on input lin
-e 205.
+e 207.
 
 [9] (/home/dario/Programming/Python Projects/optimal_transport/out/comp.aux)
  ***********
@@ -598,10 +598,10 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 14087 strings out of 476076
- 292416 string characters out of 5793775
+ 14089 strings out of 476076
+ 292438 string characters out of 5793775
  1940187 words of memory out of 5000000
- 35953 multiletter control sequences out of 15000+600000
+ 35955 multiletter control sequences out of 15000+600000
  566613 words of font info for 69 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,15n,107p,469b,987s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -621,7 +621,7 @@ onts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/m
 sbm10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
 </usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
 Output written on "/home/dario/Programming/Python Projects/optimal_transport/ou
-t/comp.pdf" (9 pages, 239469 bytes).
+t/comp.pdf" (9 pages, 239462 bytes).
 PDF statistics:
  131 PDF objects out of 1000 (max. 8388607)
  81 compressed objects within 1 object stream
