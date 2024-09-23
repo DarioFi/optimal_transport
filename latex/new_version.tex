@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\usepackage{graphicx}
 
 \title{Branched optimal transport}
 \author{Antonio De Rosa, Dario Filatrella, Aida Khajavirad}
@@ -41,9 +41,10 @@
 
     This definition is taken from \cite{Bernot} and it is known as Lagrangian formulation. \\
 
-    Given $X \subset \mathbb{R}^N$ compact and two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is
+    Given $X \subset \mathbb{R}^N$ compact, $K$ space of 1-Lipschitz path on $X$ and two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is
     a measure $P$ on $K$ that transports $\mu^+$ to $\mu^-$.
-    Formally, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$,
+    Formally, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$, where $T(\gamma)$
+    is the stopping time of the path $\gamma$.
     $P$ is a traffic plan if:
     \[
         \mu^+ = (\pi_0)_{\#}P, \quad \mu^- = (\pi_\infty)_{\#}P
@@ -83,8 +84,8 @@
 
     \subsection{Euclidean Steiner Tree problem}
 
-    A special case of the ESTP is when $\alpha=0$, which implies that the cost function is the sum of the lengths of the edges, and it does not
-    take into account the flow on the edges.
+    A special case of the ESTP is when $\alpha=0$ and a single source is present, which implies that the cost function is
+    the sum of the lengths of the edges, and it does not take into account the flow on the edges.
     In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
     The objective function is then:
     \begin{equation}
@@ -96,11 +97,11 @@
     \subsubsection{Properties of branched transport}
     It is known from \cite{Bernot} that in Branched Transport the optimal solutions have a finite graph structure outside of the
     support of $\mu^+$ and $\mu^-$. In the case of finite atomic measure, this means that the optimal solution is a forest. Furthermore
-    if there is only one source than it is also connected, so a tree.
+    if there is only one source then it is also connected, so a tree.
     For such a graph, the cost function of a parameterized traffic plan is the same as the cost function of the ESTP if no edges with positive mass
     have intersection of positive $\mathcal{H}^1$ measure, which is the case in an optimal solution.
 
-    From this we can deduce that the optimal solution of a Branched transport coincide with solutions to the ESTP.
+    From this we can deduce that the optimal solution of a Branched transport coincide with optimal solutions to the ESTP.
 
     \subsubsection{Construction of an ESTP from a branched transport problem}
 
@@ -220,10 +221,50 @@
 
     \end{proof}
 
-
     \subsection{Generalized MMX}
 
+    We present here a generalization of the MMX formulation that allows for each terminal to have a mass and be either a
+    sink or a source. This comes at a cost, namely some solutions can be unions of disjoint tree and we are imposing connectedness
+    in the formulation. A solver can still find an optimal solution by connecting them and assigning $0$ mass to the edge
+    but this introduces many different optimal solutions. Question: should we restrict to single source?
+
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|a^i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|x^i - x^j\| y_{ij} \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \\
+        & f_{ij} \le y_{ij} \quad \text{for } i,j \in S \cup P \\
+        & y_{ij} = y_{ji} \quad \text{for } i,j \in S \cup P \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S. \\
+        & f_{ij} \in [0,1] \quad \text{for } i,j \in S \cup P\\
+    \end{align}
+
+    where:
+    \begin{itemize}
+        \item $N$: dimension of the space
+        \item $\alpha \in [0,1]$: cost parameter
+        \item $P = \{p_1, \ldots, p_n\}$: set of terminal points
+        \item $M = \{m_1, \ldots, m_n\}$: masses of the terminal points
+        \item $S = \{s_1, \ldots, s_m\}$: set of Steiner points
+        \item $E_1$: set of edges connecting terminals to Steiner points
+        \item $E_2$: set of edges connecting Steiner points
+        \item $f_{xy}$: flow on the edge connecting $x$ to $y$
+        \item $y_{xy}$: binary variable indicating the presence of an edge between $x$ and $y$
+        \item $deg(\alpha, N, M)$: maximum degree of a vertex in the graph
+    \end{itemize}
+
+    In the next section we will compute an upper bound for $deg(\alpha, N, M)$.
+
     \subsection{Proof of correctness}
+    Question: how in detail should I go?
+    Steps:
+    \begin{itemize}
+        \item proof for connected optimal solution where terminals are leaves
+        \item proof for connected optimal solution
+        \item proof for optimal solution
+    \end{itemize}
 
 
     \section{Degree problem}
@@ -259,7 +300,7 @@
         \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
     \end{equation}
 
-    \subsection{Lemma 12.15 \cite{Bernot}}
+    \subsubsection{Lemma 12.15 \cite{Bernot}}
 
     Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
     $s$ to $s_1, s_2$ respectively. Let $\theta$ be the angle between the two edges.
@@ -281,13 +322,13 @@
     \subsection{Improved bounds}
 
     \begin{figure}[h]
-        \label{fig:angle_bound_example_inverted}
         \includegraphics[scale=0.5]{angle_bound_example_inverted}
+        \label{fig:angle_bound_example_inverted}
         \centering
         \caption{Picture of the bound of lemma 12.16}
     \end{figure}
 
-    We can improve the results from the book for the case described by figure \ref{fig:angle_bound_example_inverted} TODO la ref non funziona.
+    We can improve the results from the book for the case described by figure \ref{fig:angle_bound_example_inverted}.
 
     We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and by the property that every restriction of an optimal
     solution is optimal). Calling the candidate new branching point $x$ and setting $s=(0,0)$.
@@ -309,7 +350,6 @@
     \end{figure}
 
     We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
-    todo controlla m1 e m2 qui è asimmetrico
     \begin{equation}
         f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
     \end{equation}
@@ -335,29 +375,30 @@
 
     Having a value of $\beta$ such that the above equation evaluates to 0 is not enough, we should also check if on one side there is
     a minimum.
-    We also know there is a $\beta$ such that the value is negative (take beta outside of span of $p_1, p_2$ contradicting the convex
-    hull property of the optimal solution). This implies that in case of non-optimal $\theta$ this function needs to pass
-    through $0$.
 
-    todo: rendi più chiaro cosa c'è scritto qua sopra
+    Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
+    We also need to verify whether this point corresponds to a local minimum.
+
+    We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
+    span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
+    is not optimal, this function must cross zero.
 
 
-    By solving this equation (todo check condition $c^2 \le a^2 + b^2$) we get the condition:
+    By solving this equation using that $c^2 \le a^2 + b^2$ is a necessary condition for a solution to exist we get:
     \begin{equation}
         t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
     \end{equation}
-    Which is almost the same as lemma 12.2. There are some signs which are different so maybe I should check the computation but the
-    assumptions are also slightly different (in particular one of the flows is in the other direction, which explains the $m_1-m_2$ instead
-    of $m_1+m_2$).
+    Which is almost the same as lemma 12.2. In fact the only difference is that along the edge conencting $s$ to the
+    branching point here we have the difference of the masses instead of the sum.
 
     \subsection{Instance specific bounds}
 
     We now have a bound on the cosine of the angle given the masses of the two edges. Thanks to the loop-free property of the optimal solution,
     we know that the masses on the edges are combinations of masses in $M$. We can then maximize the bound of the cosine
-    under this constraint to find the smallest angle that can be achieved in a specific instance of the problem. We then can
-    use this angle to find a bound on the degree of the Steiner points and terminals.
+    under this constraint to find the smallest angle that can be achieved in a specific instance of the problem. We can
+    use this angle to compute a bound on the degree of the Steiner points and terminals.
 
-    The first thing we notice is (this is useless because the rightmost term has a broader domain sadly):
+    The first thing we notice is (this is useless because the rightmost term has a larger domain):
     \begin{equation}
         \cos(\theta) \ge \frac{(m_1+m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha} \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
     \end{equation}
@@ -384,13 +425,15 @@
     \begin{figure}[h]
         \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_le_1-2}
         \centering
-        \caption{Plot of the bound for $\alpha \le 1/2$}
+        \caption{Plot of the first bound for $\alpha \le 1/2$}
     \end{figure}
+
+    todo: first/second bound is an awful name
 
     \subsubsection{Case $\alpha \ge 1/2$}
 
     The second case apears to be NP complete (this is not a justified claim). In practice we should be able to realistically bound the ratio.
-    Maybe with a pigeonhole argument but it is not clear how to do it. In practice, with high probability there will be masses with ration close to 1.
+    todo: Maybe with a pigeonhole argument but it is not clear how to do it. In practice, with high probability there will be masses with ration close to 1.
     It can be seen from the graph, that even a ratio of 0.5 is already very close to the theoretical maximum.
 
     We need a lower bound on the distance (rather than an upper bound) so it could be more difficult to obtain one (a feasible solution is
@@ -399,30 +442,82 @@
 
     \subsection{Maximizing the second bound}
 
-    We still have to prove that the function is decreasing possa il tuono c
+    We aim to prove that the function
+    \begin{equation}
+        f(m_1) = \frac{(1 - m_1)^{2\alpha} - m_1^{2\alpha} - 1}{2m_1^\alpha}
+    \end{equation}
+    is decreasing. Notice that $\frac{1}{2m_1^\alpha}$ is decreasing, and both $(1 - m_1)^{2\alpha}$ and
+    $-m_1^{2\alpha}$ are also decreasing functions. Therefore, the entire function $f(m_1)$ is decreasing.
+
+    We can now optimize the function over combinations of masses. Our objective is to minimize the ratio
+    $\frac{m_1}{m_2}$. Knowing that fixing $m_2 = 1$ causes the function to decrease in $m_1$ and that the
+    function is homogeneous, we conclude that the minimum is achieved when $m_1 = \min_{i \in M} m_i \) and \( m_2 = \sum_{i \in M} m_i = 1 $.
 
     \begin{figure}[h]
         \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_ge_1-2}
         \centering
-        \caption{Plot of the bound for $\alpha \ge 1/2$}
+        \caption{Plot of the first bound for $\alpha \ge 1/2$}
     \end{figure}
 
     \subsection{Spherical cap results}
 
+
+
+    We know from \cite{Rankin} that the maximum number of spherical cap of angle $\beta$ that can be placed on a sphere
+    in dimension $N$ is given by:
+    \begin{enumerate}
+        \item[(i)] \( C(\beta, N) = 1 \text{ for } \frac{1}{2}\pi < \beta \leq \pi; \)
+        \item[(ii)] \( C(\beta, N) = \left\lfloor \frac{2 \sin^2 \beta}{2 \sin^2 \beta - 1} \right\rfloor \text{ for } \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N} \leq \beta \leq \frac{1}{2}\pi; \)
+        \item[(iii)] \( C(\beta, N) = N + 1 \text{ for } \frac{1}{4}\pi < \beta \leq \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N}; \)
+        \item[(iv)] \( C\left(\frac{1}{4}\pi\right) = 2N. \)
+    \end{enumerate}
+
+    If $0 < \beta < \frac{1}{4}\pi$ and $\gamma = \sin^{-1}\left(\frac{\sqrt{2} \sin \beta}{2}\right)$, then
+    \begin{equation}
+        C(\beta, N) \leq \frac{\pi \Gamma\left(\frac{N-1}{2}\right) \sin \gamma \tan \gamma}{2 \Gamma\left(\frac{N}{2}\right) \int_0^{\gamma} (\sin \phi)^{N-2} (\cos \phi - \cos \gamma) \, d\phi} = C^*(\beta)
+    \end{equation}
+
+    Further, for large $N$
+    \begin{equation}
+        C^*(\beta, N) \sim \frac{\frac{1}{2}\pi N^3 \cos 2\beta}{(\frac{\sqrt{2} \sin \beta}{2})^{N-1}}
+    \end{equation}
+
+    Provided that $\sec 2\beta = o(N)$.
+
+    \subsection{Definition of $deg$}
+
+    In this section we will reacap all the results. Assuming $\sum_{i \in P} m_i = 1$ and $m_1 = \min_{i \in P} m_i$ we have:
+
+    If $\alpha \le 1/2$:
+    \begin{equation}
+        \cos(\theta) \le \max\left(
+        \frac{1 - m_1^{2\alpha} - (1-m_1)^{2\alpha}}{2(m_1(1-m_1))^\alpha},
+        \frac{(1-m_1)^{2\alpha} - m_1^{2\alpha} - 1}{2m_1^\alpha}
+        \right)
+    \end{equation}
+
+    If $\alpha > 1/2$  (assuming we are not optimizing the ratio of the masses):
+    \begin{equation}
+        \cos(\theta) \le \max\left(
+        2^{2\alpha - 1} - 1,
+        \frac{(1-m_1)^{2\alpha} - m_1^{2\alpha} - 1}{2m_1^\alpha}
+        \right)
+    \end{equation}
+
+
+    Calling $\theta_{\max}(M, \alpha)$ as the angle that achieves the maximum above, we can then define $deg(M, N, \alpha)$ as:
+    \begin{equation}
+        deg(M, N, \alpha) = C\left( \frac{ \theta_{\max}(M, \alpha) }{2}, N\right)
+    \end{equation}
+
     \subsection{Numerical results}
 
-    \Section{Notation}
+    We performed some tests
 
-    \subsection{Eucledian Steiner Tree problem}
-    \begin{itemize}
-        \item $N$: dimension of the space
-        \item $\alpha \in [0,1]$: cost parameter
-        \item $P = \{p_1, \ldots, p_n\}$: set of terminal points
-        \item $M = \{m_1, \ldots, m_n\}$: masses of the terminal points
-        \item $S = \{s_1, \ldots, s_m\}$: set of Steiner points
-        \item $E$: set of edges
-        \item $f_{xy}$: flow on the edge connecting $x$ to $y$
-    \end{itemize}
+
+    \section{Notation}
+
+    I left them on the jupyter notebook, I am unsure on how to generate masses and what numbers to use to generate tests.
 
 
     \newpage
