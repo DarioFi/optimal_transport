@@ -1,5 +1,4 @@
 \documentclass{article}
-\usepackage{graphicx}
 
 \title{Branched optimal transport}
 \author{Antonio De Rosa, Dario Filatrella, Aida Khajavirad}
@@ -11,13 +10,19 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{amssymb}
-\usepackage[
-    backend=biber,
-    style=alphabetic,
-    sorting=ynt
-]{biblatex}
+\usepackage{graphicx}
+
+
+\usepackage{biblatex}
+\usepackage{textcomp}
 \addbibresource{bib.bib}
-% Document
+
+\newenvironment{itemizeb}
+{\begin{itemize}
+     \itemsep=2pt}{
+\end{itemize}}
+
+
 
 \renewcommand\qedsymbol{$\cdot$}
 
@@ -51,7 +56,7 @@
     \]
 
     \subsection{Parameterized Traffic Plans}
-    The next paragraph is copied from the \cite{Bernot}:
+    The next paragraph is copied from \cite[Bernot Caselles]{Bernot}:
 
     According to Skorokhod theorem (Theorem A.3 p. 185), we can parameterize any traffic plan $P$ by a measurable function
     $\chi : \Omega = [0, |\Omega|] \rightarrow K$, where $\Omega$ is a measure space which we identify with an interval, such that
@@ -92,6 +97,27 @@
         \sum_{(x,y) \in E} \|x - y\|
     \end{equation}
 
+
+    \section{Notation and preliminaries}
+
+    \subsection{General notation}
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+
+        \item[$B(x,r)$] \emph{open} ball with center $x$ and radius $r$;
+
+    \end{itemizeb}
+
+    \subsection{Theorems and results that will be used}
+
+    \begin{itemize}
+        \item From  \cite{Bernot} we use graph structure outside of the support
+        \item We also use loop-free (so trees)
+        \item We also start from their results on angles
+        \item From \cite{Rankin} we use the maximum number of spherical caps that can be placed on a sphere
+    \end{itemize}
+
     \subsection{Relation between ESTP and Branched transport}
 
     \subsubsection{Properties of branched transport}
@@ -119,6 +145,11 @@
     For each terminal $a^i$ (with $i>1$) we have a subset $A_i \subset [0,1]$ such that $\chi(A_i)$ are all paths terminating at $a^i$ and
     $\chi(A_i)(0) = a_1$.
     We can easily conclude that every terminal is connected to $a_1$ and therefore the graph is connected.
+
+    \subsection{Main results}
+
+    Here we should present the main results of the paper. We state them and then prove them later? I am unsure about this.
+
 
 
     \section{Formulation}
@@ -283,9 +314,7 @@
 
     For the case $N=2$ and for every $\alpha \in [0,1]$, it is known from \cite{degree3} that the degree of Steiner points and terminals is at most 3.
 
-    From \cite{Bernot} the following lemmas can be used:
-
-    \subsubsection{Lemma 12.2 \cite{Bernot}}
+    From \cite{Bernot} the following lemmas can be used: \\
 
     \begin{figure}[h]
         \includegraphics[scale=0.5]{angle_bound_example}
@@ -293,6 +322,7 @@
         \caption{Picture of the bound of lemma 12.2}
     \end{figure}
 
+    \textbf{Lemma 12.2 \cite{Bernot}}:
     Consider a vertex $S$ and two vertices $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges leaving
     $s$ and connecting to $p_1, p_2$ respectively.
     Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in [0,1]$:
@@ -300,8 +330,8 @@
         \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
     \end{equation}
 
-    \subsubsection{Lemma 12.15 \cite{Bernot}}
 
+    \textbf{Lemma 12.15 \cite{Bernot}}:
     Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
     $s$ to $s_1, s_2$ respectively. Let $\theta$ be the angle between the two edges.
     Then, for every $\alpha \in [0,1]$:
@@ -322,72 +352,85 @@
     \subsection{Improved bounds}
 
     \begin{figure}[h]
-        \includegraphics[scale=0.5]{angle_bound_example_inverted}
         \label{fig:angle_bound_example_inverted}
+        \includegraphics[scale=0.5]{angle_bound_example_inverted}
         \centering
         \caption{Picture of the bound of lemma 12.16}
     \end{figure}
 
-    We can improve the results from the book for the case described by figure \ref{fig:angle_bound_example_inverted}.
+    We can improve the results from the book for the case described by figure \ref{fig:angle_bound_example_inverted} (todo: ref not working).
 
-    We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and by the property that every restriction of an optimal
-    solution is optimal). Calling the candidate new branching point $x$ and setting $s=(0,0)$.
-    Without loss of generality we assume $m_1 \ge m_2$. We can write the cost $f$ of this configuration of the tree as:
+    \textbf{Lemma}:
+    Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
+    $s$ to $s_1, s_2$ respectively, such that $m_1 \ge m_2$ and $m_1$ flowing toward $s$ and $m_2$ flowing away from $s$.
+    Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in [0,1]$:
+
     \begin{equation}
-        f(x) = m_1^{\alpha}\|p_1 - x \| + m_2^{\alpha} \|p_2 - x\| + (m_1-m_2)^{\alpha} \|x\|
-    \end{equation}
-    By setting $x = \epsilon v$ with $\|v\|=1$ and expanding to the first order around $\epsilon=0$:
-    \begin{equation}
-        f(\epsilon v) = f(0) - \epsilon m_1^{\alpha} v \cdot p_1 - \epsilon m_2^{\alpha} v \cdot p_2 + (m_1-m_2)^{\alpha} \epsilon + o(\epsilon)
+        \cos(\theta) \le \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
     \end{equation}
 
-    Given that we only want to check when $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
+    \begin{proof}
+        We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and by the property that every restriction of an optimal
+        solution is optimal). Calling the candidate new branching point $x$ and setting $s=(0,0)$.
+        Without loss of generality we assume $m_1 \ge m_2$. We can write the cost $f$ of this configuration of the tree as:
+        \begin{equation}
+            f(x) = m_1^{\alpha}\|p_1 - x \| + m_2^{\alpha} \|p_2 - x\| + (m_1-m_2)^{\alpha} \|x\|
+        \end{equation}
+        By setting $x = \epsilon v$ with $\|v\|=1$ and expanding to the first order around $\epsilon=0$:
+        \begin{equation}
+            f(\epsilon v) = f(0) - \epsilon m_1^{\alpha} v \cdot p_1 - \epsilon m_2^{\alpha} v \cdot p_2 + (m_1-m_2)^{\alpha} \epsilon + o(\epsilon)
+        \end{equation}
 
-    \begin{figure}[h]
-        \includegraphics[scale=0.5]{circle}
-        \centering
-        \caption{Diagram of $p_1$, $p_2$ and $s$}
-    \end{figure}
+        Given that we only want to check when $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
 
-    We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
-    \begin{equation}
-        f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
-    \end{equation}
+        \begin{figure}[h]
+            \includegraphics[scale=0.5]{circle}
+            \centering
+            \caption{Diagram of $p_1$, $p_2$ and $s$}
+        \end{figure}
 
-    To prove that $\theta$ is not optimal we have two options:
-    \begin{itemize}
-        \item prove that there exists $\beta$ such that the first order coefficient is negative
-        \item prove that the first order coefficient is bigger than $0$ for all $\beta$
-    \end{itemize}
+        We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
+        \begin{equation}
+            f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
+        \end{equation}
 
-
-    To do this we want to fix $\theta, m_1, m_2$ and study the minimum of this function:
-    \begin{equation}
-    (m_1-m_2)
-        ^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
-    \end{equation}
-
-    Calling $t = \cos(\beta)$ we get the following equations needs to have a solution for $\beta$:
-    \begin{equation}
-    (m_1-m_2)
-        ^{\alpha} + \cos\beta(-m_2^\alpha-m_1^\alpha t) + \sin\beta(m_1^\alpha \sqrt{1-t^2}) = 0
-    \end{equation}
-
-    Having a value of $\beta$ such that the above equation evaluates to 0 is not enough, we should also check if on one side there is
-    a minimum.
-
-    Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
-    We also need to verify whether this point corresponds to a local minimum.
-
-    We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
-    span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
-    is not optimal, this function must cross zero.
+        To prove that $\theta$ is not optimal we have two options:
+        \begin{itemize}
+            \item prove that there exists $\beta$ such that the first order coefficient is negative
+            \item prove that the first order coefficient is bigger than $0$ for all $\beta$
+        \end{itemize}
 
 
-    By solving this equation using that $c^2 \le a^2 + b^2$ is a necessary condition for a solution to exist we get:
-    \begin{equation}
-        t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
-    \end{equation}
+        To do this we want to fix $\theta, m_1, m_2$ and study the minimum of this function:
+        \begin{equation}
+        (m_1-m_2)
+            ^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
+        \end{equation}
+
+        Calling $t = \cos(\beta)$ we get the following equations needs to have a solution for $\beta$:
+        \begin{equation}
+        (m_1-m_2)
+            ^{\alpha} + \cos\beta(-m_2^\alpha-m_1^\alpha t) + \sin\beta(m_1^\alpha \sqrt{1-t^2}) = 0
+        \end{equation}
+
+        Having a value of $\beta$ such that the above equation evaluates to 0 is not enough, we should also check if on one side there is
+        a minimum.
+
+        Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
+        We also need to verify whether this point corresponds to a local minimum.
+
+        We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
+        span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
+        is not optimal, this function must cross zero.
+
+
+        By solving this equation using that $c^2 \le a^2 + b^2$ is a necessary condition for a solution to exist we get:
+        \begin{equation}
+            t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+        \end{equation}
+    \end{proof}
+
+
     Which is almost the same as lemma 12.2. In fact the only difference is that along the edge conencting $s$ to the
     branching point here we have the difference of the masses instead of the sum.
 
@@ -462,7 +505,7 @@
     \subsection{Spherical cap results}
 
 
-
+    preliminaries
     We know from \cite{Rankin} that the maximum number of spherical cap of angle $\beta$ that can be placed on a sphere
     in dimension $N$ is given by:
     \begin{enumerate}
@@ -484,9 +527,12 @@
 
     Provided that $\sec 2\beta = o(N)$.
 
-    \subsection{Definition of $deg$}
+    \subsection{Definition of $deg(N, M, \alpha)$}
+
+    Question: should this be a theorem?
 
     In this section we will reacap all the results. Assuming $\sum_{i \in P} m_i = 1$ and $m_1 = \min_{i \in P} m_i$ we have:
+
 
     If $\alpha \le 1/2$:
     \begin{equation}
@@ -512,12 +558,7 @@
 
     \subsection{Numerical results}
 
-    We performed some tests
-
-
-    \section{Notation}
-
-    I left them on the jupyter notebook, I am unsure on how to generate masses and what numbers to use to generate tests.
+    I left the results on the jupyter notebook, I am unsure on how to generate masses and what numbers to use to generate tests.
 
 
     \newpage

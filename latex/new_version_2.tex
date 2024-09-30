@@ -1,0 +1,760 @@
+\documentclass[11pt,reqno,a4paper]{amsart}
+
+% set margins
+\usepackage[margin=1in]{geometry}
+
+
+\title{Branched optimal transport}
+\date{August 2024}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{tikz-cd}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\usepackage{hyperref}\hypersetup{colorlinks=true, citecolor=blue}
+
+\usepackage{biblatex}
+\usepackage{textcomp}
+\usepackage{mathtools}
+\addbibresource{bib.bib}
+
+\newenvironment{itemizeb}
+{\begin{itemize}
+     \itemsep=2pt}{
+\end{itemize}}
+
+
+\numberwithin{equation}{section}
+
+\newtheoremstyle{mytheorem}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3pt
+{\it}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{~\rm#3}}% Manually specify head
+
+\newtheoremstyle{myremark}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3ptontinuo dentro e fuori dall'infermeria, poi Barzagli e i due mesi di stop per l'infortunio alla spalla, infine a
+{\rm}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{~\rm#3}}% Manually specify head
+
+\newtheoremstyle{myparagraph}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3pt
+{\rm}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{#3}}% Manually specify head
+
+\theoremstyle{mytheorem}
+\newtheorem{maintheorem}{Theorem}
+\newtheorem{theorem}[subsection]{Theorem}
+\newtheorem{definition}[subsubsection]{Definition}
+\newtheorem{lemma}[subsection]{Lemma}
+\newtheorem{corollary}[subsection]{Corollary}
+\newtheorem{proposition}[subsection]{Proposition}
+\newtheorem{question}[subsection]{Question}
+
+\theoremstyle{myremark}
+\newtheorem{remark}[subsection]{Remark}
+%\newtheorem*{remark*}{Remark}
+%\newtheorem{remarks}[subsection]{Remarks}
+%\newtheorem*{remarks*}{Remarks}
+\newtheorem{problem}[subsection]{Problem}
+\theoremstyle{myparagraph}
+\newtheorem{parag}[subsection]{}
+\newtheorem*{parag*}{}
+
+
+\renewcommand\qedsymbol{$\cdot$}
+
+
+\newcommand{\R}{\mathbb{R}}
+
+
+\begin{document}
+    \author{Antonio De Rosa, Dario Filatrella, Aida Khajavirad}
+
+    \maketitle
+
+
+    \tableofcontents
+    \newpage
+
+    \nocite{*}
+
+
+    \section{Introduction}
+
+
+    \section{Notation and preliminaries}
+
+    \subsection{General notation}
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item[$f_{\#}\mu$] push-forward of the measure $\mu$ by a map $f$
+        \item[$\mathcal{H}^1$] 1-dimensional Hausdorff measure
+        \item[$|\Omega|$] Lebesgue measure of a set $\Omega$ when it is a subset of $\mathbb{R}$
+        \item[$T(\gamma)$] Stopping time of a path $\gamma$
+        \item[$\|x\|$] Euclidean norm of a vector $x$
+    \end{itemizeb}
+
+    \subsection{Optimal transport notation}
+    The following notation will be defined more extensively in the next section but it is summarized here:
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item[$N$] Dimension of the space
+        \item[$X \subseteq \R^N$] Compact set and domain of the measures
+        \item[$K$] Space of 1-Lipschitz paths eventually constant on $X$
+        \item[$\mu^+, \mu^-$] Two measures of equal mass on $X$
+        \item[$\mathbf{P}$] Traffic plan, measure on $K$ that transports $\mu^+$ to $\mu^-$
+        \item[$\pi_0, \pi_\infty$] Maps from $K$ to $X$ defined by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$
+        \item[$\mathcal{E}^{\alpha}(P)$] Gilbert energy of a traffic plan $P$
+        \item[$E^{\alpha}(P)$] Energy of a traffic plan $P$
+        \item[$\chi$] Parameterization of a traffic plan (with Lagrangian formulation)
+        \item[$C(\beta, N)$] Maximum number of non-overlapping caps on a sphere of dimension $N$ (\ref{definition:spherical_cap_results})
+    \end{itemizeb}
+
+    \subsection{ESTP notation} The following notation is specific to the ESTP problem and the MNILP formulations:
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item [$P$] Set of terminals $\{p_1, \ldots, p_n\}$
+        \item [$S$] Set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, ..., 2|P|-2\}$)
+        \item[$E$] Set of all edges
+        \item [$E_1$] Set of edges connecting terminals to Steiner points
+        \item [$E_2$] Set of edges connecting Steiner points
+
+        \item[$\alpha \in {[0,1]}$] cost parameter
+        \item [$M$] set of masses $\{m_1, \ldots, m_n\}$ of the terminals
+        \item [$f_{xy}$] flow on the edge connecting $x$ to $y$
+        \item [$y_{xy}$] binary variable indicating the presence of an edge between $x$ and $y$
+        \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in \ref{lemma:degree_definition}
+    \end{itemizeb}
+
+    \newpage
+
+
+    \section{Optimal transport definitions}
+
+    We start with the most abstract definition of branched transport, which holds for generic measures $\mu^+$ and $\mu^-$.
+    We will then restrict our analysis to the case where $\mu^+$ is a Dirac delta and $\mu^-$ is a finite sum of Dirac deltas.
+
+    \subsection{Branched transport \cite[Chapter 3]{Bernot}}
+
+    Given $X \subset \mathbb{R}^N$ compact, $K$ space of 1-Lipschitz path wiche are eventually constant on $X$ and
+    two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is a measure $\mathbf{P}$ on $K$ that transports $\mu^+$ to $\mu^-$.
+    Formally, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$, where $T(\gamma)$
+    is the stopping time of the path $\gamma$.
+    $\mathbf{P}$ is a traffic plan if:
+    \[
+        \mu^+ = (\pi_0)_{\#}\mathbf{P}, \quad \mu^- = (\pi_\infty)_{\#}\mathbf{P}
+    \]
+
+    \subsection{Parameterized Traffic Plans}
+    The next paragraph is copied from~\cite{Bernot}:
+
+    According to Skorokhod theorem~\cite[Theorem A.3]{Bernot}, we can parameterize any traffic plan $\mathbf{P}$ by a measurable function
+    $\chi : \Omega = [0, |\Omega|] \rightarrow K$, where $\Omega$ is a measure space which we identify with an interval, such that
+    $\mathbf{P}= \chi_{\#} \lambda$, where $\lambda$ is the Lebesgue measure on $[0, |\Omega|]$.
+    We shall set $\chi(\omega, t) \coloneqq \chi(\omega)(t)$ and consider it as a function of the variable pair
+    $(\omega, t)$.
+
+    With this formulation we can define the \textbf{energy} (or cost) of a parameterized traffic plan as:
+    \begin{equation}
+        E^{\alpha}(\mathbf{P}) = \int_{\mathbb{R}^N} |x|_\mathbf{P}^{\alpha} d \mathcal{H}^1(x)
+    \end{equation}
+
+    where $|x|_\mathbf{P}$ is the multiplicity of the point defined as:
+    \begin{equation}
+        |x|_\mathbf{P} = | \{\omega: x \in \chi(\omega, \mathbb{R}) \} |
+    \end{equation}
+
+
+    We call \textbf{Gilbert energy} of a traffic plan $P$ parameterized by $\chi$ the quantity:
+    \begin{equation}
+        \mathcal{E}^{\alpha}(\mathbf{P}) = \int_{\Omega} \int_{\mathbb{R}^N} |\chi(\omega, t)|^{\alpha-1}_\chi |\dot{\chi} (\omega, t)| dtd\omega
+    \end{equation}
+
+    Importantly, under certain regularity assumptions, the two energies coincide.
+    Todo: more care for the two energy formulations?
+
+    \subsection{Euclidean Steiner Tree problem with masses}
+
+    We can define the ESTP as follows: \\
+    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
+    corresponding masses $M = \{m_1, \ldots, m_n\}$, the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
+    consists of Steiner points $s_i \in \mathbb{R}^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
+    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
+    The graph must form a network flow with sources and sinks at the terminal points $P$ (in accordance with their masses),
+    such that the following cost function is minimized:
+    \[
+        \sum_{(x,y) \in E} |f_{xy}|^\alpha \|x - y\|
+    \]
+
+    We are particularly interested in the case where there is a single source, so only one terminal has negative mass.
+    In this case, the optimal solution is a tree.
+
+    \subsection{Euclidean Steiner Tree problem}
+
+    A special case of the ESTP is when $\alpha=0$ and a single source is present, which implies that the cost function is
+    the sum of the lengths of the edges, and it does not take into account the flow on the edges.
+    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
+    The objective function is then:
+    \begin{equation}
+        \sum_{(x,y) \in E} \|x - y\|
+    \end{equation}
+
+    TODO: I am unsure about the naming of the two problems.
+
+
+    \section{Preliminaries theorems}
+
+    Here we define the theorems that we will use
+
+    \subsection{Loop-free property \cite[Proposition 4.9]{Bernot}}
+    \label{lemma:loop_free}
+    The minimum of $\mathcal{E}^{\alpha}$ on the set of traffic plans, if it exists, is attained
+    at a loop-free traffic plan. Moreover $\inf\mathcal{E}^{\alpha} =\inf E^\alpha$, where both
+    infima are taken indifferently over the set of all traffic plans or over the set of loop-free traffic
+    plans.
+
+    \subsection{Graph structure theorem \cite[Lemma 8.14]{Bernot}}
+
+    Todo: Ask about the general alpha case
+
+    Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
+    plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
+    of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
+    of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
+
+    \subsection{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
+    Let $\mu^+$ and $\mu^-$ be two measures with finite support in $\R^2$ and assume that the cost
+    function $C$ is admissible (in our case $C(x) = |x|^\alpha$, which is admissible for $\alpha \in (0,1)$).
+    If a traffic plan $P$ has a branching point of degree at least 4, then there exists
+    a traffic plan $P'$ with strictly smaller value of Gilbert functional.
+
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{angle_bound_example}
+        \centering
+        \caption{Picture of the bound of lemma 12.2}
+        \label{fig:angle_bound_example}
+    \end{figure}
+
+    \subsection{Angles bound \cite[Lemma 12.2]{Bernot}}
+    Consider a vertex $s$ and two vertices $p_1, p_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges leaving
+    $s$ and connecting to $p_1, p_2$ respectively.
+    Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in [0,1]$:
+    \begin{equation}
+        \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+    \end{equation}
+
+    \subsection{Angles bound \cite[Lemma 12.5]{Bernot}}
+    \label{lemma:bernot_angles_sum_bound}
+    Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
+    $s$ to $s_1, s_2$ respectively. Let $\theta$ be the angle between the two edges.
+    Then, for all $\alpha \in [0,1]$ and for all $m_1, m_2 \in [0,1]$:
+
+    \begin{equation}
+        \cos(\theta) \le \begin{cases}
+                             2^{2\alpha-1}-1 & \text{if} \frac{1}{2} < \alpha \le 1\\
+                             0 & \text{if 0} \le \alpha \le \frac{1}{2}\\
+        \end{cases}
+    \end{equation}
+
+    Notice that this bound is independent of the masses of the edges. In the proof of the lemma it is also proved that the function
+    \begin{equation}
+        f(m_1) = \frac{(1+m_1)^{2\alpha} - 1 - m_1^{2\alpha}}{2m_1^\alpha}
+    \end{equation}
+    is decreasing for $m_1 \in [0,1]$ and $\alpha \in [0,\frac{1}{2}]$ and increasing for $m_1 \in [0,1]$ and $\alpha \in [\frac{1}{2},1]$.
+
+    \subsection{Spherical cap results \cite[Theorem 1 and 2]{Rankin}}
+    \label{definition:spherical_cap_results}
+    Let $S_N$ denote the "surface" of an $N$-dimensional unit sphere in Euclidean space of
+    $N$ dimensions. We may suppose that the sphere is centred at the origin of coordinates $O$
+    By a spherical cap $Cap(\beta, N)$ of angular radius $\beta \le \pi$ and centre $P$ on $S_N$ , we mean the set of
+    points $Q$ of $S_N$ for which the angle $QOP$ is less than or equal to $\beta$. Our object is to obtain an
+    upper bound for the maximum number $C(\beta, N)$ of non-overlapping caps $Cap(\beta, N)$ which can be
+    placed on $S_N$, and to investigate this upper bound for large values of $N$.
+    \begin{enumerate}
+        \item[(i)] \( C(\beta, N) = 1 \text{ for } \frac{1}{2}\pi < \beta \leq \pi; \)
+        \item[(ii)] \( C(\beta, N) = \left\lfloor \frac{2 \sin^2 \beta}{2 \sin^2 \beta - 1} \right\rfloor \text{ for } \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N} \leq \beta \leq \frac{1}{2}\pi; \)
+        \item[(iii)] \( C(\beta, N) = N + 1 \text{ for } \frac{1}{4}\pi < \beta \leq \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N}; \)
+        \item[(iv)] \( C\left(\frac{1}{4}\pi\right) = 2N. \)
+    \end{enumerate}
+
+    If $0 < \beta < \frac{1}{4}\pi$ and $\gamma = \sin^{-1}\left(\frac{\sqrt{2} \sin \beta}{2}\right)$, then
+    \begin{equation}
+        C(\beta, N) \leq \frac{\pi \Gamma\left(\frac{N-1}{2}\right) \sin \gamma \tan \gamma}{2 \Gamma\left(\frac{N}{2}\right) \int_0^{\gamma} (\sin \phi)^{N-2} (\cos \phi - \cos \gamma) \, d\phi} = C^*(\beta)
+    \end{equation}
+
+    furthermore, for large $N$
+    \begin{equation}
+        C^*(\beta, N) \sim \frac{\frac{1}{2}\pi N^3 \cos 2\beta}{(\frac{\sqrt{2} \sin \beta}{2})^{N-1}}
+    \end{equation}
+
+    provided that $\sec 2\beta = o(N)$.
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{angle_bound_example_inverted}
+        \centering
+        \caption{Picture of the bound of lemma 12.16}
+        \label{fig:angle_bound_example_inverted}
+    \end{figure}
+
+
+    \section{Main results}
+    In this section, we present the main results, which provide bounds on the angles between edges.
+    These bounds depend either on the specific instance or only on the pair $(N, \alpha)$.
+
+    The following lemma offers an improvement over \cite[Lemma 12.16]{Bernot},
+    where the competitor is considered along the edge instead of the span defined by the three vertices.
+
+    \begin{lemma}
+        \label{lemma:bound_opposite_direction}
+        Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it (as illustrated in \ref{fig:angle_bound_example_inverted}). Let $m_1, m_2$ be the masses of the two edges connecting
+        $s$ to $s_1, s_2$ respectively, such that $m_1 \ge m_2$ and $m_1$ is flowing toward $s$ and $m_2$ is flowing away from $s$.
+        Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in (0,1]$:
+
+        \begin{equation}
+            \cos(\theta) \le \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+        \end{equation}
+
+        \begin{proof}
+            We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and by the property that every restriction of an optimal
+            solution is optimal \cite[Chapter 8]{Bernot}). Calling the candidate new branching point $x$ and setting $s=(0,0)$.
+            Without loss of generality we assume $m_1 \ge m_2$. We can write the cost $f$ of this configuration of the tree as:
+            \begin{equation}
+                f(x) = m_1^{\alpha}\|p_1 - x \| + m_2^{\alpha} \|p_2 - x\| + (m_1-m_2)^{\alpha} \|x\|
+            \end{equation}
+            By setting $x = \epsilon v$ with $\|v\|=1$ and expanding to the first order around $\epsilon=0$:
+            \begin{equation}
+                f(\epsilon v) = f(0) - \epsilon m_1^{\alpha} v \cdot p_1 - \epsilon m_2^{\alpha} v \cdot p_2 + (m_1-m_2)^{\alpha} \epsilon + o(\epsilon)
+            \end{equation}
+
+            Given that we only want to check when $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
+
+            \begin{figure}[h]
+                \includegraphics[scale=0.5]{circle}
+                \centering
+                \caption{Diagram of $p_1$, $p_2$ and $s$ for edges flowing in opposite directions}
+            \end{figure}
+
+            We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
+            \begin{equation}
+                f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
+            \end{equation}
+
+            To prove that $\theta$ is not optimal we have two options:
+            \begin{itemize}
+                \item prove that there exists $\beta$ such that the first order coefficient is negative
+                \item prove that the first order coefficient is bigger than $0$ for all $\beta$
+            \end{itemize}
+
+
+            To do this we want to fix $\theta, m_1, m_2$ and study the minimum of this function:
+            \begin{equation}
+            (m_1-m_2)
+                ^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
+            \end{equation}
+
+            Calling $t = \cos(\beta)$ we get the following equations needs to have a solution for $\beta$:
+            \begin{equation}
+                \label{eq:optimality_condition_proof}
+                (m_1-m_2)
+                ^{\alpha} + \cos\beta(-m_2^\alpha-m_1^\alpha t) + \sin\beta(m_1^\alpha \sqrt{1-t^2}) = 0
+            \end{equation}
+
+            Having a value of $\beta$ such that the above equation evaluates to 0 is not enough, we should also check if on one side there is
+            a minimum.
+
+            Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
+            We also need to verify whether this point corresponds to a local minimum.
+
+            We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
+            span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
+            is not optimal, this function must cross zero.
+
+
+            By solving equation \ref{eq:optimality_condition_proof} (using that $c^2 \le a^2 + b^2$ is a necessary and
+            sufficient condition an equation of the form $a\cos\beta + b\cos\beta = c$ to have a solution) we get:
+            \begin{equation}
+                t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+    Which is almost the same as \cite[lemma 12.2]{Bernot}. In fact the only difference is that along the edge conencting $s$ to the
+    branching point here we have the difference of the masses instead of the sum.
+
+    \begin{lemma}
+        \label{lemma:difference_bound_decreasing}
+        The function:
+        \begin{equation}
+            f(m_1, m_2) = \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+        \end{equation}
+        is decreasing in the ratio $\frac{m_2}{m_1}$ and that $\frac{m_2}{m_1} \rightarrow 0$ is $0$.
+
+        \begin{proof}
+            We notice $f$ is homogeneous and can therefore be reparametrized in terms of the ratio of the masses. Calling $m= \frac{m_2}{m_1}$
+            we get:
+            \begin{equation}
+                f(m_1, m_2) = g(m_1/m_2) = \frac{(1 - m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
+            \end{equation}
+            We can then verify that this function is indeed decreasing in $m$ as $(1-m)^ {2\alpha}$, $-m^{2\alpha}$
+            and $1/ m^\alpha$ are all decreasing functions.
+            Therefore
+            \begin{equation}
+                \sup_{m_1, m_2} f(m_1,m_2) = \lim_{m \rightarrow 0} g(m) = 0
+            \end{equation}
+            To compute the limit we apply de l'Hopital's rule and get:
+            \begin{equation}
+                \lim_{m \rightarrow 0} g(m) = \lim_{m \rightarrow 0} \frac{-2\alpha (1-m)^{2\alpha-1} - 2\alpha m^{2\alpha-1}}{2\alpha m^{\alpha-1}} = 0
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+
+    \begin{lemma}
+        \label{lemma:bound_general_direction}
+
+        Let $\mathbf{P}$ be an optimal traffic plan transporting $\mu^+$ to $\mu^-$ with finite energy and finite graph structure.
+        Consider a branching point $s$ located outside the support of $\mu^{\pm}$, with two branches connecting $s$ to points $x_1$ and $x_2$.
+        Denoting the angle $\angle x_1 s x_2$ by $\theta$, the following inequality holds:
+
+        \begin{equation}
+            \cos(\theta) \le \max\left( 2^{2\alpha - 1} - 1, 0 \right).
+        \end{equation}
+
+        Furthermore, the degree is bounded by $C \left( \frac{\theta_{\max}}{2}, N \right)$, where $\theta_{\max}$ is the angle that realizes this maximum.
+
+        \begin{proof}
+            By combining Lemmas \ref{lemma:bound_opposite_direction} and \ref{lemma:difference_bound_decreasing}, along with \cite[Lemma 12.5]{Bernot}, we obtain a bound on $\cos \theta$ that applies to all masses and depends only on $\alpha$.
+
+            Taking the supremum over all masses, we conclude that for a three-point system, there is no branching point if
+            \begin{equation}
+                \cos(\theta) \le \max \left( \max\left( 2^{2\alpha - 1} - 1, 0 \right), 0 \right).
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+
+    \begin{corollary}
+        In the case where $\mu^+$ and $\mu^-$ are two measures with finite support (the ESTP problem) we know that the graph structure also
+        holds in their support (which is the discrete set of terminals $P$). Therefore the bound on the angle also holds at the terminals.
+    \end{corollary}
+
+    \subsection{Instance specific bounds}
+
+    We now have a bound on the cosine of the angle given the masses of the two edges for both the cases where the edges are
+    flowing in the same direction and in opposite directions.
+
+
+    We now focus on the case where there is only one source and therefore the optimal solution is a tree.
+    In this case, thanks to the loop-free property of the optimal solution, we know that the masses on the edges are
+    combinations of masses in $M$. We can then maximize the bound of the cosine under this constraint to find the smallest
+    angle that can be achieved in a specific instance of the problem.
+
+    \begin{lemma}
+        \label{lemma:degree_definition}
+        Given an instance of a ESTP problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$ such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
+        a cost parameter $\alpha \in [0,1]$, consider a branching point $s$ with two branches attached to it,
+        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P} |m_i|$ we have:
+
+        If $\alpha \le 1/2$:
+        \begin{equation}
+            \cos(\theta) \le \max\left(
+            \frac{1 - m_{\min}^{2\alpha} - (1-m_{\min})^{2\alpha}}{2(m_{\min}(1-m_{\min}))^\alpha},
+            \frac{(1-m_{\min})^{2\alpha} - m_{\min}^{2\alpha} - 1}{2m_{\min}^\alpha}
+            \right)
+        \end{equation}
+
+        If $\alpha > 1/2$  (assuming we are not optimizing the ratio of the masses, todo: discuss this):
+        \begin{equation}
+            \cos(\theta) \le \max\left(
+            2^{2\alpha - 1} - 1,
+            \frac{(1-m_{\min})^{2\alpha} - m_{\min}^{2\alpha} - 1}{2m_{\min}^\alpha}
+            \right)
+        \end{equation}
+
+
+        Defining $\theta_{\max}(M, \alpha)$ as the angle that achieves the maximum above, we can then define $deg(M, N, \alpha)$ as:
+        \begin{equation}
+            deg(M, N, \alpha) = C\left( \frac{ \theta_{\max}(M, \alpha) }{2}, N\right)
+        \end{equation}
+    \end{lemma}
+
+    \begin{proof}
+        We proceed in a similar fashion as in~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
+        over $m_1, m_2 \in [0,1]$ we maximize over the constraint that the masses on the branches $m_i,m_j$ are combinations of masses $M$.
+
+        We have two bounds to consider: the first applies to the case where both edges flow outward,
+        while the second applies to the case where one edge flows outward and the other flows inward.
+
+        todo: first/second bound is an awful name
+
+        \subsubsection{Optimizing the first bound}
+
+        We aim to maximize:
+        \begin{equation}
+            f(m_i, m_j) = \frac{(m_i + m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
+        \end{equation}
+
+        Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of \ref{lemma:loop_free}) in the sense that there
+        exist sets $A_1, A_2 \subseteq M$ such that $A_1, A_2 \neq \emptyset$, $m_i = \sum_{k \in A_1} m_k$ and $m_j = \sum_{k \in A_2} m_k$ and $A_1 \cap A_2 = \emptyset$.
+
+        Similarly to \ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
+
+        \begin{equation}
+            f(m) = \frac{(1 + m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
+        \end{equation}
+
+        We can also observe that $f(m) = f(1/m)$ so it is enough to consider $m \in [0,1]$.
+        From \ref{lemma:bernot_angles_sum_bound} we know that there is a different behaviour depending on $\alpha$ (figures \ref{fig:first_bound_a_le_1-2} and \ref{fig:first_bound_a_ge_1-2}).:
+        \begin{itemize}
+            \item If $\alpha \le 1/2$ we have that the function is decreasing in $m$. Therefore the maximum is achieved when $m$ is the smallest.
+            \item If $\alpha > 1/2$ we have that the function is increasing in $m \in [0,1]$. The maximum is achieved when $m = 1$.
+        \end{itemize}
+
+        \subsubsection{Case $\alpha \le 1/2$}
+        In the first case, it is sufficient to take
+        \begin{align}
+            & m_i = \min_{k \in M} m_k \\
+            & m_j = \sum_{k \in M} m_k - m_i
+        \end{align}
+
+        todo: How should we treat the sources? negative mass? Ideally it should be the same both here and in the formulation for the solver`
+
+        \begin{figure}[h]
+            \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_le_1-2}
+            \centering
+            \caption{Plot of the first bound for $\alpha \le 1/2$}
+            \label{fig:first_bound_a_le_1-2}
+        \end{figure}
+
+        \subsubsection{Case $\alpha \ge 1/2$}
+
+        The second case appears to be a much more difficult problem as we look for two subset with the closest sum ratio (peraphs NP complete but this is not a justified claim).
+        It can be seen from simulation (in the jupyter notebook) that even a ratio of 0.5 is already very close to the theoretical maximum.
+        We can achieve any arbitrary maximum ratio by taking the masses in a geometric sequence. But this case seems unlikely if
+        the masses are drawn independently from a distribution.
+
+        We need an upper bound on the distance (rather than a lower bound) so it could be more difficult to obtain one (a feasible solution is
+        not enough, we need a relaxation guarantee, from the perspective of a solver), but we can empirically observe that
+        for most mass distributions there are subset with a ratio close to 0.5, so computationally it can make sense to just
+        use $2^{2\alpha - 1} - 1$ as the bound.
+
+        \subsubsection{Optimizing the second bound}
+        We are aiming at maximizing the function (see figure \ref{fig:second_bound}):
+        \begin{equation}
+            f(m_i, m_j) = \frac{(m_i - m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
+        \end{equation}
+        We know from \ref{lemma:difference_bound_decreasing} that this function only depends on $m = \frac{m_j}{m_i}$ and that the following:
+        \begin{equation}
+            f(m) = \frac{(1 - m)^{2\alpha} - m^{2\alpha} - 1}{2m^\alpha}
+        \end{equation}
+        is decreasing.
+
+        We can now optimize the function over combinations of masses. Our objective is to minimize the ratio
+        $m$. The two masses are independent so we conclude that the minimum is achieved when
+        $m_i = \min_{k \in P} m_k \) and \( m_j = \sum_{k \in P} m_k = 1 $.
+        Todo: we should take extra care of the source here too
+    \end{proof}
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{f_diff_m1_m2}
+        \centering
+        \caption{Plot of the second bound}
+        \label{fig:second_bound}
+    \end{figure}
+
+
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_ge_1-2}
+        \centering
+        \caption{Plot of the first bound for $\alpha \ge 1/2$}
+        \label{fig:first_bound_a_ge_1-2}
+    \end{figure}
+
+
+    \section{Formulation}
+
+    Here we present two formulations, respectively for the ESTP without masses and with masses.
+
+    \subsection{MMX}
+    This first formulation is due to \cite[Section 2]{mmx}.
+    We will prove its correctness and provide an extension to a more general case:
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S.
+    \end{align}
+
+    Where:
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+
+        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, ..., 2|P|-2\}$),
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points,
+        \item [$E_2$] is the set of edges connecting Steiner points
+    \end{itemizeb}
+
+    \subsection{Proof of correctness}
+
+    The MMX problem "solves" the ESTP in the sense that under certain conditions, the optimal solution of MMX corresponds to
+    the optimal EST.
+    Explicitly, we can construct a function $\phi$ that maps feasible solutions of MMX to feasible solutions of ESTP and such
+    that the following commutative diagram holds:
+
+    \[
+        \begin{tikzcd}
+            & \mathbb{R}  \\
+            MMX \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & ESTP  \arrow[ul, "Obj"]
+        \end{tikzcd}
+    \]
+
+    Where $Obj$ is the objective function of the respective problems and MMX and ESTP are the feasible regions.
+
+    \subsection{Definition of $\phi$}
+    The function $\phi$ maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|}$ to a graph in $\mathbb{R}^N$ as follows:
+
+    \begin{enumerate}
+        \item For each $i \in P$, add a terminal at $p^i$.
+        \item For each $j \in S$, add a vertex $v_j$ at $s^j$.
+        \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
+    \end{enumerate}
+
+    There are a few issues with this identification: $\phi$ is neither injective (there is a permutation invariance in the index of both
+    Steiner points and terminals) nor surjective, as for instance, the number of vertices is fixed. By an edge counting argument we know that
+    the number of Steiner points in an optimal EST cannot be bigger than the ones included in MMX, but it could be lower
+    (for example in the case where all terminals lie on a line).
+    \begin{remark}
+        It is easy to see that the commutative diagram holds as both objective functions are the sum of the Euclidean distances of the active edges.
+    \end{remark}
+
+
+    \begin{lemma}
+        Calling MMX and ESTP the respective feasible regions, we have that $\phi(MMX) \subseteq ESTP$.
+
+        \begin{proof}
+            Let $x \in MMX$ and $G = \phi(x)$. We need to show that $G$ is a tree (so connected and loop-free).
+            By the first constraints, we know each terminal is connected to a Steiner point and constraint (\ref{MMX:connectivity_steiner}) ensures that
+            all Steiner points are connected, so $G$ is connected.
+            By edge counting, we deduce that $G$ is a tree.
+        \end{proof}
+
+    \end{lemma}
+
+    \begin{lemma}
+        The optimal solution of MMX is also optimal for ESTP.
+
+        \begin{proof}
+            We know that the optimal solution for the ESTP is a tree with number of vertices $|V| \le 2|P| - 2$ and degree of each vertex $d(v) \le 3$.
+            We can show that for each graph with those properties there is an element in $MMX$ that maps to it.
+            In $MMX$, the degree of the terminals is fixed at 1. However, we can introduce a Steiner point with the
+            same coordinates as a terminal (allowing for a degenerate solution) and make the following construction for the case where $d(v) = 2$.
+
+            We will describe a procedure to add Steiner points until a sufficient number is reached, while maintaining
+            the original graph structure. Then, we will demonstrate that these operations preserve all the properties of the $MMX$ problem.
+
+            By performing some edge counting, we observe that
+            \begin{equation}
+                |E| = \frac{1}{2} \left( 3|S| + \sum_{i \in P} d(i) \right)
+            \end{equation}
+            Which implies that:
+            \begin{equation}
+                \sum_{i \in P} d(i) = 2|P| - 2 - |S|
+            \end{equation}
+            If $|S| = 2|P| - 2$ we are done, otherwise we can find a terminal $i$ with $d(i) = 2,3$ and add 1 or 2 Steiner points respectively.
+            \begin{itemize}
+
+                \item Case $d(i) = 1 $: we add a Steiner point $s$ with connection to the two points connected to $i$ and remove the edge
+                connecting $i$ to the other terminal. We also connect $s$ to the terminal $i$.
+
+                \item Case $d(i) = 2$: Calling the points connected to $i$ $z_1, z_2, z_3$ we add two Steiner points $s_1, s_2$ and connect
+                $s_1$ to $(z_1, s_2, i)$ and $s_2$ to $(s_1, z_2, z_3)$.
+            \end{itemize}
+
+            In this way we preserve connectedness, loop-freeness and the number of (non-degenerate) vertices. Connectedness implies
+            \ref{MMX:connectivity_steiner} up to reordering of the Steiner points.
+            We can repeat the procedure until $|S| = |P| - 2$ which is our desired number of Steiner points.
+            We get that the degree of every terminal is 1 and the degree of every Steiner point is 3, so all the conditions
+            of MMX are satisfied.
+
+            To prove that the minimum over MMX cannot be smaller than the minimum over ESTP we can just use as competitor
+            $\phi(x)$ where $x$ is the optimal solution of MMX.
+
+        \end{proof}
+    \end{lemma}
+
+    \subsection{Generalized MMX}
+
+    We present here a generalization of the MMX formulation that allows for each terminal to have a mass and be either a
+    sink or a source. This comes at a cost, namely some solutions can be unions of disjoint trees and we are imposing
+    connectedness in the formulation.
+    A solver can still find an optimal solution by connecting them and assigning $0$ mass to the edge
+    but this introduces many different optimal solutions. Question: should we restrict to single source?
+
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|a^i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|x^i - x^j\| y_{ij} \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \\
+        & f_{ij} \le y_{ij} \quad \text{for } i,j \in S \cup P \\
+        & y_{ij} = y_{ji} \quad \text{for } i,j \in S \cup P \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S. \\
+        & f_{ij} \in [0,1] \quad \text{for } i,j \in S \cup P\\
+    \end{align}
+
+    where we use the same notation for the sets $P, S, E_1, E_2$ and additionally:
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item[$\alpha \in (0,1)$] is the cost parameter
+        \item [$M$] is the set of masses $\{m_1, \ldots, m_n\}$ of the terminals
+        \item [$f_{xy}$] flow on the edge connecting $x$ to $y$
+        \item [$y_{xy}$] binary variable indicating the presence of an edge between $x$ and $y$
+        \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in \ref{lemma:degree_definition}
+    \end{itemizeb}
+
+    Todo: I also wrote the notation for those symbols in the first page, I am not sure on where to put it.
+
+    \subsection{Proof of correctness}
+    Todo: understand what I actually want to prove, importantly whether to also consider the case with multiple sources
+
+
+    Outline of the steps:
+    \begin{itemize}
+        \item proof for connected optimal solution where terminals are leaves
+        \item proof for connected optimal solution
+        \item proof for optimal solution
+    \end{itemize}
+
+
+    \section{Numerical results}
+
+    \newpage
+    \printbibliography
+
+
+\end{document}
