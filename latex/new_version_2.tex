@@ -109,7 +109,7 @@
         \leftskip 0.8 cm\labelsep=.3 cm
         \item[$f_{\#}\mu$] push-forward of the measure $\mu$ by a map $f$
         \item[$\mathcal{H}^1$] 1-dimensional Hausdorff measure
-        \item[$|\Omega|$] Lebesgue measure of a set $\Omega$ when it is a subset of $\mathbb{R}$
+        \item[$|\Omega|$] Lebesgue measure of a set $\Omega$ when it is a subset of $\R$
         \item[$T(\gamma)$] Stopping time of a path $\gamma$
         \item[$\|x\|$] Euclidean norm of a vector $x$
     \end{itemizeb}
@@ -131,7 +131,8 @@
         \item[$C(\beta, N)$] Maximum number of non-overlapping caps on a sphere of dimension $N$ (\ref{definition:spherical_cap_results})
     \end{itemizeb}
 
-    \subsection{ESTP notation} The following notation is specific to the ESTP problem and the MNILP formulations:
+    \subsection{Discrete branched transport notation}
+    The following notation is specific to the discrete branched transport problem (DBT) and its mixed integer non-linear programming formulation (MINLP).
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
         \item [$P$] Set of terminals $\{p_1, \ldots, p_n\}$
@@ -142,6 +143,8 @@
 
         \item[$\alpha \in {[0,1]}$] cost parameter
         \item [$M$] set of masses $\{m_1, \ldots, m_n\}$ of the terminals
+        \item [$P^+$] set of terminals with positive masses (sinks)
+        \item [$P^-$] set of terminals with negative masses (sources)
         \item [$f_{xy}$] flow on the edge connecting $x$ to $y$
         \item [$y_{xy}$] binary variable indicating the presence of an edge between $x$ and $y$
         \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in \ref{lemma:degree_definition}
@@ -153,7 +156,7 @@
     \section{Optimal transport definitions}
 
     We start with the most abstract definition of branched transport, which holds for generic measures $\mu^+$ and $\mu^-$.
-    We will then restrict our analysis to the case where $\mu^+$ is a Dirac delta and $\mu^-$ is a finite sum of Dirac deltas.
+    The numerical analysis will be restricted to the discretized case where $\mu^+$ is a Dirac delta and $\mu^-$ is a finite sum of Dirac deltas.
 
     \subsection{Branched transport \cite[Chapter 3]{Bernot}}
 
@@ -191,36 +194,10 @@
         \mathcal{E}^{\alpha}(\mathbf{P}) = \int_{\Omega} \int_{\mathbb{R}^N} |\chi(\omega, t)|^{\alpha-1}_\chi |\dot{\chi} (\omega, t)| dtd\omega
     \end{equation}
 
-    Importantly, under certain regularity assumptions, the two energies coincide.
-    Todo: more care for the two energy formulations?
-
-    \subsection{Euclidean Steiner Tree problem with masses}
-
-    We can define the ESTP as follows: \\
-    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
-    corresponding masses $M = \{m_1, \ldots, m_n\}$, the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
-    consists of Steiner points $s_i \in \mathbb{R}^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
-    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
-    The graph must form a network flow with sources and sinks at the terminal points $P$ (in accordance with their masses),
-    such that the following cost function is minimized:
-    \[
-        \sum_{(x,y) \in E} |f_{xy}|^\alpha \|x - y\|
-    \]
-
-    We are particularly interested in the case where there is a single source, so only one terminal has negative mass.
-    In this case, the optimal solution is a tree.
-
-    \subsection{Euclidean Steiner Tree problem}
-
-    A special case of the ESTP is when $\alpha=0$ and a single source is present, which implies that the cost function is
-    the sum of the lengths of the edges, and it does not take into account the flow on the edges.
-    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
-    The objective function is then:
-    \begin{equation}
-        \sum_{(x,y) \in E} \|x - y\|
-    \end{equation}
-
-    TODO: I am unsure about the naming of the two problems.
+    \begin{remark}
+        From \cite[Proposition 4.8]{Bernot} we know that for traffic plans with finite energy, it holds that $\mathcal{E} ^\alpha(\mathbf{P}) \ge E^\alpha (\mathbf{P})$.
+        Furthermore, under regularity assumption \cite[definition 4.7]{Bernot} we have that they are equal. The relationship is further discussed in \ref{lemma:loop_free}.
+    \end{remark}
 
 
     \section{Preliminaries theorems}
@@ -236,7 +213,9 @@
 
     \subsection{Graph structure theorem \cite[Lemma 8.14]{Bernot}}
 
-    Todo: Ask about the general alpha case
+    \cite[Theorem ?]{well_posedness}
+    The finite graph structure of optimal traffic plans holds for all $\alpha$.
+    todo: properly understand the assumptions
 
     Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
     plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
@@ -336,7 +315,7 @@
         \end{equation}
 
         \begin{proof}
-            We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and by the property that every restriction of an optimal
+            We can assume $p_1$ and $p_2$ lie on the unit circle (by zooming enough and then rescaling, using the property that every restriction of an optimal
             solution is optimal \cite[Chapter 8]{Bernot}). Calling the candidate new branching point $x$ and setting $s=(0,0)$.
             Without loss of generality we assume $m_1 \ge m_2$. We can write the cost $f$ of this configuration of the tree as:
             \begin{equation}
@@ -459,7 +438,46 @@
         holds in their support (which is the discrete set of terminals $P$). Therefore the bound on the angle also holds at the terminals.
     \end{corollary}
 
+    \subsection{Disrete branched transport}
+
+    We can define the discrete branched transport (DBT) as follows: \\
+    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
+    corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
+    \begin{itemize}
+        \item $\sum_{i=1}^{n} m_i = 0$
+        \item $P^+$ is the set of terminals with positive mass (sources) and $P^-$ is the set of terminals with negative mass (sinks)
+    \end{itemize}
+
+    the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
+    consists of Steiner points $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
+    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
+    The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
+    such that the following cost function is minimized:
+    \[
+        \sum_{(x,y) \in E} |f_{xy}|^\alpha \|x - y\|
+    \]
+
+    \begin{remark}
+        The optimal solution of a DBT problem is a union of trees, with a special case where there is only one source and the optimal solution is a tree.
+    \end{remark}
+
+    \begin{remark}
+        The problem is symmetric with respect to changing the sign of the masses, i.e.\ swapping the roles of sources and sinks.
+    \end{remark}
+
+    \subsection{Euclidean Steiner Tree problem}
+
+    A special case of the DBT is called ESTP (todo: check this and re-read this part) and it is when $\alpha=0$ and a single source is present, which implies that the cost function is
+    the sum of the lengths of the edges, and it does not take into account the flow on the edges.
+    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
+    The objective function is then:
+    \begin{equation}
+        \sum_{(x,y) \in E} \|x - y\|
+    \end{equation}
+
     \subsection{Instance specific bounds}
+
+    todo: check that it flows well to put the definitions above in this way
 
     We now have a bound on the cosine of the angle given the masses of the two edges for both the cases where the edges are
     flowing in the same direction and in opposite directions.
@@ -472,11 +490,11 @@
 
     \begin{lemma}
         \label{lemma:degree_definition}
-        Given an instance of a ESTP problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$ such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
+        Given an instance of a DBT problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$ such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
         a cost parameter $\alpha \in [0,1]$, consider a branching point $s$ with two branches attached to it,
-        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P} |m_i|$ we have:
+        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ we have:
 
-        If $\alpha \le 1/2$:
+        If $\alpha \le 1/2$: todo: it seems like one of them is smaller than the other
         \begin{equation}
             \cos(\theta) \le \max\left(
             \frac{1 - m_{\min}^{2\alpha} - (1-m_{\min})^{2\alpha}}{2(m_{\min}(1-m_{\min}))^\alpha},
@@ -484,10 +502,15 @@
             \right)
         \end{equation}
 
-        If $\alpha > 1/2$  (assuming we are not optimizing the ratio of the masses, todo: discuss this):
+        If $\alpha > 1/2$, define the ratio $r$ as:
+        \begin{equation}
+            r = \max \left\{ \frac{m_i}{m_j} \text{  s.t.  } A_i, A_j \subseteq M, A_i \cap A_j = \emptyset, m_i = \sum_{k \in A_i} m_k, m_j = \sum_{k \in A_j} m_k, m_i \le m_j \right\}
+        \end{equation}
+
+        Then we have:
         \begin{equation}
             \cos(\theta) \le \max\left(
-            2^{2\alpha - 1} - 1,
+            \frac{ (1+r)^{2\alpha} - 1 - r^{2\alpha}}{2r^\alpha},
             \frac{(1-m_{\min})^{2\alpha} - m_{\min}^{2\alpha} - 1}{2m_{\min}^\alpha}
             \right)
         \end{equation}
@@ -498,6 +521,11 @@
             deg(M, N, \alpha) = C\left( \frac{ \theta_{\max}(M, \alpha) }{2}, N\right)
         \end{equation}
     \end{lemma}
+
+    \begin{corollary}
+        We can deduce from \ref{lemma:degree_definition} that outside of the support of the sources and sinks the bound can be refined,
+        as we know from the conservation of flow that there is at least one angle with both incoming and outgoing flow.
+    \end{corollary}
 
     \begin{proof}
         We proceed in a similar fashion as in~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
@@ -516,16 +544,16 @@
         \end{equation}
 
         Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of \ref{lemma:loop_free}) in the sense that there
-        exist sets $A_1, A_2 \subseteq M$ such that $A_1, A_2 \neq \emptyset$, $m_i = \sum_{k \in A_1} m_k$ and $m_j = \sum_{k \in A_2} m_k$ and $A_1 \cap A_2 = \emptyset$.
+        exist sets $A_i, A_j \subseteq M$ such that $A_i, A_j \neq \emptyset$, $m_i = \sum_{k \in A_i} m_k$ and $m_j = \sum_{k \in A_j} m_k$ and $A_i \cap A_j = \emptyset$.
 
-        Similarly to \ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
+        Similarly to~\ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
 
         \begin{equation}
             f(m) = \frac{(1 + m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
         \end{equation}
 
         We can also observe that $f(m) = f(1/m)$ so it is enough to consider $m \in [0,1]$.
-        From \ref{lemma:bernot_angles_sum_bound} we know that there is a different behaviour depending on $\alpha$ (figures \ref{fig:first_bound_a_le_1-2} and \ref{fig:first_bound_a_ge_1-2}).:
+        From~\ref{lemma:bernot_angles_sum_bound} we know that there is a different behaviour depending on $\alpha$ (figures \ref{fig:first_bound_a_le_1-2} and \ref{fig:first_bound_a_ge_1-2}).:
         \begin{itemize}
             \item If $\alpha \le 1/2$ we have that the function is decreasing in $m$. Therefore the maximum is achieved when $m$ is the smallest.
             \item If $\alpha > 1/2$ we have that the function is increasing in $m \in [0,1]$. The maximum is achieved when $m = 1$.
@@ -597,7 +625,7 @@
     Here we present two formulations, respectively for the ESTP without masses and with masses.
 
     \subsection{MMX}
-    This first formulation is due to \cite[Section 2]{mmx}.
+    This first formulation is due to~\cite[Section 2]{mmx}.
     We will prove its correctness and provide an extension to a more general case:
     \begin{align}
         \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
@@ -612,7 +640,7 @@
         \leftskip 0.8 cm\labelsep=.3 cm
 
         \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
-        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, ..., 2|P|-2\}$),
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
         \item [$E_1$] is the set of edges connecting terminals to Steiner points,
         \item [$E_2$] is the set of edges connecting Steiner points
     \end{itemizeb}
@@ -705,20 +733,21 @@
         \end{proof}
     \end{lemma}
 
+    todo: remove above?
+    todo: fix ESTP usage?
+
     \subsection{Generalized MMX}
 
     We present here a generalization of the MMX formulation that allows for each terminal to have a mass and be either a
-    sink or a source. This comes at a cost, namely some solutions can be unions of disjoint trees and we are imposing
-    connectedness in the formulation.
-    A solver can still find an optimal solution by connecting them and assigning $0$ mass to the edge
-    but this introduces many different optimal solutions. Question: should we restrict to single source?
+    sink or a source.
 
+    todo: fix notation and make it consistent with the rest of the document, in particular for p,s,a
     \begin{align}
         \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|a^i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|x^i - x^j\| y_{ij} \\
         & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
         & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
-        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \\
-        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \label{gmmx:sum_terminals} \\
+        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \label{gmmx:sum_steiner_0} \\
         & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \\
         & f_{ij} \le y_{ij} \quad \text{for } i,j \in S \cup P \\
         & y_{ij} = y_{ji} \quad \text{for } i,j \in S \cup P \\
@@ -737,18 +766,66 @@
         \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in \ref{lemma:degree_definition}
     \end{itemizeb}
 
-    Todo: I also wrote the notation for those symbols in the first page, I am not sure on where to put it.
-
     \subsection{Proof of correctness}
-    Todo: understand what I actually want to prove, importantly whether to also consider the case with multiple sources
 
+    When we say correctness we mean that, given an optimal solution of GMMX we can reconstruct one of the optimal solutions
+    to the DBT problem. Therefore we need to construct a function $\phi$ that maps feasible solutions of GMMX to feasible solutions of DBT
+    and prove that the optimal solutions found in GMMX are also optimal in DBT.
 
     Outline of the steps:
-    \begin{itemize}
+    \begin{enumerate}
+        \item construct a map that takes feasible solutions of GMMX to graphs that solve DBT
+        \item proof that objective functions are the same
         \item proof for connected optimal solution where terminals are leaves
         \item proof for connected optimal solution
         \item proof for optimal solution
-    \end{itemize}
+    \end{enumerate}
+
+    \subsection{Step 1}
+    We define a function $\phi$ maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|} \times \R^{|E|}$ to a oriented weighted graph in $\mathbb{R}^N$ as follows:
+
+    \begin{enumerate}
+        \item For each $i \in P$, add a terminal at $p_i$.
+        \item For each $j \in S$, add a vertex $s_j \in \R^N$ with coordinates $x^j$.
+        \item If there are multiple vertices with the same coordinates, collapse them into one and identify them with any of the indices.
+        \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
+        \item Assign the flow $f_{ij} - f_{ji}$ to the edge connecting $v_i$ to $v_j$. Note that this flow is oriented, and in any optimal solution
+        either $f_{ij} = 0$ or $f_{ji} = 0$.
+    \end{enumerate}
+
+    Note that this function is not injective, as we can permute the indices of the Steiner points and still get the same graph.
+    We first show that $\phi(GMMX)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
+    constraints work.
+
+    For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, called $S_p = \{s_1, \dots, s_m\}$,
+    at the same coordinates.
+    The total flow of the collapsed vertex is:
+    \begin{equation}
+        \sum_{i \in P \cup S} \left( f_{pi} - f_{ip}\right) + \sum_{j \in S_p} \sum_{i \in P \cup S} \left( f_{ij} - f_{ji} \right)
+    \end{equation}
+    By constraint~\ref{gmmx:sum_steiner_0} and~\ref{gmmx:sum_terminals} we get that the final flow is exactly $m_p$.
+    Outside of any terminal the same computations yield a sum of $0$.
+
+    \subsection{Step 2}
+    By calling $GMMX$ and $DBT$ the feasible regions of the respective problems, we show that the following diagram commutes:
+    \[
+        \begin{tikzcd}
+            & \mathbb{R}  \\
+            GMMX \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & DBT  \arrow[ul, "Obj"]
+        \end{tikzcd}
+    \]
+
+    The objective function in GMMX is the sum of $(f_{ij} + f_{ji})^\alpha$ which is, after passing through $\phi$, the flow
+    along the edge $(i,j)$, weighted by $\| a^i - x^j \|$ or $\|x^i-x^j \|$ which are the euclidean distances between
+    Steiner points and terminals.
+    The fact that there could be a degeneracy is not important as those points have $0$ distance and do not contribute to the
+    objective value.
+
+
+
+    This comes at a cost, namely some solutions can be unions of disjoint trees and we are imposing
+    connectedness in the formulation.
+    A solver can still find an optimal solution by connecting them and assigning $0$ mass to the edge
 
 
     \section{Numerical results}
