@@ -1,6 +1,6 @@
 import math
 from problems.utils import norm
-from random import random
+from random import random, randint
 from .utils import points_normalization
 import sympy as sp
 
@@ -107,3 +107,18 @@ def random_points_unit_square(n):
     points = [[x[j] / M for j in range(len(x))] for x in points]
 
     return {"terminals": points}
+
+
+def random_points_unit_square_with_masses(n):
+    points = [[random(), random()] for _ in range(n)]
+    # M = max(norm(x, y, range(len(points[0]))) for x in points for y in points if x != y)
+    # points = [[x[j] / M for j in range(len(x))] for x in points]
+
+    masses = [random() for _ in range(n-1)]
+    # renormalize masses to 1
+    masses = [m / sum(masses) for m in masses]
+
+    # assure masses sum to 0
+    masses.append(-sum(masses))
+
+    return {"terminals": points, "masses": masses}

@@ -9,14 +9,15 @@ import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 
 from formulations.mmx import mmx_model
-from problems.closest_counterexample import random_points_unit_square
+from formulations.gmmx import gmmx
+from problems.closest_counterexample import random_points_unit_square, random_points_unit_square_with_masses
 
 
 def extract_results(model, result):
     results_dict = {
         'status': str(result.solver.status),
         'termination_condition': str(result.solver.termination_condition),
-        'objective': model.Obj(),
+        'objective': model.obj(),
         'wallclock_time': result.Problem[0]["Wall time"],
         'time': result.solver.time,
         # 'variables': {v.name: pyo.value(model.__getattribute__(v.name)) for v in model.component_objects(Var)}
@@ -108,23 +109,24 @@ class Experiment:
 
 if __name__ == '__main__':
     exp = Experiment(
-        instance_generator=random_points_unit_square,
+        instance_generator=random_points_unit_square_with_masses,
         instance_arguments={'n': 4},
         solver='baron',
         solver_options='maxtime=7200',
-        formulation=mmx_model,
+        formulation=gmmx,
         formulation_arguments={
-            'use_convex_hull': True,
-            'use_convex_combinations': True,
-            'use_geometric_cuts': True,
-            'use_new_objective': True
+            'maximum_degree': 3,
+            # 'use_convex_hull': True,
+            # 'use_convex_combinations': True,
+            # 'use_geometric_cuts': True,
+            # 'use_new_objective': True
         },
-        seed=1,
+        seed=3131,
         save_folder='runs',
         experiment_name='test'
     )
 
-    results = exp.run(2)
+    results = exp.run(1)
     exp.save_to_disk(results)
 
 # todo:
