@@ -124,7 +124,7 @@ if __name__ == '__main__':
         experiment_name='test'
     )
 
-    results = exp.run(10)
+    results = exp.run(2)
     exp.save_to_disk(results)
 
 # todo:
