@@ -3,9 +3,6 @@ import sympy as sp
 from scipy.special import gamma, betainc
 from scipy.integrate import quad
 
-# Define alpha as a symbolic variable
-alpha = sp.symbols('alpha')
-
 
 def N_sphere_cap(angle, n):
     # Case (i): 1/2 * pi < alpha <= pi

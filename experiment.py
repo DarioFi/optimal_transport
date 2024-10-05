@@ -132,7 +132,6 @@ if __name__ == '__main__':
 # maybe parallelize the experiments
 # create deserializer tool to read the results and analyze them
 # visualization
-# install Baron on the VM
 # install Gurobi on the VM
 # install CPLEX on the VM
-# setup git on the VM
+
