@@ -97,7 +97,7 @@ class Experiment:
         results = []
         for seed in seeds:
             instance, result = self._single_run(seed)
-            results.append(self.serialize(instance, result))
+            results.append(self.serialize(instance, result, seed))
 
         return results
 
