@@ -126,7 +126,7 @@ if __name__ == '__main__':
             },
             seed=83810,
             save_folder='runs',
-            experiment_name=f'gmmx_with_{bind=}'
+            experiment_name=f'gmmx'
         )
 
         results = exp.run(50)
