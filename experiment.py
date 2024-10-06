@@ -112,7 +112,7 @@ if __name__ == '__main__':
     for bind in [True, False]:
         exp = Experiment(
             instance_generator=random_points_unit_square_with_masses,
-            instance_arguments={'n': 4},
+            instance_arguments={'n': 5},
             solver='baron',
             solver_options='maxtime=300',
             formulation=gmmx,
@@ -126,7 +126,7 @@ if __name__ == '__main__':
             experiment_name=f'gmmx_with_{bind=}'
         )
 
-        results = exp.run(50)
+        results = exp.run(20)
         exp.save_to_disk(results)
 
 # todo:

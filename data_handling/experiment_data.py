@@ -67,16 +67,31 @@ class Database:
 if __name__ == '__main__':
     db = Database.populate_from_folder("../runs/")
 
-    successful_times = []
-    failed_times = []
+    successful_times_bind = []
+    successful_times_not_bind = []
+    failed_times_bind = []
+    failed_times_not_bind = []
     for exp in db.experiments:
         print(exp.results)
         if exp.is_optimal():
-            successful_times.append(exp.results["wallclock_time"])
+            if exp.formulation_arguments["bind_first_steiner"]:
+                successful_times_bind.append(exp.results["wallclock_time"])
+            else:
+                successful_times_not_bind.append(exp.results["wallclock_time"])
+
         else:
-            failed_times.append(exp.results["wallclock_time"])
+            if exp.formulation_arguments["bind_first_steiner"]:
+                failed_times_bind.append(exp.results["wallclock_time"])
+            else:
+                failed_times_not_bind.append(exp.results["wallclock_time"])
 
 
+    print(f"Successful times bind: {successful_times_bind}")
+    print(f"Failed times bind: {failed_times_bind}")
 
-    print(f"Successful runs: {len(successful_times)} {successful_times}")
-    print(f"Failed runs: {len(failed_times)} {failed_times}")
+    print(f"Average successful times bind: {sum(successful_times_bind)/len(successful_times_bind)}")
+
+    print(f"Successful times not bind: {successful_times_not_bind}")
+    print(f"Failed times not bind: {failed_times_not_bind}")
+
+    print(f"Average successful times not bind: {sum(successful_times_not_bind)/len(successful_times_not_bind)}")
