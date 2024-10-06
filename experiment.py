@@ -19,6 +19,8 @@ def extract_results(model, result):
         'status': str(result.solver.status),
         'termination_condition': str(result.solver.termination_condition),
         'objective': model.obj(),
+        'lower_bound': result.Problem[0]["Lower bound"],
+        'upper_bound': result.Problem[0]["Upper bound"],
         'wallclock_time': result.Problem[0]["Wall time"],
         'time': result.solver.time,
         # 'variables': {v.name: pyo.value(model.__getattribute__(v.name)) for v in model.component_objects(Var)}
@@ -104,7 +106,7 @@ class Experiment:
         return results
 
     def save_to_disk(self, results: List[Dict]):
-        with open(f'{self.save_location}/{self.experiment_name}_{datetime.datetime.now().isoformat()}.json', 'w') as f:
+        with open(f'{self.save_location}/{datetime.datetime.now().isoformat()}_{self.experiment_name}.json', 'w') as f:
             json.dump(results, f, indent=4)
 
 
@@ -112,7 +114,7 @@ if __name__ == '__main__':
     for bind in [True, False]:
         exp = Experiment(
             instance_generator=random_points_unit_square_with_masses,
-            instance_arguments={'n': 5},
+            instance_arguments={'n': 4},
             solver='baron',
             solver_options='maxtime=300',
             formulation=gmmx,
@@ -120,13 +122,14 @@ if __name__ == '__main__':
                 'maximum_degree': 3,
                 'alpha': .5,
                 'bind_first_steiner': bind,
+                'use_obj_lb': True
             },
-            seed=42,
+            seed=83810,
             save_folder='runs',
             experiment_name=f'gmmx_with_{bind=}'
         )
 
-        results = exp.run(20)
+        results = exp.run(50)
         exp.save_to_disk(results)
 
 # todo:

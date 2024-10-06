@@ -1,11 +1,11 @@
 import pyomo.environ as pyo
-
+from formulations.utils import get_lower_bound
 
 def norm(p1, p2, dim):
     return sum((p1[d] - p2[d]) ** 2 for d in dim) ** 0.5
 
 
-def gmmx(terminals, masses, maximum_degree, alpha, bind_first_steiner):
+def gmmx(terminals, masses, maximum_degree, alpha, bind_first_steiner, use_obj_lb):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     model = pyo.ConcreteModel()
@@ -110,16 +110,16 @@ def gmmx(terminals, masses, maximum_degree, alpha, bind_first_steiner):
                     model.S)
         )
 
-        # return (
-        #         sum(norm([model.x[i, d] * (model.f[i, j] + model.f[j, i]) ** a for d in model.D],
-        #                  [model.x[j, d] * (model.f[i, j] + model.f[j, i]) ** a for d in model.D], model.D) for i in
-        #             model.S
-        #             for j in
-        #             model.S) +
-        #         sum(norm([terminals[i][d] * (model.f[i, j] + model.f[j, i]) ** a for d in model.D],
-        #                  [model.x[j, d] * (model.f[i, j] + model.f[j, i]) ** a for d in model.D], model.D) for
-        #             i in model.P for j in model.S)
-        # )
+    if use_obj_lb:
+        # it means that we use the bound that we know lb <= objective value
+        lb = get_lower_bound(terminals, masses, alpha)
+
+        def objective_lb_rule(model):
+            return lb <= objective_rule(model)
+
+        model.lb_obj = pyo.Constraint(rule=objective_lb_rule)
+
+
 
     model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
