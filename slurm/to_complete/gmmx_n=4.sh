@@ -1,11 +1,10 @@
 #!/bin/bash
 
-#SBATCH --job-name="baron_test"
+#SBATCH --job-name="gmmx_n=4"
 
 #SBATCH --account=3144366
 
-#SBATCH --qos=debug
-#SBATCH --partition=debug
+#SBATCH --partition=defq
 
 #SBATCH --output=out/%x_%j.out # %x gives job name and %j gives job id
 

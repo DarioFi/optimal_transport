@@ -118,10 +118,6 @@ if __name__ == '__main__':
         formulation_arguments={
             'maximum_degree': 3,
             'alpha': .5,
-            # 'use_convex_hull': True,
-            # 'use_convex_combinations': True,
-            # 'use_geometric_cuts': True,
-            # 'use_new_objective': True
         },
         seed=42,
         save_folder='runs',
