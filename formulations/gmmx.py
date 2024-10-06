@@ -5,7 +5,7 @@ def norm(p1, p2, dim):
     return sum((p1[d] - p2[d]) ** 2 for d in dim) ** 0.5
 
 
-def gmmx(terminals, masses, maximum_degree):
+def gmmx(terminals, masses, maximum_degree, alpha):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     model = pyo.ConcreteModel()
@@ -95,17 +95,17 @@ def gmmx(terminals, masses, maximum_degree):
     #     return model.y[i, j] == 1
     # model.single_constr = pyo.Constraint([0], [P], rule=single_constr)
 
-
     # objective
-
-    a = .05
 
     def objective_rule(model):
 
         return (
-                sum((model.f[i, j] + model.f[j, i])**a * norm([model.x[i, d] for d in model.D], [model.x[j, d] for d in model.D], model.D) for i in model.S for j in
-                    model.S if i != j) +
-                sum((model.f[i, j] + model.f[j, i])**a * norm(terminals[i], [model.x[j, d] for d in model.D], model.D) for i in model.P for j in
+                sum((model.f[i, j] + model.f[j, i]) ** alpha * norm([model.x[i, d] for d in model.D],
+                                                                [model.x[j, d] for d in model.D], model.D) for i in
+                    model.S for j in
+                    model.S if i < j) +
+                sum((model.f[i, j] + model.f[j, i]) ** alpha * norm(terminals[i], [model.x[j, d] for d in model.D], model.D)
+                    for i in model.P for j in
                     model.S)
         )
 
@@ -126,3 +126,6 @@ def gmmx(terminals, masses, maximum_degree):
     model.pprint()
 
     return model
+
+# todo: degeneracy makes it such that there is no incentive to make
+#  f_ij = 0 or f_ji = 0 in optimal solutions

@@ -656,7 +656,7 @@
     We present here a generalization of the MMX formulation that solves a DBT problem with a cost parameter $\alpha$.
 
     \begin{align}
-        \text{(GMMX)}: \; \min &\sum_{[i,j] \in E_1} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|p_i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f^{\alpha}_{ij} + f^{\alpha}_{ji})\|x^i - x^j\| y_{ij} \\
+        \text{(GMMX)}: \; \min &\sum_{[i,j] \in E_1} (f_{ij} + f_{ji})^{\alpha}\|p_i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f_{ij} + f_{ji})^{\alpha}\|x^i - x^j\| y_{ij} \\
         & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
         & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\}, \label{gmmx:connectedness} \\
         & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \label{gmmx:sum_terminals} \\

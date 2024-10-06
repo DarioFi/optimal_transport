@@ -59,9 +59,15 @@ def visualize(data: ExperimentData):
 
     all_points_indexed = terminals + list(steiner_points.values())
 
+    cost = 0
+
     for key, value in new_flow.items():
         if value > 0:
             value = min(value, 1)
+
+            a = .5
+            distance = ((all_points_indexed[key[0]][0] - all_points_indexed[key[1]][0])**2 + (all_points_indexed[key[0]][1] - all_points_indexed[key[1]][1])**2)**0.5
+            cost += value ** a * distance
 
             plt.plot([all_points_indexed[key[0]][0], all_points_indexed[key[1]][0]], [all_points_indexed[key[0]][1], all_points_indexed[key[1]][1]], 'b-', alpha=value)
 
@@ -77,6 +83,7 @@ def visualize(data: ExperimentData):
 
     plt.show()
 
+    print(f"{cost=}")
 
 if __name__ == '__main__':
     import json, os

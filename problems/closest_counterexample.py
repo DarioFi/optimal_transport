@@ -114,11 +114,24 @@ def random_points_unit_square_with_masses(n):
     # M = max(norm(x, y, range(len(points[0]))) for x in points for y in points if x != y)
     # points = [[x[j] / M for j in range(len(x))] for x in points]
 
-    masses = [random() for _ in range(n-1)]
+    masses = [random() for _ in range(n - 1)]
     # renormalize masses to 1
     masses = [m / sum(masses) for m in masses]
 
     # assure masses sum to 0
     masses.append(-sum(masses))
+
+    return {"terminals": points, "masses": masses}
+
+
+def fixed_points(*args, **kwargs):
+    points = [
+        [0, 0],
+        [-.1, 1],
+        [.1, 1],
+        [0, -1]
+    ]
+
+    masses = [1, -1 / 3, -1 / 3, -1/3]
 
     return {"terminals": points, "masses": masses}

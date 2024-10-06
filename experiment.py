@@ -10,7 +10,8 @@ from pyomo.opt import SolverFactory
 
 from formulations.mmx import mmx_model
 from formulations.gmmx import gmmx
-from problems.closest_counterexample import random_points_unit_square, random_points_unit_square_with_masses
+from problems.closest_counterexample import random_points_unit_square, random_points_unit_square_with_masses, \
+    fixed_points
 
 
 def extract_results(model, result):
@@ -94,7 +95,7 @@ class Experiment:
 
     def run(self, n_runs: int):
         random.seed(self.seed)
-        seeds = [self.seed] + random.sample(range(1, 1000000), n_runs - 1)
+        seeds = [random.randint(0, 100000) for _ in range(n_runs)]
         results = []
         for seed in seeds:
             instance, result = self._single_run(seed)
@@ -112,21 +113,22 @@ if __name__ == '__main__':
         instance_generator=random_points_unit_square_with_masses,
         instance_arguments={'n': 4},
         solver='baron',
-        solver_options='maxtime=7200',
+        solver_options='maxtime=600',
         formulation=gmmx,
         formulation_arguments={
             'maximum_degree': 3,
+            'alpha': .5,
             # 'use_convex_hull': True,
             # 'use_convex_combinations': True,
             # 'use_geometric_cuts': True,
             # 'use_new_objective': True
         },
-        seed=3131,
+        seed=42,
         save_folder='runs',
         experiment_name='test'
     )
 
-    results = exp.run(1)
+    results = exp.run(100)
     exp.save_to_disk(results)
 
 # todo:
@@ -136,4 +138,3 @@ if __name__ == '__main__':
 # visualization
 # install Gurobi on the VM
 # install CPLEX on the VM
-
