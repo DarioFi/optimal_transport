@@ -91,8 +91,8 @@ if __name__ == '__main__':
     # get the last file in that directory with alphabetical order
     with open("../runs/" + sorted(os.listdir("../runs"))[-1], "r") as f:
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
-        jd = json.load(f)[0]
+        jd = json.load(f)[-1]
 
     data = ExperimentData.from_json(jd)
-
+    print(data.results["termination_condition"])
     visualize(data)

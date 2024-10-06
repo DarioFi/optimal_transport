@@ -109,23 +109,25 @@ class Experiment:
 
 
 if __name__ == '__main__':
-    exp = Experiment(
-        instance_generator=random_points_unit_square_with_masses,
-        instance_arguments={'n': 4},
-        solver='baron',
-        solver_options='maxtime=600',
-        formulation=gmmx,
-        formulation_arguments={
-            'maximum_degree': 3,
-            'alpha': .5,
-        },
-        seed=42,
-        save_folder='runs',
-        experiment_name='test'
-    )
+    for bind in [True, False]:
+        exp = Experiment(
+            instance_generator=random_points_unit_square_with_masses,
+            instance_arguments={'n': 4},
+            solver='baron',
+            solver_options='maxtime=600',
+            formulation=gmmx,
+            formulation_arguments={
+                'maximum_degree': 3,
+                'alpha': .5,
+                'bind_first_steiner': bind,
+            },
+            seed=42,
+            save_folder='runs',
+            experiment_name=f'gmmx_with_{bind=}'
+        )
 
-    results = exp.run(10)
-    exp.save_to_disk(results)
+        results = exp.run(50)
+        exp.save_to_disk(results)
 
 # todo:
 # experiment manager that runs multiple experiments with grid search or similar

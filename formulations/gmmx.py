@@ -5,7 +5,7 @@ def norm(p1, p2, dim):
     return sum((p1[d] - p2[d]) ** 2 for d in dim) ** 0.5
 
 
-def gmmx(terminals, masses, maximum_degree, alpha):
+def gmmx(terminals, masses, maximum_degree, alpha, bind_first_steiner):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     model = pyo.ConcreteModel()
@@ -91,9 +91,10 @@ def gmmx(terminals, masses, maximum_degree, alpha):
 
     model.y_symmetric_constraint = pyo.Constraint(model.SUP, model.SUP, rule=y_symmetric_constraint)
 
-    # def single_constr(model, i, j):
-    #     return model.y[i, j] == 1
-    # model.single_constr = pyo.Constraint([0], [P], rule=single_constr)
+    if bind_first_steiner:
+        def single_constr(model, i, j):
+            return model.y[i, j] == 1
+        model.single_constr = pyo.Constraint([0], [P], rule=single_constr)
 
     # objective
 

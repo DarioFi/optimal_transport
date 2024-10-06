@@ -1,4 +1,7 @@
 import datetime
+import json
+import os
+from typing import List
 
 
 class ExperimentData:
@@ -38,14 +41,42 @@ class ExperimentData:
             cpu=json_data['cpu']
         )
 
+    def is_optimal(self):
+        return self.results['termination_condition'] == 'optimal'
+
 
 class Database:
-    def __init__(self, folder):
-        self.experiments = []
+    def __init__(self):
+        self.experiments: List[ExperimentData] = []
 
-    def populate(self, folder):
-        # iterate over json in folder
-        # load them with experiment constructor
-        pass
+    @classmethod
+    def populate_from_folder(cls, folder):
+        db = cls()
+        # iterate over json files
+        for file in os.listdir(folder):
+            if file.endswith(".json"):
+                with open(os.path.join(folder, file), 'r') as f:
+                    data = json.load(f)
+                    assert type(data) == list
+                    for run in data:
+                        db.experiments.append(ExperimentData.from_json(run))
+
+        return db
 
 
+if __name__ == '__main__':
+    db = Database.populate_from_folder("../runs/")
+
+    successful_times = []
+    failed_times = []
+    for exp in db.experiments:
+        print(exp.results)
+        if exp.is_optimal():
+            successful_times.append(exp.results["wallclock_time"])
+        else:
+            failed_times.append(exp.results["wallclock_time"])
+
+
+
+    print(f"Successful runs: {len(successful_times)} {successful_times}")
+    print(f"Failed runs: {len(failed_times)} {failed_times}")
