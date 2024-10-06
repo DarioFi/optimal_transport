@@ -122,8 +122,6 @@ def gmmx(terminals, masses, maximum_degree, alpha):
 
     model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
-    print("Model information:")
-    model.pprint()
 
     return model
 
