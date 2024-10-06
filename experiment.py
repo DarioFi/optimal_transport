@@ -114,7 +114,7 @@ if __name__ == '__main__':
             instance_generator=random_points_unit_square_with_masses,
             instance_arguments={'n': 4},
             solver='baron',
-            solver_options='maxtime=600',
+            solver_options='maxtime=300',
             formulation=gmmx,
             formulation_arguments={
                 'maximum_degree': 3,
