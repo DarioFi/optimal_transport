@@ -113,6 +113,7 @@
         \item[$|\Omega|$] Lebesgue measure of a set $\Omega$ when it is a subset of $\R$
         \item[$T(\gamma)$] Stopping time of a path $\gamma$
         \item[$\|x\|$] Euclidean norm of a vector $x$
+        \item[$\R_+^N$] Vectors in $\R^N$ where all components are non-negative
     \end{itemizeb}
 
     \subsection{Optimal transport notation}
@@ -212,7 +213,15 @@
 
         {\color{red} Before giving each theorem, you should briefly say (in a couple of sentences) where/how each result is used.}
 
-        {\color{red} Put all results in proposition/theorem environments (not subsections) so that you can refer to them later on.}
+    \begin{definition}
+        \textbf{Branching point}
+        TODO: add it
+    \end{definition}
+
+    \begin{definition}
+        \textbf{Loop-free}
+        TODO: add it
+    \end{definition}
 
     \begin{theorem}
         \textbf{Loop-free property \cite[Proposition 4.9]{Bernot}}
@@ -225,27 +234,31 @@
             {\color{red} For example the following should be the key result for us; please put the theorem in and say a sentence about its importance for us.}
     \end{theorem}
 
-    \subsection{Graph structure theorem \cite[Lemma 8.14]{Bernot}}
+    \begin{theorem}
+        \textbf{Graph structure theorem \cite[Lemma 8.14]{Bernot}}
+        \cite[Theorem ?]{well_posedness}
+        The finite graph structure of optimal traffic plans holds for all $\alpha$.
+        todo: properly understand the assumptions
+        \\
 
-    \cite[Theorem ?]{well_posedness}
-    The finite graph structure of optimal traffic plans holds for all $\alpha$.
-    todo: properly understand the assumptions
-    \\
+        Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
+        plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
+        of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
+        of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
+            {\color{red} Define a branching point.}
 
-    Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
-    plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
-    of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
-    of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
-        {\color{red} Define a branching point.}
+            {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
 
-        {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
+    \end{theorem}
 
-    \subsection{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
-    Let $\mu^+$ and $\mu^-$ be two measures with finite support in $\R^2$ and assume that the cost
-    function $C$ is admissible (in our case $C(x) = |x|^\alpha$, which is admissible for $\alpha \in (0,1)$).
-    If a traffic plan $P$ has a branching point of degree at least 4, then there exists
-    a traffic plan $P'$ with strictly smaller value of Gilbert functional.
+    \begin{theorem}
+        \textbf{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
+        Let $\mu^+$ and $\mu^-$ be two measures with finite support in $\R^2$ and assume that the cost
+        function $C$ is admissible (in our case $C(x) = |x|^\alpha$, which is admissible for $\alpha \in (0,1)$).
+        If a traffic plan $P$ has a branching point of degree at least 4, then there exists
+        a traffic plan $P'$ with strictly smaller value of Gilbert functional.
 
+    \end{theorem}
 
     \begin{figure}[h]
         \includegraphics[scale=0.5]{angle_bound_example}
@@ -256,77 +269,87 @@
 
     {\color{red} Are you going to use the results to improve the upper bound on the number of branch points in dimension $N \geq 3$. If so, then before stating the above lemma mention that it is tight, and that such a bound is not available in higher dimensions and that you will be using the next results to obtain such upper bounds.}
 
-    \subsection{Angles bound \cite[Lemma 12.2]{Bernot}}
-    Consider a vertex $s$ and two vertices $p_1, p_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges leaving
-    $s$ and connecting to $p_1, p_2$ respectively (see figure \ref{fig:angle_bound_example}).
-    Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in [0,1]$:
-    \begin{equation}
-        \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
-    \end{equation}
 
-    \subsection{Angles bound \cite[Lemma 12.5]{Bernot}}
-    \label{lemma:bernot_angles_sum_bound}
-    Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
-    $s$ to $s_1, s_2$ respectively. Let $\theta$ be the angle between the two edges.
-    Then, for all $\alpha \in [0,1]$ and for all $m_1, m_2 \in [0,1]$:
+    \begin{theorem}
+        \textbf{Angles bound \cite[Lemma 12.2]{Bernot}}
+        Consider a vertex $s$ and two vertices $p_1, p_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges leaving
+        $s$ and connecting to $p_1, p_2$ respectively (see figure~\ref{fig:angle_bound_example}).
+        Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in [0,1]$:
+        \begin{equation}
+            \cos(\theta) \le \frac{(m_1 + m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_1^\alpha m_2^\alpha}
+        \end{equation}
+    \end{theorem}
 
-    \begin{equation}
-        \cos(\theta) \le \begin{cases}
-                             2^{2\alpha-1}-1 & \text{if} \frac{1}{2} < \alpha \le 1\\
-                             0 & \text{if 0} \le \alpha \le \frac{1}{2}\\
-        \end{cases}
-    \end{equation}
+    \begin{theorem}
+        \label{lemma:bernot_angles_sum_bound}
+        \textbf{Angles bound \cite[Lemma 12.5]{Bernot}}
+        Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges connecting
+        $s$ to $s_1, s_2$ respectively. Let $\theta$ be the angle between the two edges.
+        Then, for all $\alpha \in [0,1]$ and for all $m_1, m_2 \in [0,1]$:
 
-    Notice that this bound is independent of the masses of the edges. In the proof of the lemma it is also proved that the function
-    \begin{equation}
-        f(m_1) = \frac{(1+m_1)^{2\alpha} - 1 - m_1^{2\alpha}}{2m_1^\alpha}
-    \end{equation}
-    is decreasing for $m_1 \in [0,1]$ and $\alpha \in [0,\frac{1}{2}]$ and increasing for $m_1 \in [0,1]$ and $\alpha \in [\frac{1}{2},1]$.
+        \begin{equation}
+            \cos(\theta) \le \begin{cases}
+                                 2^{2\alpha-1}-1 & \text{if} \frac{1}{2} < \alpha \le 1\\
+                                 0 & \text{if 0} \le \alpha \le \frac{1}{2}\\
+            \end{cases}
+        \end{equation}
 
-    What about putting the above two lemmas in one statement as the second seems to be a simple consequence of the first one.
+        Notice that this bound is independent of the masses of the edges. In the proof of the lemma it is also proved that the function
+        \begin{equation}
+            f(m_1) = \frac{(1+m_1)^{2\alpha} - 1 - m_1^{2\alpha}}{2m_1^\alpha}
+        \end{equation}
+        is decreasing for $m_1 \in [0,1]$ and $\alpha \in [0,\frac{1}{2}]$ and increasing for $m_1 \in [0,1]$ and $\alpha \in [\frac{1}{2},1]$.
 
-        {\color{red} Again you need to motivate the following, otherwise, it seems completely irrelevant.}
+        What about putting the above two lemmas in one statement as the second seems to be a simple consequence of the first one.
 
-    \subsection{Spherical cap results \cite[Theorem 1 and 2]{Rankin}}
-    \label{definition:spherical_cap_results}
-    Let $S_N$ denote the "surface" of an $N$-dimensional unit sphere in Euclidean space of
-    $N$ dimensions. We may suppose that the sphere is centred at the origin of coordinates $O$
-    By a spherical cap $Cap(\beta, N)$ of angular radius $\beta \le \pi$ and centre $P$ on $S_N$ , we mean the set of
-    points $Q$ of $S_N$ for which the angle $QOP$ is less than or equal to $\beta$. Our object is to obtain an
-    upper bound for the maximum number $C(\beta, N)$ of non-overlapping caps $Cap(\beta, N)$ which can be
-    placed on $S_N$, and to investigate this upper bound for large values of $N$.
-    \begin{enumerate}
-        \item[(i)] \( C(\beta, N) = 1 \text{ for } \frac{1}{2}\pi < \beta \leq \pi; \)
-        \item[(ii)] \( C(\beta, N) = \left\lfloor \frac{2 \sin^2 \beta}{2 \sin^2 \beta - 1} \right\rfloor \text{ for } \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N} \leq \beta \leq \frac{1}{2}\pi; \)
-        \item[(iii)] \( C(\beta, N) = N + 1 \text{ for } \frac{1}{4}\pi < \beta \leq \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N}; \)
-        \item[(iv)] \( C\left(\frac{1}{4}\pi\right) = 2N. \)
-    \end{enumerate}
+    \end{theorem}
 
-    If $0 < \beta < \frac{1}{4}\pi$ and $\gamma = \sin^{-1}\left(\frac{\sqrt{2} \sin \beta}{2}\right)$, then
-    \begin{equation}
-        C(\beta, N) \leq \frac{\pi \Gamma\left(\frac{N-1}{2}\right) \sin \gamma \tan \gamma}{2 \Gamma\left(\frac{N}{2}\right) \int_0^{\gamma} (\sin \phi)^{N-2} (\cos \phi - \cos \gamma) \, d\phi} = C^*(\beta)
-    \end{equation}
+    {\color{red} Again you need to motivate the following, otherwise, it seems completely irrelevant.}
 
-    furthermore, for large $N$
-    \begin{equation}
-        C^*(\beta, N) \sim \frac{\frac{1}{2}\pi N^3 \cos 2\beta}{(\frac{\sqrt{2} \sin \beta}{2})^{N-1}}
-    \end{equation}
+    \begin{theorem}
+        \textbf{Spherical cap results \cite[Theorem 1 and 2]{Rankin}}
+        \label{definition:spherical_cap_results}
+        Let $S_N$ denote the "surface" of an $N$-dimensional unit sphere in Euclidean space of
+        $N$ dimensions. We may suppose that the sphere is centred at the origin of coordinates $O$
+        By a spherical cap $Cap(\beta, N)$ of angular radius $\beta \le \pi$ and centre $P$ on $S_N$ , we mean the set of
+        points $Q$ of $S_N$ for which the angle $QOP$ is less than or equal to $\beta$. Our object is to obtain an
+        upper bound for the maximum number $C(\beta, N)$ of non-overlapping caps $Cap(\beta, N)$ which can be
+        placed on $S_N$, and to investigate this upper bound for large values of $N$.
+        \begin{enumerate}
+            \item[(i)] \( C(\beta, N) = 1 \text{ for } \frac{1}{2}\pi < \beta \leq \pi; \)
+            \item[(ii)] \( C(\beta, N) = \left\lfloor \frac{2 \sin^2 \beta}{2 \sin^2 \beta - 1} \right\rfloor \text{ for } \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N} \leq \beta \leq \frac{1}{2}\pi; \)
+            \item[(iii)] \( C(\beta, N) = N + 1 \text{ for } \frac{1}{4}\pi < \beta \leq \frac{1}{4}\pi + \frac{1}{2} \sin^{-1} \frac{1}{N}; \)
+            \item[(iv)] \( C\left(\frac{1}{4}\pi\right) = 2N. \)
+        \end{enumerate}
 
-    provided that $\sec 2\beta = o(N)$.
-    \begin{figure}[h]
-        \includegraphics[scale=0.5]{angle_bound_example_inverted}
-        \centering
-        \caption{Picture of the bound of lemma 12.16}
-        \label{fig:angle_bound_example_inverted}
-    \end{figure}
+        If $0 < \beta < \frac{1}{4}\pi$ and $\gamma = \sin^{-1}\left(\frac{\sqrt{2} \sin \beta}{2}\right)$, then
+        \begin{equation}
+            C(\beta, N) \leq \frac{\pi \Gamma\left(\frac{N-1}{2}\right) \sin \gamma \tan \gamma}{2 \Gamma\left(\frac{N}{2}\right) \int_0^{\gamma} (\sin \phi)^{N-2} (\cos \phi - \cos \gamma) \, d\phi} = C^*(\beta)
+        \end{equation}
+
+        furthermore, for large $N$
+        \begin{equation}
+            C^*(\beta, N) \sim \frac{\frac{1}{2}\pi N^3 \cos 2\beta}{(\frac{\sqrt{2} \sin \beta}{2})^{N-1}}
+        \end{equation}
+
+        provided that $\sec 2\beta = o(N)$.
+        \begin{figure}[h]
+            \includegraphics[scale=0.5]{angle_bound_example_inverted}
+            \centering
+            \caption{Picture of the bound of lemma 12.16}
+            \label{fig:angle_bound_example_inverted}
+        \end{figure}
+    \end{theorem}
 
 
     \section{Main results}
 
-    In this section, we present the main results, which provide bounds on the angles between edges.
-    These bounds depend either on the specific instance of the problem $(\mu^{\pm}, N, \alpha)$ or only on the pair $(N, \alpha)$. {\color{red} We care about upper bounds on the number of branches, right?}
+    In this section, we present the main results, which provide lower bounds on the angles between edges.
+    These bounds depend either on the specific instance of the problem $(\mu^{\pm}, N, \alpha)$ or only on the pair $(N, \alpha)$.
+    Once we have these bounds, we can use the results for spherical cap packing~\ref{definition:spherical_cap_results}
+    to obtain upper bounds on the number of branches in the optimal transport problem.
 
-    The following lemma offers an improvement over \cite[Lemma 12.16]{Bernot},
+    The following lemma offers an improvement over~\cite[Lemma 12.16]{Bernot},
     where the competitor is considered along the edge instead of the span defined by the three vertices.
 
     \begin{lemma}
@@ -466,8 +489,10 @@
 
     \subsection{Discrete branched transport}
 
-    {\color{red} Define by making the connection with general branched transport in terms of $\mu^-, \mu^+$.}
-    We can define the discrete branched transport (DBT) as follows: \\
+    The Discrete Branched Transport (DBT) is a special case of branched transport
+    where the measures $\mu^+$ and $\mu^-$ are finite and atomic.
+
+    Formally, we can define the DBT as follows: \\
     Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
     corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
     \begin{itemize}
@@ -476,20 +501,33 @@
     \end{itemize}
 
     the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
-    consists of Steiner points {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?} $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
+    consists of Steiner points
+        {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?
+    This terminology is used in the euclidean steiner tree problem and in the other formulation (MMX). Should I sttle for one and just say that they are synonim?
+    }
+
+    $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
     $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
     The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
     such that the following cost function is minimized:
     \[
-        \sum_{(x,y) \in E} |f_{xy}|^\alpha \|x - y\|
+        \sum_{(x,y) \in E} f_{xy}^\alpha \|x - y\|
     \]
-        {\color{red} This notation is confusing; are $x,y$ nodes of the graph or the corresponding coordinates of terminals or Steiners? Also, not clear why you are using absolute value since you have not said what a negative flow means in your formulation.}
+        {\color{red} This notation is confusing; are $x,y$ nodes of the graph or the corresponding coordinates of terminals or Steiners?}
+        {\color{red} What a negative flow means in your formulation. DONE}
     \begin{remark}
-        The optimal solution of a DBT problem is a union of trees, with a special case where there is only one source and the optimal solution is a tree. {\color{red} why? this follows from Antonio's result, right? if so, cite it.}
+        It follows from~\ref{lemma:loop_free} that the optimal solution of a DBT problem is a union of trees.
+        In the special case where there is only one source then the optimal solution is a tree becuase of the connectivity
+        of the solution.
+            {\color{red} why? this follows from Antonio's result, right? if so, cite it. DONE}
     \end{remark}
-
     \begin{remark}
-        The problem is symmetric with respect to changing the sign of the masses, i.e.\ swapping the roles of sources and sinks. {\color{red} Why do we need this remark? Have you used this fact anywhere?}
+
+        The problem remains unchanged if the signs of the masses are inverted, meaning that sources and sinks can be swapped.
+        Therefore, it is sufficient to analyze either the case of a single source or a single sink, as they are the same problem.
+
+            {\color{red} Why do we need this remark? Have you used this fact anywhere? Later we restrict to a single sink,
+        it is just to say that the same applies also for a single source, but it is overall a very obvious fact}
     \end{remark}
 
     \subsection{Euclidean Steiner Tree problem}
@@ -507,10 +545,14 @@
 
     \subsection{Instance specific bounds}
 
-    We now have a bound on the cosine of the angle between two edges given their flows. In the previous section we have
-    taken the supremum over all possible masses to obtain an instance independent bound. {\color{red} Please specify the result you are referring to.} We now focus on an instance
-    specific bound, assuming that we already know the set $M$.
-        {\color{red} You have a couple of results already depending on $m_1, m_2$. What you do mean we now focus on an instance specific bound? I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence.}
+    We now have a bound on the cosine of the angle between two edges given their flows. In~\ref{lemma:bound_general_direction} we have
+    taken the supremum over all possible masses to obtain an instance independent bound. {\color{red} Please specify the result you are referring to. DONE}
+    We now focus on looking for a bound that holds at every branching point of a specific instance of the problem,
+    so we assume that we already know the set $M$.
+
+        {\color{red} You have a couple of results already depending on $m_1, m_2$. What you do mean we now focus on an instance specific bound?
+    I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence. TODO: finisci}
+
     We now focus on the case where there is only one source and therefore the optimal solution is a tree.
     In this case, thanks to the loop-free property of the optimal solution, we know that the masses on the edges are
     combinations of masses in $M$. We can then maximize the bound of the cosine under this constraint to find the smallest
@@ -518,7 +560,9 @@
 
     \begin{lemma}
         \label{lemma:degree_definition}
-        Given an instance of a DBT problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$ {\color{red} why did you add $-1$ to the set of masses?} such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
+        Given an instance of a DBT problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$
+            {\color{red} why did you add $-1$ to the set of masses?}
+        such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
         a cost parameter $\alpha \in (0,1)$, consider a branching point $s$ with two branches attached to it,
         calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ we have {\color{red} $P^+$ or $P$?}:
 
@@ -554,8 +598,10 @@
     \end{lemma}
 
     \begin{corollary}
-        We can deduce from \ref{lemma:degree_definition} that outside of the support of the sources and sinks the bound can be refined,
-        as we know from the conservation of flow that there is at least one angle with both incoming and outgoing flow. {\color{red} I dont understand.}
+        At a branching point outside of the support of $P$ we know that the conservation of flow holds, therefore there is
+        at least one incoming edge and one outgoing edge. Given this we can slightly improve the bound with a strategy
+        similar to~\cite[Section 11]{Bernot}.
+            {\color{red} I dont understand. I am not sure that this is a useful remark/corollary}
     \end{corollary}
     \begin{remark}
         Finding $r$ as in~\ref{eq:ratio_definition} is probably computationally a difficult problem, so we could try some heuristic to find a good approximation.
@@ -662,19 +708,21 @@
     This formulation is due to~\cite[Section 2]{mmx}
     \begin{align}
         \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
-        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P^+, \\
         & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
         & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
-        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S.
+        & s_i = \sum_{j \in P} c_{ij} p_j \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S \\
+        & c_{ij} \in \R_+^N \quad i \in S, \quad j \in P,
     \end{align}
-    {\color{red} lets always add the constraint that the Steiner points are in the convex hull of terminals.}\\
+    {\color{red} lets always add the constraint that the Steiner points are in the convex hull of terminals. DONE}\\
     Where:
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
         \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
         \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
-        \item [$E_1$] is the set of edges connecting terminals to Steiner points,
-        \item [$E_2$] is the set of edges connecting Steiner points
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
+        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
     \end{itemizeb}
 
     We will prove its correctness by showing that the generalization of this formulation is equivalent to the DBT problem.
@@ -682,38 +730,40 @@
 
         {\color{red} This is a formulation for DBT, why using the name generalized MMX??}
 
-    \subsection{Generalized MMX}
+    \subsection{DBT Formulation}
 
-    We present here a generalization of the MMX formulation that solves a DBT problem with a cost parameter $\alpha$.
+    We present here a generalization of the MMX formulation that solves a DBT problem with a cost parameter $\alpha$ and a
+    single source $p^-=\{p_0\}$.
 
     \begin{align}
-        \text{(GMMX)}: \; \min &\sum_{[i,j] \in E_1} (f_{ij} + f_{ji})^{\alpha}\|p_i - x^j\| y_{ij} + \sum_{[i,j] \in E_2} (f_{ij} + f_{ji})^{\alpha}\|x^i - x^j\| y_{ij} \\
-        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P, \\
-        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\}, \label{gmmx:connectedness} \\
-        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = m_j \quad \text{for } j \in P, \label{gmmx:sum_terminals} \\
-        & \sum_{i \in S \cup P} f_{ij} - \sum_{i \in S \cup P} f_{ji} = 0 \quad \text{for } j \in S, \label{gmmx:sum_steiner_0} \\
-        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \\
-        & f_{ij} \le y_{ij} \quad \text{for } i,j \in S \cup P \\
-        & y_{ij} = y_{ji} \quad \text{for } i,j \in S \cup P \\
-        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S. \\
-        & f_{ij} \in [0,1] \quad \text{for } i,j \in S \cup P\\
+        \text{(DBT)}: \; \min &\sum_{[i,j] \in E_1} f_{ij}^{\alpha}\|p_i - x^j\| + \sum_{[i,j] \in E_2} f_{ji}^{\alpha}\|x^i - x^j\| \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\}, \label{dbt_form:connectedness} \\
+        & \sum_{i \in S} f_{ji} = m_j \quad \text{for } j \in P^+ \label{dbt_form:sum_terminals} \\
+        & \sum_{i \in S} f_{ji} = -m_j \quad \text{for } j \in P^- \label{dbt_form:sum_sink} \text{todo: understand how to treat this in a decent way} \\
+        & \sum_{i \in P} f_{ij} + \sum_{k < j, k \in S} f_{kj} + \sum_{k > j, k \in S} f_{jk} = 0 \quad \text{for } j \in S \label{dbt_form:sum_steiner_0}  \\
+        3 \le & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \label{dbt_form:degree_bound} \\
+        & f_{ij} \le y_{ij} \quad \text{for } [i,j] \in E \\
+        & s_i = \sum_{j \in P} c_{ij} p_j \text{    todo: this is an equality for vectors, should I expand it coordinate wise?} \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S \\
+        & f_{ij} \in [0,1] \quad \text{for } [i,j] \in E\\
+        & c_{ij} \in \R_+^N \quad i \in S, \quad j \in P \\
         & |S| = |P| - 2
     \end{align}
-    {\color{red} why $|S| = |P| - 2$ is part of the formulation?}
-    {\color{red} Also constrain $x^i$ to be in the convex hull of terminals}
-    {\color{red} Get rid of duplicates like $y_{ij}$ and $y_{ji}$.}
-    {\color{red} why $f_{ij}$ and $y_{ij}$ are defined over different index sets? The index set over which $f_{ij}$ as defined does not seem correct. It should either be between two Steiners $i,j$ or a Steiner $i$  and a terminal $j$ (similar to what you did in MMX for Steiner).}
-    {\color{red} Also please specify under what conditions inequality (6.11) can be replaced by an equality.}
+    {\color{red} why $|S| = |P| - 2$ is part of the formulation?} \\
+    {\color{red} Also constrain $x^i$ to be in the convex hull of terminals DONE} \\
+    {\color{red} Get rid of duplicates like $y_{ij}$ and $y_{ji}$. DONE} \\
+    {\color{red} why $f_{ij}$ and $y_{ij}$ are defined over different index sets? The index set over which $f_{ij}$ as defined does not seem correct. It should either be between two Steiners $i,j$ or a Steiner $i$  and a terminal $j$ (similar to what you did in MMX for Steiner). DONE} \\
+    {\color{red} Also please specify under what conditions inequality \ref{dbt_form:degree_bound} can be replaced by an equality.} \\
     where we use the same notation for the sets $P, S, E_1, E_2$ and additionally:
 
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
         \item[$\alpha \in (0,1)$] is the cost parameter
         \item [$M$] is the set of masses $\{m_1, \ldots, m_n\}$ of the terminals
-        \item [$f_{xy}$] {\color{red} inconsistent notation.} flow on the edge connecting $x$ to $y$
-        \item [$y_{xy}$] {\color{red} inconsistent notation.}
-        binary variable indicating the presence of an edge between $x$ and $y$
-        \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in \ref{lemma:degree_definition}
+        \item [$f_{ij}$] flow on the edge connecting $i$ to $j$  {\color{red} inconsistent notation.}
+        \item [$y_{ij}$] binary variable indicating the presence of an edge between $i$ and $j$  {\color{red} inconsistent notation.}
+        \item [$ deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in~\ref{lemma:degree_definition}
     \end{itemizeb}
 
     \subsection{Proof of correctness}
@@ -753,7 +803,7 @@
     \begin{equation}
         \sum_{i \in P \cup S} \left( f_{pi} - f_{ip}\right) + \sum_{j \in S_p} \sum_{i \in P \cup S} \left( f_{ij} - f_{ji} \right)
     \end{equation}
-    By constraint~\ref{gmmx:sum_steiner_0} and~\ref{gmmx:sum_terminals} we get that the final flow is exactly $m_p$.
+    By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_terminals} we get that the final flow is exactly $m_p$.
     Outside of any terminal the same computations yield a sum of $0$.
     We have also proved now that the set of feasible solutions of GMMX is a subset of the set of feasible solutions of DBT through $\phi$.
     This means that to prove the equivalence we only need to show that for any optimal solution in DBT
@@ -791,7 +841,7 @@
     \end{equation}
 
     because in our case $d(i)=1$ by assumption.
-    In order to satisfy the connectivity constraint~\ref{gmmx:connectedness} we have to re-order
+    In order to satisfy the connectivity constraint~\ref{dbt_form:connectedness} we have to re-order
     the steiner points in a topological order, which exists as it is a tree.
 
     \subsection{Step 4}
@@ -809,7 +859,7 @@
     This procedure preserves the connectedness of the graph and its topology. We can repeat this procedure until all terminals
     have degree $1$.
     Once the topology is fixed, the flows are uniquely determined by the masses on the terminals. We might just have to
-    re-order the Steiner points to satisfy the connectivity constraint~\ref{gmmx:connectedness}.
+    re-order the Steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
 
     \subsection{Step 5}
     In the case of a disconnected optimal solution we would have a finite union of $T$ trees, where each tree is an optimal solution

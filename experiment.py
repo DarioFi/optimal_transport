@@ -39,12 +39,13 @@ def extract_results(model, result):
 class Experiment:
     def __init__(self, instance_generator: Callable, instance_arguments: Dict, solver: str, solver_options: str,
                  formulation: Callable,
-                 formulation_arguments: Dict, seed: int, save_folder: str, experiment_name: str):
+                 formulation_arguments: Dict, seed: int, save_folder: str, experiment_name: str, tee: bool):
         self._instance_generator = instance_generator
         self.instance_arguments = instance_arguments
 
         self.solver = solver
         self.solver_options = solver_options
+        self.tee = tee
 
         self.formulation = formulation
         self.formulation_arguments = formulation_arguments
@@ -64,7 +65,7 @@ class Experiment:
 
         solver = SolverFactory(self.solver)
 
-        results = solver.solve(formulation, tee=True, options_string=self.solver_options)
+        results = solver.solve(formulation, tee=self.tee ,options_string=self.solver_options)
 
         results_serializable = extract_results(formulation, results)
         return instance, results_serializable
@@ -126,7 +127,8 @@ if __name__ == '__main__':
             },
             seed=83810,
             save_folder='runs',
-            experiment_name=f'gmmx'
+            experiment_name=f'gmmx',
+            tee=True
         )
 
         results = exp.run(50)

@@ -124,6 +124,8 @@ def apply_single_C(exp: ExperimentData, c: ImplementedC):
     obj = exp
     for key in c.filter_path:
         if isinstance(obj, dict):
+            if key not in obj:
+                return False
             obj = obj[key]
         else:
             obj = getattr(obj, key)
@@ -167,35 +169,45 @@ if __name__ == '__main__':
     db = Database.populate_from_folder("../runs/")
 
     query = Query()
-    query.add_filter(C("instance_arguments//n").is_in(4,5))
+    query.add_filter(C("instance_arguments//n").is_in(4))
     # query.add_filter(C("results//termination_condition") == "optimal")
     # query.add_filter(C("date") == datetime.datetime.today())
 
-    query_bind = query.clone()
-    query_not_bind = query.clone()
+    query_lb = query.clone()
+    query_no_lb = query.clone()
 
-    query_bind.add_filter(C("formulation_arguments//bind_first_steiner") == True)
-    query_not_bind.add_filter(C("formulation_arguments//bind_first_steiner") == False)
+    query_lb.add_filter(C("formulation_arguments//use_obj_lb") == True).add_filter(
+        C("formulation_arguments//bind_first_steiner") == False)
 
-    results_bind = query_bind.apply(db)
-    results_not_bind = query_not_bind.apply(db)
+    query_no_lb.add_callback(lambda x: "use_obj_lb" not in x.formulation_arguments)
+    query_no_lb.add_filter(C("formulation_arguments//bind_first_steiner") == False)
+
+    results_bind = query_lb.apply(db)
+    results_not_bind = query_no_lb.apply(db)
 
     all_exp_bind = [res.results["wallclock_time"] for res in results_bind]
     all_exp_not_bind = [res.results["wallclock_time"] for res in results_not_bind]
 
     successful_times_bind = [res.results["wallclock_time"] for res in
-                             query_bind.clone().add_callback(exp_is_optimal).apply(db)]
+                             query_lb.clone().add_callback(exp_is_optimal).apply(db)]
     successful_times_not_bind = [res.results["wallclock_time"] for res in
-                                 query_not_bind.clone().add_callback(exp_is_optimal).apply(db)]
+                                 query_no_lb.clone().add_callback(exp_is_optimal).apply(db)]
 
     failed_times_bind = [res.results["wallclock_time"] for res in
-                         query_bind.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
+                         query_lb.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
 
     failed_times_not_bind = [res.results["wallclock_time"] for res in
-                             query_not_bind.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
+                             query_no_lb.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
 
     print(f"Percentage of success with bind: {len(successful_times_bind) / len(all_exp_bind) * 100:.2f}%")
     print(f"Percentage of success without bind: {len(successful_times_not_bind) / len(all_exp_not_bind) * 100:.2f}%")
+
+    print(f"Average time for success with bind: {sum(successful_times_bind) / len(successful_times_bind):.2f}s")
+    print(f"Average time for success without bind: {sum(successful_times_not_bind) / len(successful_times_not_bind):.2f}s")
+
+    print(len(all_exp_bind))
+    print(len(all_exp_not_bind))
+
 
     for i, (time_bind, time_not_bind) in enumerate(zip(all_exp_bind, all_exp_not_bind)):
         # print with spacing of 10

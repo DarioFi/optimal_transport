@@ -16,8 +16,6 @@ def visualize(data: ExperimentData):
         color = 'ro' if mass < 0 else 'bo'
         plt.plot(terminal[0], terminal[1], color, alpha=abs(mass**0.2))
 
-    print(terminals)
-
     steiner_points = []
     x = data.results['variables']['x']
     polished_x = {}
@@ -42,9 +40,9 @@ def visualize(data: ExperimentData):
             new_x[key[0]] = []
         new_x[key[0]].append(value)
 
-    print(new_x)
-
     steiner_points = new_x
+
+    print(f"{steiner_points=}")
 
     for point, value in steiner_points.items():
         plt.plot(value[0], value[1], 'go')
@@ -82,8 +80,6 @@ def visualize(data: ExperimentData):
             #           fc='b', ec='b', alpha=value**.2)
 
     plt.show()
-
-    print(f"{cost=}")
 
 if __name__ == '__main__':
     import json, os
