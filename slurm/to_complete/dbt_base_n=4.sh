@@ -14,7 +14,7 @@
 
 #SBATCH --mail-user=dario.filatrella@studbocconi.it
 
-python experiments/dbt_baseline_test.py
+python dbt_baseline_test.py
 
 
 
