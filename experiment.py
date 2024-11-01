@@ -70,7 +70,6 @@ class Experiment:
 
         results_serializable = extract_results(formulation, results)
 
-        print(f"Finished run {seed=}")
         return instance, results_serializable
 
     def serialize(self, instance, results, seed):
@@ -99,7 +98,7 @@ class Experiment:
 
         return serialized_data
 
-    def run(self, multithreaded: bool, n_threads: Optional[int]=None):
+    def run(self, multithreaded: bool, n_threads: Optional[int] = None):
         random.seed(self.seed)
         seeds = [random.randint(0, 100000) for _ in range(self.n_runs)]
         results = []

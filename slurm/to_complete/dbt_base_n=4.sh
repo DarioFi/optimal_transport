@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name="gmmx_n=5"
+#SBATCH --job-name="dbt_baseline_n=4-5"
 
 #SBATCH --account=3144366
 
@@ -14,7 +14,7 @@
 
 #SBATCH --mail-user=dario.filatrella@studbocconi.it
 
-python experiment.py
+python experiments/dbt_baseline_test.py
 
 
 
