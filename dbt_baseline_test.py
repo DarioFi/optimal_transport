@@ -53,9 +53,4 @@ nm.fixed_params['solver'] = 'baron'
 
 nm.build_experiments()
 
-# nm.run_save(True, None)
-
-import multiprocessing
-
-print(f"{multiprocessing.cpu_count()} cores available")
-
+nm.run_save(True, 8)
