@@ -2,7 +2,7 @@ import datetime
 import json
 import os
 import random
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Optional
 
 from pyomo.environ import Var
 import pyomo.environ as pyo
@@ -38,7 +38,7 @@ def extract_results(model, result):
 
 class Experiment:
     def __init__(self, instance_generator: Callable, instance_arguments: Dict, solver: str, solver_options: str,
-                 formulation: Callable,
+                 formulation: Callable, n_runs: int,
                  formulation_arguments: Dict, seed: int, save_folder: str, experiment_name: str, tee: bool):
         self._instance_generator = instance_generator
         self.instance_arguments = instance_arguments
@@ -52,6 +52,7 @@ class Experiment:
 
         self.seed = seed
 
+        self.n_runs = n_runs
         self.save_location = save_folder
         self.experiment_name = experiment_name
 
@@ -65,9 +66,11 @@ class Experiment:
 
         solver = SolverFactory(self.solver)
 
-        results = solver.solve(formulation, tee=self.tee ,options_string=self.solver_options)
+        results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
 
         results_serializable = extract_results(formulation, results)
+
+        print(f"Finished run {seed=}")
         return instance, results_serializable
 
     def serialize(self, instance, results, seed):
@@ -96,13 +99,25 @@ class Experiment:
 
         return serialized_data
 
-    def run(self, n_runs: int):
+    def run(self, multithreaded: bool, n_threads: Optional[int]=None):
         random.seed(self.seed)
-        seeds = [random.randint(0, 100000) for _ in range(n_runs)]
+        seeds = [random.randint(0, 100000) for _ in range(self.n_runs)]
         results = []
-        for seed in seeds:
-            instance, result = self._single_run(seed)
-            results.append(self.serialize(instance, result, seed))
+        if multithreaded is False:
+            for seed in seeds:
+                instance, result = self._single_run(seed)
+                results.append(self.serialize(instance, result, seed))
+        else:
+            import multiprocessing
+
+            if n_threads is None:
+                n_threads = multiprocessing.cpu_count()
+
+            with multiprocessing.Pool(n_threads) as pool:
+                single_runs_res = pool.map(self._single_run, seeds)
+
+            for seed, (instance, result) in zip(seeds, single_runs_res):
+                results.append(self.serialize(instance, result, seed))
 
         return results
 
@@ -122,22 +137,22 @@ if __name__ == '__main__':
             formulation_arguments={
                 'maximum_degree': 3,
                 'alpha': .5,
-                'bind_first_steiner': bind,
+                'use_bind_first_steiner': bind,
                 'use_obj_lb': True
             },
             seed=83810,
             save_folder='runs',
             experiment_name=f'gmmx',
-            tee=True
+            tee=False,
+            n_runs=100
         )
 
-        results = exp.run(50)
+        results = exp.run(multithreaded=True, n_threads=3)
         exp.save_to_disk(results)
 
 # todo:
 # experiment manager that runs multiple experiments with grid search or similar
 # maybe parallelize the experiments
-# create deserializer tool to read the results and analyze them
 # visualization
 # install Gurobi on the VM
 # install CPLEX on the VM

@@ -118,8 +118,7 @@ def random_points_unit_square_with_masses(n):
     # renormalize masses to 1
     masses = [m / sum(masses) for m in masses]
 
-    # assure masses sum to 0
-    masses.append(-sum(masses))
+    masses = [-sum(masses)] + masses
 
     return {"terminals": points, "masses": masses}
 
