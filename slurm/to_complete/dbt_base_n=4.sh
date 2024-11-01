@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name="dbt_baseline_n=4-5"
+#SBATCH --job-name="dbt_baseline_n=6-7"
 
 #SBATCH --account=3144366
 

@@ -5,7 +5,7 @@ from formulations.dbt import dbt
 nm = ExperimentManager()
 
 nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
-nm.grid_params['instance_arguments'] = [{'n': 4}, {'n': 5}]
+nm.grid_params['instance_arguments'] = [{'n': 6}, {'n': 7}]
 
 nm.baron_solver(300)
 
