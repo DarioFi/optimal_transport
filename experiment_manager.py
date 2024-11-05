@@ -62,9 +62,9 @@ if __name__ == '__main__':
     nm = ExperimentManager()
 
     nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
-    nm.fixed_params['instance_arguments'] = {'n': 4}
+    nm.fixed_params['instance_arguments'] = {'n': 6}
 
-    nm.baron_solver(300)
+    nm.baron_solver(10)
 
     nm.fixed_params['n_runs'] = 10
     nm.fixed_params['save_folder'] = 'runs'
@@ -78,15 +78,13 @@ if __name__ == '__main__':
     }
 
     nm.random_seed()
-    nm.fixed_params['tee'] = False
+    nm.fixed_params['tee'] = True
     nm.fixed_params['experiment_name'] = 'test_manager'
 
 
 
-    nm.fixed_params['solver'] = 'baron'
     nm.grid_params['formulation'] = [
         formulations.dbt.dbt,
-        formulations.gmmx.gmmx
     ]
 
     nm.build_experiments()

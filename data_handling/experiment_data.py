@@ -1,8 +1,12 @@
 import datetime
+import itertools
 import json
 import os
 from typing import List, Dict, Tuple, Callable, Any
 import copy
+import numpy as np
+from matplotlib import pyplot as plt
+from pyomo.contrib.mindtpy.util import numpy
 
 
 class C:
@@ -87,16 +91,6 @@ class ExperimentData:
         )
 
 
-def exp_is_optimal(exp: ExperimentData):
-    if exp.results['termination_condition'] == 'optimal':
-        return True
-    elif exp.results['termination_condition'] == 'maxTimeLimit':
-        return False
-    else:
-        print(f"Unknown termination condition: {exp.results['termination_condition']}")
-        raise ValueError
-
-
 def NOT(f: Callable[[Any], bool]):
     return lambda x: not f(x)
 
@@ -118,6 +112,30 @@ class Database:
                         db.experiments.append(ExperimentData.from_json(run))
 
         return db
+
+    def __len__(self):
+        return len(self.experiments)
+
+    def __getitem__(self, item):
+        if isinstance(item, slice):
+            return self.experiments[item]
+        if isinstance(item, int):
+            return self.experiments[item]
+        if isinstance(item, str):
+            db = Database()
+            for exp in self.experiments:
+                if isinstance(exp, dict):
+                    if item in exp:
+                        db.experiments.append(exp[item])
+                    else:
+                        raise KeyError(f"Key {item} not found in experiment")
+                else:
+                    db.experiments.append(getattr(exp, item))
+
+            return db
+
+    def to_numpy(self):
+        return numpy.array(self.experiments)
 
 
 def apply_single_C(exp: ExperimentData, c: ImplementedC):
@@ -153,15 +171,15 @@ class Query:
     def join(self, other_query):
         # todo:
         # - implement as __add__ ?
-        # - return new value or modify self?
+        # - return new value or modify self ?
         raise NotImplementedError
 
-    def apply(self, db):
-        results = []
+    def apply(self, db: Database):
+        results = Database()
         for exp in db.experiments:
             if all([filter_func(exp) for filter_func in self._callbacks]):
                 if all([apply_single_C(exp, c) for c in self._filters]):
-                    results.append(exp)
+                    results.experiments.append(exp)
         return results
 
 
@@ -169,48 +187,41 @@ if __name__ == '__main__':
     db = Database.populate_from_folder("../runs/")
 
     query = Query()
-    query.add_filter(C("instance_arguments//n").is_in(4))
     # query.add_filter(C("results//termination_condition") == "optimal")
     # query.add_filter(C("date") == datetime.datetime.today())
 
-    query_lb = query.clone()
-    query_no_lb = query.clone()
+    query.add_filter(C("instance_arguments//n") == 6)
+    query.add_filter(C("formulation") == "dbt")
 
-    query_lb.add_filter(C("formulation_arguments//use_obj_lb") == True).add_filter(
-        C("formulation_arguments//bind_first_steiner") == False)
+    query_optimal = query
+    query_optimal.add_filter(C("results//termination_condition") == "optimal")
 
-    query_no_lb.add_callback(lambda x: "use_obj_lb" not in x.formulation_arguments)
-    query_no_lb.add_filter(C("formulation_arguments//bind_first_steiner") == False)
+    results_optimal = query_optimal.apply(db)
 
-    results_bind = query_lb.apply(db)
-    results_not_bind = query_no_lb.apply(db)
+    print(f"Optimal: {len(results_optimal)}")
 
-    all_exp_bind = [res.results["wallclock_time"] for res in results_bind]
-    all_exp_not_bind = [res.results["wallclock_time"] for res in results_not_bind]
+    times_opt = results_optimal["results"]["time"]
 
-    successful_times_bind = [res.results["wallclock_time"] for res in
-                             query_lb.clone().add_callback(exp_is_optimal).apply(db)]
-    successful_times_not_bind = [res.results["wallclock_time"] for res in
-                                 query_no_lb.clone().add_callback(exp_is_optimal).apply(db)]
+    # filter on use_bind_steiner and use_convex_hull to get a 2x2 matrix of results
 
-    failed_times_bind = [res.results["wallclock_time"] for res in
-                         query_lb.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
+    conds = itertools.product([True, False], repeat=2)
+    data = {}
+    for co in conds:
+        nq = query_optimal.clone()
+        data[tuple(co)] = nq.add_filter(
+            C("formulation_arguments//use_bind_first_steiner") == co[0]).add_filter(
+            C("formulation_arguments//use_convex_hull") == co[1]
+        ).apply(db)["results"]["time"].to_numpy()
 
-    failed_times_not_bind = [res.results["wallclock_time"] for res in
-                             query_no_lb.clone().add_callback(NOT(exp_is_optimal)).apply(db)]
+    mean = np.array([np.mean(x) for x in data.values()]).reshape(2, 2)
+    std = np.array([np.std(x) for x in data.values()]).reshape(2, 2)
 
-    print(f"Percentage of success with bind: {len(successful_times_bind) / len(all_exp_bind) * 100:.2f}%")
-    print(f"Percentage of success without bind: {len(successful_times_not_bind) / len(all_exp_not_bind) * 100:.2f}%")
+    print(f"Average time: {sum(times_opt) / len(times_opt)}")
+    print(f"Max time: {max(times_opt)}")
+    print(f"Min time: {min(times_opt)}")
 
-    print(f"Average time for success with bind: {sum(successful_times_bind) / len(successful_times_bind):.2f}s")
-    print(f"Average time for success without bind: {sum(successful_times_not_bind) / len(successful_times_not_bind):.2f}s")
+    print(mean.round(2))
+    print(std.round(2))
 
-    print(len(all_exp_bind))
-    print(len(all_exp_not_bind))
-
-
-    for i, (time_bind, time_not_bind) in enumerate(zip(all_exp_bind, all_exp_not_bind)):
-        # print with spacing of 10
-        time_bind = "XXX" if time_bind > 300 else time_bind
-        time_not_bind = "XXX" if time_not_bind > 300 else time_not_bind
-        print(f"{i:<10}{time_bind:<10}{time_not_bind:<10}s")
+    for k, d in data.items():
+        print(rf"bind_first={k[0]} convex_hull={k[1]}: {np.mean(d):2f} +- {np.std(d):2f}")

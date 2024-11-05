@@ -49,7 +49,6 @@ nm.random_seed()
 nm.fixed_params['tee'] = False
 nm.fixed_params['experiment_name'] = 'dbt_baseline_test'
 
-nm.fixed_params['solver'] = 'baron'
 
 nm.build_experiments()
 

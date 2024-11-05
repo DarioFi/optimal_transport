@@ -1,4 +1,4 @@
-from data_handling.experiment_data import ExperimentData
+from data_handling.experiment_data import ExperimentData, Database, Query, C
 import matplotlib.pyplot as plt
 
 
@@ -10,11 +10,6 @@ def visualize(data: ExperimentData):
     plt.title(data.experiment_name)
     plt.axis('equal')
     plt.axis('off')
-
-    for mass, terminal in zip(masses, terminals):
-        # terminal is a list with x,y coordinates, mass is the intensity
-        color = 'ro' if mass < 0 else 'bo'
-        plt.plot(terminal[0], terminal[1], color, alpha=abs(mass**0.2))
 
     steiner_points = []
     x = data.results['variables']['x']
@@ -64,10 +59,14 @@ def visualize(data: ExperimentData):
             value = min(value, 1)
 
             a = .5
-            distance = ((all_points_indexed[key[0]][0] - all_points_indexed[key[1]][0])**2 + (all_points_indexed[key[0]][1] - all_points_indexed[key[1]][1])**2)**0.5
+            distance = ((all_points_indexed[key[0]][0] - all_points_indexed[key[1]][0]) ** 2 + (
+                    all_points_indexed[key[0]][1] - all_points_indexed[key[1]][1]) ** 2) ** 0.5
             cost += value ** a * distance
 
-            plt.plot([all_points_indexed[key[0]][0], all_points_indexed[key[1]][0]], [all_points_indexed[key[0]][1], all_points_indexed[key[1]][1]], 'b-', alpha=value)
+            value = value ** .3
+
+            plt.plot([all_points_indexed[key[0]][0], all_points_indexed[key[1]][0]],
+                     [all_points_indexed[key[0]][1], all_points_indexed[key[1]][1]], 'b-', alpha=value)
 
             # clip value to 1
             # do the same but add an arrow at the end
@@ -79,7 +78,14 @@ def visualize(data: ExperimentData):
             #           head_width=0.05, head_length=0.02,
             #           fc='b', ec='b', alpha=value**.2)
 
+    for mass, terminal in zip(masses, terminals):
+        # terminal is a list with x,y coordinates, mass is the intensity
+        color = 'ro' if mass < 0 else 'bo'
+        plt.plot(terminal[0], terminal[1], color, alpha=1)
+
+    # todo : fix colors overlapping
     plt.show()
+
 
 if __name__ == '__main__':
     import json, os
@@ -89,6 +95,14 @@ if __name__ == '__main__':
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
         jd = json.load(f)[-1]
 
-    data = ExperimentData.from_json(jd)
-    print(data.results["termination_condition"])
-    visualize(data)
+    db = Database.populate_from_folder("../runs/")
+
+    query = Query().add_filter(C("formulation") == "dbt").add_filter(
+        C("instance_arguments//n") == 6).add_filter(C("results//termination_condition") == "optimal")
+
+    exps = query.apply(db)
+
+    tot = 10
+
+    for i in range(tot):
+        visualize(exps[i])

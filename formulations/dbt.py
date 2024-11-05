@@ -57,7 +57,6 @@ def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_ob
     model.flow_conservation_terminal_constraint = pyo.Constraint(model.P, rule=flow_conservation_terminal_constraint)
 
     def flow_conservation_steiner_constraint(model, i):
-        # todo: check orientation
         return sum(model.f[j, i] for j in model.S if j < i) - sum(model.f[i, j] for j in model.S if j > i) - sum(
             model.f[j, i] for j in model.P if j != 0) + model.f[0, i] == 0
 

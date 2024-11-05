@@ -628,7 +628,7 @@
             f(m_i, m_j) = \frac{(m_i + m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
         \end{equation}
 
-        Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of \ref{lemma:loop_free}) in the sense that there
+        Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of~\ref{lemma:loop_free}) in the sense that there
         exist sets $A_i, A_j \subseteq M$ such that $A_i, A_j \neq \emptyset$, $m_i = \sum_{k \in A_i} m_k$ and $m_j = \sum_{k \in A_j} m_k$ and $A_i \cap A_j = \emptyset$.
 
         Similarly to~\ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
@@ -697,43 +697,15 @@
 
     \section{Formulating DBT as a mathematical optimization problem}
 
-    In this section we formulate DBT as an MINLP problem. We first introduce a formulation specific for the case $\alpha=0$
-    and then extend it to the general case.
-        {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta, we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
+    {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta, we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
 
 
-        {\color{red} Get rid of MMX, give the optimization problems better names related to the problem name.}
-
-    \subsection{MMX}
-    This formulation is due to~\cite[Section 2]{mmx}
-    \begin{align}
-        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
-        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P^+, \\
-        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
-        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
-        & s_i = \sum_{j \in P} c_{ij} p_j \\
-        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S \\
-        & c_{ij} \in \R_+^N \quad i \in S, \quad j \in P,
-    \end{align}
-    {\color{red} lets always add the constraint that the Steiner points are in the convex hull of terminals. DONE}\\
-    Where:
-    \begin{itemizeb}
-        \leftskip 0.8 cm\labelsep=.3 cm
-        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
-        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
-        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
-        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
-    \end{itemizeb}
-
-    We will prove its correctness by showing that the generalization of this formulation is equivalent to the DBT problem.
-
-
-        {\color{red} This is a formulation for DBT, why using the name generalized MMX??}
+    {\color{red} Get rid of MMX, give the optimization problems better names related to the problem name.}
 
     \subsection{DBT Formulation}
 
-    We present here a generalization of the MMX formulation that solves a DBT problem with a cost parameter $\alpha$ and a
-    single source $p^-=\{p_0\}$.
+    In this section we present a formulation for the DBT problem with a cost parameter $\alpha$ and a
+    single source $p^-=\{p_0\}$ based on~\cite[MMX]{mmx}.
 
     \begin{align}
         \text{(DBT)}: \; \min &\sum_{[i,j] \in E_1} f_{ij}^{\alpha}\|p_i - x^j\| + \sum_{[i,j] \in E_2} f_{ji}^{\alpha}\|x^i - x^j\| \\
@@ -744,10 +716,10 @@
         & \sum_{i \in P} f_{ij} + \sum_{k < j, k \in S} f_{kj} + \sum_{k > j, k \in S} f_{jk} = 0 \quad \text{for } j \in S \label{dbt_form:sum_steiner_0}  \\
         3 \le & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} \le deg(\alpha, N, M) \quad \text{for } j \in S \label{dbt_form:degree_bound} \\
         & f_{ij} \le y_{ij} \quad \text{for } [i,j] \in E \\
-        & s_i = \sum_{j \in P} c_{ij} p_j \text{    todo: this is an equality for vectors, should I expand it coordinate wise?} \\
+        & s_i = \sum_{j \in P} c_{ij} p_j \\
         & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S \\
         & f_{ij} \in [0,1] \quad \text{for } [i,j] \in E\\
-        & c_{ij} \in \R_+^N \quad i \in S, \quad j \in P \\
+        & c_{ij} \in \R_+ \quad i \in S, \quad j \in P \\
         & |S| = |P| - 2
     \end{align}
     {\color{red} why $|S| = |P| - 2$ is part of the formulation?} \\
@@ -755,7 +727,15 @@
     {\color{red} Get rid of duplicates like $y_{ij}$ and $y_{ji}$. DONE} \\
     {\color{red} why $f_{ij}$ and $y_{ij}$ are defined over different index sets? The index set over which $f_{ij}$ as defined does not seem correct. It should either be between two Steiners $i,j$ or a Steiner $i$  and a terminal $j$ (similar to what you did in MMX for Steiner). DONE} \\
     {\color{red} Also please specify under what conditions inequality \ref{dbt_form:degree_bound} can be replaced by an equality.} \\
-    where we use the same notation for the sets $P, S, E_1, E_2$ and additionally:
+    where we define the followings:
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
+        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
+    \end{itemizeb}
 
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
@@ -768,17 +748,19 @@
 
     \subsection{Proof of correctness}
 
-    When we say correctness we mean that, given an optimal solution of GMMX we can reconstruct one of the optimal solutions
-    to the DBT problem. Therefore we need to construct a function $\phi$ that maps feasible solutions of GMMX to feasible solutions of DBT
-    and prove that the optimal solutions found in GMMX are also optimal in DBT.
+    When we say correctness we mean that, given an optimal solution of the DBT formulation we can reconstruct one of the optimal solutions
+    to the DBT problem.
+    Therefore we need to construct a function $\phi$ that maps feasible solutions of the formulation into feasible solutions of DBT (which are graphs)
+    and prove that the optimality is preserved.
 
     Outline of the proof:
     \begin{enumerate}
-        \item construction of the map that takes feasible solutions of GMMX to graphs that solve DBT
+        \item assuming that flows can be negative
+        \item construction of the map that takes feasible solutions to graphs
         \item proof that the objective functions are the same
         \item proof of optimality for connected optimal solution where terminals are leaves
         \item proof of optimality for connected optimal solution
-        \item proof of optimality for optimal solution
+        \item dropping of the negative flow assumption
     \end{enumerate}
 
     \subsection{Step 1}
@@ -872,6 +854,29 @@
         The case of disjoint trees can only occur if there are multiple sources. In this case there is a symmetry in the ordering
         of the trees and this can heavily slow down solvers.
     \end{remark}
+
+    \subsection{MMX}
+    This formulation is due to~\cite[Section 2]{mmx}
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P^+, \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & s_i = \sum_{j \in P} c_{ij} p_j \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S \\
+        & c_{ij} \in \R_+ \quad i \in S, \quad j \in P,
+    \end{align}
+
+    Where:
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
+        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
+    \end{itemizeb}
+
+    We will prove its correctness by showing that the generalization of this formulation is equivalent to the DBT problem.
 
 
     \section{Numerical results}
