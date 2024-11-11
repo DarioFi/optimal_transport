@@ -124,6 +124,20 @@ class Experiment:
         with open(f'{self.save_location}/{datetime.datetime.now().isoformat()}_{self.experiment_name}.json', 'w') as f:
             json.dump(results, f, indent=4)
 
+    def __str__(self):
+        """Print all the parameters of the experiment"""
+        s = ""
+        s += f"Experiment: {self.experiment_name}\n"
+        s += f"Instance generator: {self._instance_generator.__name__}\n"
+        s += f"Instance arguments: {self.instance_arguments}\n"
+        s += f"Solver: {self.solver}\n"
+        s += f"Solver options: {self.solver_options}\n"
+        s += f"Formulation: {self.formulation.__name__}\n"
+        s += f"Formulation arguments: {self.formulation_arguments}\n"
+        s += f"Number of runs: {self.n_runs}\n"
+        s += f"Seed: {self.seed}\n"
+        return s
+
 
 if __name__ == '__main__':
     for bind in [True, False]:

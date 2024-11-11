@@ -8,7 +8,12 @@ def norm(p1, p2):
     return sum((x - y) ** 2 for x, y in zip(p1, p2)) ** 0.5
 
 
-def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_obj_lb, use_convex_hull):
+def norm_y(p1, p2, edge):
+    # assert abs(edge) < 1e-8 or abs(edge - 1) < 1e-8
+    return sum((x * edge - y * edge) ** 2 for x, y in zip(p1, p2)) ** 0.5
+
+
+def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     assert masses[0] < 0
@@ -63,7 +68,7 @@ def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_ob
     model.flow_conservation_steiner_constraint = pyo.Constraint(model.S, rule=flow_conservation_steiner_constraint)
 
     def degree_constraint(model, i):
-        return sum(model.y[k, j] for (k, j) in model.E if i in (k, j)) == maximum_degree
+        return sum(model.y[k, j] for (k, j) in model.E if i in (k, j)) == 3
 
     model.degree_constraint = pyo.Constraint(model.S, rule=degree_constraint)
 
@@ -76,7 +81,6 @@ def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_ob
         raise NotImplementedError("Objective lower bound not implemented yet")
 
     if use_bind_first_steiner:
-
         # bind the source to the first steiner point
 
         model.y[0, min(model.S)].fix(1)
@@ -99,10 +103,24 @@ def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_ob
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
     def objective_rule(model):
-        return sum(
-            model.f[i, j] ** alpha * norm(terminals[i], [model.x[j, d] for d in model.D]) for (i, j) in model.E1) + sum(
-            model.f[i, j] ** alpha * norm([model.x[i, d] for d in model.D], [model.x[j, d] for d in model.D]) for (i, j)
-            in model.E2)
+
+        if use_better_obj:
+            return (sum(
+                model.f[i, j] ** alpha * norm_y(terminals[i], [model.x[j, d] for d in model.D], model.y[i, j]) for
+                (i, j) in model.E1) +
+                    sum(
+                        model.f[i, j] ** alpha * norm_y([model.x[i, d] for d in model.D],
+                                                        [model.x[j, d] for d in model.D],
+                                                        model.y[i, j]) for
+                        (i, j) in model.E2))
+
+        else:
+            return sum(
+                model.f[i, j] ** alpha * norm(terminals[i], [model.x[j, d] for d in model.D]) for (i, j) in
+                model.E1) + sum(
+                model.f[i, j] ** alpha * norm([model.x[i, d] for d in model.D], [model.x[j, d] for d in model.D]) for
+                (i, j)
+                in model.E2)
 
     model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
@@ -110,8 +128,8 @@ def dbt(terminals, masses, maximum_degree, alpha, use_bind_first_steiner, use_ob
 
 
 if __name__ == '__main__':
-    terminals = [(0, 1), (1, 0), (1, 1)]
-    masses = [-1, .5, .5]
+    terminals = [(0, 1), (1, 0), (1, 1), (0, 0), (3,5), (10,10)]
+    masses = [-1, .2, .3, .2, .2, .1]
     maximum_degree = 3
     alpha = .5
 
@@ -119,10 +137,17 @@ if __name__ == '__main__':
     use_obj_lb = False
     use_convex_hull = False
 
-    model = dbt(terminals, masses, maximum_degree, alpha, bind_first_steiner, use_obj_lb, use_convex_hull)
 
-    model.pprint()
+    for use_better_obj in [True, False]:
+        model = dbt(terminals, masses, alpha, use_bind_first_steiner=bind_first_steiner, use_obj_lb=use_obj_lb, use_convex_hull=use_convex_hull,
+                    use_better_obj=use_better_obj)
 
-    solver = SolverFactory('baron')
-    results = solver.solve(model, tee=True)
-    print(results)
+        # model.pprint()
+
+        solver = SolverFactory('baron')
+        results = solver.solve(model, tee=False)
+        print(f"------{use_better_obj=}------")
+        print(results.problem.lower_bound, results.problem.upper_bound)
+        print(results.problem.cpu_time)
+        print(results.problem.wall_time)
+

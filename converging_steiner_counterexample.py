@@ -28,10 +28,12 @@ def converging_steiner():
     data = []
     for height_ratio in [4, 3, 2.5, 2.2, 2.1, 2.05, 2.01, 2]:
         exp = Experiment(gen_instance, {"height": height_ratio}, 'baron', '', dbt,
-                     {'use_bind_first_steiner': False, 'use_obj_lb': False, 'use_convex_hull': False},
-                     seed=0, save_folder=None, experiment_name="Converging Steiner", tee=False)
+                     formulation_arguments={'use_bind_first_steiner': False, 'use_obj_lb': False, 'use_convex_hull': False},
+                     seed=0, save_folder=None, experiment_name="Converging Steiner", tee=True, n_runs=1
+                         )
 
-        results = exp.run(n_runs=1)
+        results = exp.run(multithreaded=False)
+        exit()
 
         data.append(ExperimentData.from_json(results[0]))
 

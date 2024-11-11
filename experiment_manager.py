@@ -54,6 +54,9 @@ class ExperimentManager:
 
     def run_save(self, multi_threaded: bool, n_threads: Optional[int]):
         for exp in self.queued_experiments:
+
+            print(exp)
+
             results = exp.run(multi_threaded, n_threads)
             exp.save_to_disk(results)
 
