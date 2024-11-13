@@ -2,11 +2,32 @@ import datetime
 import itertools
 import json
 import os
+from doctest import debug
 from typing import List, Dict, Tuple, Callable, Any
 import copy
 import numpy as np
 from matplotlib import pyplot as plt
 from pyomo.contrib.mindtpy.util import numpy
+from sympy import pprint
+
+
+def is_hashable(obj):
+    try:
+        hash(obj)
+    except TypeError:
+        return False
+    return True
+
+
+def recursive_freeze(obj):
+    if is_hashable(obj):
+        return obj
+    if isinstance(obj, dict):
+        return frozenset({k: recursive_freeze(v) for k, v in obj.items()}.items())
+    try:
+        return tuple(recursive_freeze(v) for v in obj)
+    except TypeError:
+        raise TypeError(f"Object {obj} is weird")
 
 
 class C:
@@ -42,12 +63,12 @@ class C:
         return ImplementedC(self.filter_path, args, lambda x, y: x in y)
 
 
-class ImplementedC:
+class ImplementedC(C):
     """
     Constraint class
     """
 
-    def __init__(self, filter_path, value, test):
+    def __init__(self, filter_path, value, test, name=None):
         self.filter_path = filter_path
         self.value = value
         self.test = test
@@ -137,8 +158,64 @@ class Database:
     def to_numpy(self):
         return numpy.array(self.experiments)
 
+    def get_problem_solutions_db(self) -> Dict[Tuple, List[ExperimentData]]:
+        """
+        we use as keys seed, instance_generator, instance_arguments
+        :return:
+        """
+        new_db = {}
+        for exp in self.experiments:
+            key = []
+            for v in exp.instance.values():
+                if isinstance(v, list):
+                    for v1 in v:
+                        if isinstance(v1, list):
+                            key.extend(v1)
+                        else:
+                            key.append(v1)
+                else:
+                    key.append(v)
 
-def apply_single_C(exp: ExperimentData, c: ImplementedC):
+            key.append(exp.seed)
+            for v in exp.instance_arguments.values():
+                if isinstance(v, list):
+                    key.extend(v)
+                else:
+                    key.append(v)
+
+            key = tuple(key)
+
+            if key in new_db:
+                new_db[key].append(exp)
+            else:
+                new_db[key] = [exp]
+
+        assert sum([len(v) for v in new_db.values()]) == len(self)
+        return new_db
+
+    def index_on(self, *args):
+        new_db = {}
+
+        for exp in self.experiments:
+
+            key = []
+            for arg in args:
+                if isinstance(arg, C):
+                    key.append(extract_C(exp, arg))
+                else:
+                    key.append(getattr(exp, arg))
+
+            key = recursive_freeze(key)
+
+            if key in new_db:
+                new_db[key].append(exp)
+            else:
+                new_db[key] = [exp]
+
+        return new_db
+
+
+def extract_C(exp: ExperimentData, c: C):
     obj = exp
     for key in c.filter_path:
         if isinstance(obj, dict):
@@ -148,6 +225,11 @@ def apply_single_C(exp: ExperimentData, c: ImplementedC):
         else:
             obj = getattr(obj, key)
 
+    return obj
+
+
+def apply_single_C(exp: ExperimentData, c: ImplementedC):
+    obj = extract_C(exp, c)
     return c.test(obj, c.value)
 
 
@@ -186,42 +268,60 @@ class Query:
 if __name__ == '__main__':
     db = Database.populate_from_folder("../runs/")
 
-    query = Query()
-    # query.add_filter(C("results//termination_condition") == "optimal")
-    # query.add_filter(C("date") == datetime.datetime.today())
+    if False:
+        query = Query()
+        # query.add_filter(C("results//termination_condition") == "optimal")
+        # query.add_filter(C("date") == datetime.datetime.today())
 
-    query.add_filter(C("instance_arguments//n") == 6)
-    query.add_filter(C("formulation") == "dbt")
+        query.add_filter(C("instance_arguments//n") == 6)
+        query.add_filter(C("formulation") == "dbt")
 
-    query_optimal = query
-    query_optimal.add_filter(C("results//termination_condition") == "optimal")
+        query_optimal = query
+        query_optimal.add_filter(C("results//termination_condition") == "optimal")
 
-    results_optimal = query_optimal.apply(db)
+        results_optimal = query_optimal.apply(db)
 
-    print(f"Optimal: {len(results_optimal)}")
+        print(f"Optimal: {len(results_optimal)}")
 
-    times_opt = results_optimal["results"]["time"]
+        times_opt = results_optimal["results"]["time"]
 
-    # filter on use_bind_steiner and use_convex_hull to get a 2x2 matrix of results
+        # filter on use_bind_steiner and use_convex_hull to get a 2x2 matrix of results
 
-    conds = itertools.product([True, False], repeat=2)
-    data = {}
-    for co in conds:
-        nq = query_optimal.clone()
-        data[tuple(co)] = nq.add_filter(
-            C("formulation_arguments//use_bind_first_steiner") == co[0]).add_filter(
-            C("formulation_arguments//use_convex_hull") == co[1]
-        ).apply(db)["results"]["time"].to_numpy()
+        conds = itertools.product([True, False], repeat=2)
+        data = {}
+        for co in conds:
+            nq = query_optimal.clone()
+            data[tuple(co)] = nq.add_filter(
+                C("formulation_arguments//use_bind_first_steiner") == co[0]).add_filter(
+                C("formulation_arguments//use_convex_hull") == co[1]
+            ).apply(db)["results"]["time"].to_numpy()
 
-    mean = np.array([np.mean(x) for x in data.values()]).reshape(2, 2)
-    std = np.array([np.std(x) for x in data.values()]).reshape(2, 2)
+        mean = np.array([np.mean(x) for x in data.values()]).reshape(2, 2)
+        std = np.array([np.std(x) for x in data.values()]).reshape(2, 2)
 
-    print(f"Average time: {sum(times_opt) / len(times_opt)}")
-    print(f"Max time: {max(times_opt)}")
-    print(f"Min time: {min(times_opt)}")
+        print(f"Average time: {sum(times_opt) / len(times_opt)}")
+        print(f"Max time: {max(times_opt)}")
+        print(f"Min time: {min(times_opt)}")
 
-    print(mean.round(2))
-    print(std.round(2))
+        print(mean.round(2))
+        print(std.round(2))
 
-    for k, d in data.items():
-        print(rf"bind_first={k[0]} convex_hull={k[1]}: {np.mean(d):2f} +- {np.std(d):2f}")
+        for k, d in data.items():
+            print(rf"bind_first={k[0]} convex_hull={k[1]}: {np.mean(d):2f} +- {np.std(d):2f}")
+
+    if True:
+
+        q = Query().add_filter(C("instance_arguments//n") == 7).add_filter(C("formulation") == "dbt")
+        db = q.apply(db)
+
+        data = db.index_on(C("formulation_arguments//use_better_obj"), C("instance_arguments//n"))
+
+        print(len(data))
+
+
+        def avg_time(exps):
+            return sum([exp.results["time"] for exp in exps]) / len(exps)
+
+
+        for k, v in data.items():
+            print(k, avg_time(v))

@@ -805,21 +805,28 @@
         \item For each $j \in S$, add a vertex $s_j \in \R^N$ with coordinates $x^j$.
         \item If there are multiple vertices with the same coordinates, collapse them into one and identify them with any of the indices.
         \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
-        \item Assign the flow $f_{ij} - f_{ji}$ to the edge connecting $v_i$ to $v_j$. Note that this flow is oriented, and in any optimal solution
-        either $f_{ij} = 0$ or $f_{ji} = 0$.
+        \item Assign the flow $f_{ij}$ to the edge connecting $v_i$ to $v_j$. Note that either $(i,j) \in E$ or $(j,i) \in E$ but not both so flows
+        cannot cancel.
     \end{enumerate}
 
     Note that this function is not injective, as we can permute the indices of the Steiner points and still get the same graph.
     We first show that $\phi(GMMX)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
     constraints work.
 
+    The (only) source is a special terminal, and here we constraint it to be connected to $x_{|P|+1}$, the first Steiner point~\ref{dbt_form:sum_sink}.
+
+    We observe that the constraints form a tree were leaves are sink terminals, so in any optimal solutions the flows all go "downstream".
     For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, called $S_p = \{s_1, \dots, s_m\}$,
     at the same coordinates.
     The total flow of the collapsed vertex is:
+        {\color{teal} FINISCI QUI CON CARTA E PENNA}
     \begin{equation}
-        \sum_{i \in P \cup S} \left( f_{pi} - f_{ip}\right) + \sum_{j \in S_p} \sum_{i \in P \cup S} \left( f_{ij} - f_{ji} \right)
+        \sum_{i \in S} f_{ip} = m_p
     \end{equation}
     By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_terminals} we get that the final flow is exactly $m_p$.
+
+    We can apply the same construction also for coinciding Steiner points. {\color{teal} FINISCI ANCHE QUI}
+
     Outside of any terminal the same computations yield a sum of $0$.
     We have also proved now that the set of feasible solutions of GMMX is a subset of the set of feasible solutions of DBT through $\phi$.
     This means that to prove the equivalence we only need to show that for any optimal solution in DBT

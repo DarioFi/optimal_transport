@@ -1,18 +1,23 @@
+import sys
+
 from experiment_manager import ExperimentManager
 from problems.closest_counterexample import random_points_unit_square_with_masses
 from formulations.dbt import dbt
 
 import itertools as it
 
+# get alpha from cli named argument
+alpha = float(sys.argv[1])
+
 nm = ExperimentManager()
 
 nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
-nm.grid_params['instance_arguments'] = [{'n': 4}, {'n': 5}, {'n': 6}, {'n': 7}]
+nm.grid_params['instance_arguments'] = [{'n': 4, 'alpha': alpha}, {'n': 5, 'alpha':alpha}, {'n': 6, 'alpha':alpha}, {'n': 7, 'alpha':alpha}]
 
 nm.baron_solver(300)
 
 nm.fixed_params['n_runs'] = 50
-nm.fixed_params['save_folder'] = 'runs'
+nm.fixed_params['save_folder'] = 'runs/'
 
 nm.fixed_params['formulation'] = dbt
 
@@ -22,7 +27,6 @@ nm.grid_params['formulation_arguments'] = []
 
 for grid in bools_grid:
     nm.grid_params['formulation_arguments'].append({
-        'alpha': .5,
         'use_bind_first_steiner': grid[0],
         'use_convex_hull': grid[1],
         'use_obj_lb': False,

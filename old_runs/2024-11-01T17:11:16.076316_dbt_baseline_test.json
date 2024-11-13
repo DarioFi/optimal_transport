@@ -30,7 +30,8 @@
                 0.2829326880273075,
                 0.4708076244715204,
                 0.0678552767252165
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -110,14 +111,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -157,7 +158,8 @@
                 0.33442628370636834,
                 0.11849499614653586,
                 0.3736292449721714
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -237,14 +239,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -284,7 +286,8 @@
                 0.16367584810660799,
                 0.3135675798341059,
                 0.2318854114163242
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -364,14 +367,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -411,7 +414,8 @@
                 0.38763317319041213,
                 0.055250078038693154,
                 0.3228755562609883
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -491,14 +495,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -538,7 +542,8 @@
                 0.35033443642253836,
                 0.23277093733868728,
                 0.23160708484203055
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -618,14 +623,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -665,7 +670,8 @@
                 0.0008827905058299065,
                 0.38424084172394707,
                 0.22184538941163
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -745,14 +751,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -792,7 +798,8 @@
                 0.18167007806625676,
                 0.13058716935842507,
                 0.39102095506711326
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -872,14 +879,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -919,7 +926,8 @@
                 0.37113864086374565,
                 0.4068269669314449,
                 0.1275876989218875
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -999,14 +1007,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1046,7 +1054,8 @@
                 0.12965333780388938,
                 0.3151696067665206,
                 0.3074874863826793
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1126,14 +1135,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1173,7 +1182,8 @@
                 0.24742235612429261,
                 0.26750121774104973,
                 0.19684316162333543
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1253,14 +1263,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1300,7 +1310,8 @@
                 0.34060565553795763,
                 0.312799821955464,
                 0.012161759311513328
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1380,14 +1391,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1427,7 +1438,8 @@
                 0.28526338401182094,
                 0.08963684776920733,
                 0.43211148868149757
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1507,14 +1519,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1554,7 +1566,8 @@
                 0.11588764927819138,
                 0.1049381815205506,
                 0.30544186423722797
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1634,14 +1647,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1681,7 +1694,8 @@
                 0.3364866645608162,
                 0.06058890896749227,
                 0.26202805403862084
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1761,14 +1775,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1808,7 +1822,8 @@
                 0.2784217354768577,
                 0.19680770597369435,
                 0.22498210833888865
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -1888,14 +1903,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -1935,7 +1950,8 @@
                 0.2963015951762832,
                 0.2354546816573803,
                 0.4473301225645375
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2015,14 +2031,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2062,7 +2078,8 @@
                 0.0999518886833981,
                 0.4264745335062581,
                 0.2851800503905916
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2142,14 +2159,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2189,7 +2206,8 @@
                 0.266223349417011,
                 0.15248742965565906,
                 0.12378551657028444
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2269,14 +2287,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2316,7 +2334,8 @@
                 0.14957211199712522,
                 0.0394300755109691,
                 0.593428810018152
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2396,14 +2415,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2443,7 +2462,8 @@
                 0.3635581013074712,
                 0.26434288792151683,
                 0.2588246466795353
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2523,14 +2543,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2570,7 +2590,8 @@
                 0.0158646667765834,
                 0.41340121381114847,
                 0.13471484375396403
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2650,14 +2671,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2697,7 +2718,8 @@
                 0.2268106312542696,
                 0.08848852339758138,
                 0.371525862120046
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2777,14 +2799,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2824,7 +2846,8 @@
                 0.08278713591865047,
                 0.2296331652770206,
                 0.18815777361319272
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -2904,14 +2927,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -2951,7 +2974,8 @@
                 0.008209886139080223,
                 0.2846246611793524,
                 0.4644283269268604
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3031,14 +3055,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3078,7 +3102,8 @@
                 0.3098746363132284,
                 0.17280734270262293,
                 0.19677408705055652
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3158,14 +3183,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3205,7 +3230,8 @@
                 0.43138150996237923,
                 0.27259079133646547,
                 0.14615245330851248
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3285,14 +3311,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3332,7 +3358,8 @@
                 0.24910487256864314,
                 0.5203640934486605,
                 0.0750698761708803
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3412,14 +3439,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3459,7 +3486,8 @@
                 0.06531278310246993,
                 0.49367439406524344,
                 0.4278501308307949
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3539,14 +3567,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3586,7 +3614,8 @@
                 0.059989694161594415,
                 0.35741811371724197,
                 0.32493517863888705
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3666,14 +3695,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3713,7 +3742,8 @@
                 0.1767394760278951,
                 0.18095254622995002,
                 0.38130304266536286
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3793,14 +3823,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3840,7 +3870,8 @@
                 0.016342914090740845,
                 0.07165521379626423,
                 0.15325072588251382
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -3920,14 +3951,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -3967,7 +3998,8 @@
                 0.2846182725371963,
                 0.03457912877128713,
                 0.4549183419040407
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4047,14 +4079,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4094,7 +4126,8 @@
                 0.4871109469994145,
                 0.4158337796243281,
                 0.007844872803216869
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4174,14 +4207,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4221,7 +4254,8 @@
                 0.08882531964049885,
                 0.43679891297776846,
                 0.3505658208445811
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4301,14 +4335,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4348,7 +4382,8 @@
                 0.26611073525566337,
                 0.46452424336338316,
                 0.14434224179310554
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4428,14 +4463,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4475,7 +4510,8 @@
                 0.12370090040928741,
                 0.2984052965151251,
                 0.32464876637252654
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4555,14 +4591,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4602,7 +4638,8 @@
                 0.054835146497244004,
                 0.4917283698207698,
                 0.003952702101755189
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4682,14 +4719,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4729,7 +4766,8 @@
                 0.09069103229731461,
                 0.3624548983526326,
                 0.11417776806329129
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4809,14 +4847,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4856,7 +4894,8 @@
                 0.07899484793508545,
                 0.2643671425407041,
                 0.42495202082846606
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -4936,14 +4975,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -4983,7 +5022,8 @@
                 0.4926879868874048,
                 0.2340908846165972,
                 0.05190269294014947
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5063,14 +5103,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5110,7 +5150,8 @@
                 0.48030063057860056,
                 0.08336352930379345,
                 0.3410108254647907
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5190,14 +5231,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5237,7 +5278,8 @@
                 0.14695581601885493,
                 0.26555772281881984,
                 0.0639802841750963
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5317,14 +5359,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5364,7 +5406,8 @@
                 0.10015958554491063,
                 0.059062955180958734,
                 0.577409964959044
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5444,14 +5487,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5491,7 +5534,8 @@
                 0.11228561783613607,
                 0.2198150878309283,
                 0.12021378786416045
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5571,14 +5615,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5618,7 +5662,8 @@
                 0.33012167886323673,
                 0.20278929026821726,
                 0.31973536510725514
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5698,14 +5743,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5745,7 +5790,8 @@
                 0.18151363694279024,
                 0.2886448975936935,
                 0.2586966818503223
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5825,14 +5871,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5872,7 +5918,8 @@
                 0.1260570934219388,
                 0.23036510721862574,
                 0.5185697880529632
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -5952,14 +5999,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -5999,7 +6046,8 @@
                 0.12297145079374643,
                 0.37510722852796613,
                 0.33153598403082124
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -6079,14 +6127,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -6126,7 +6174,8 @@
                 0.3163073170049896,
                 0.1554815320141629,
                 0.22682857570546364
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -6206,14 +6255,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false
@@ -6253,7 +6302,8 @@
                 0.2763741174416197,
                 0.3174664758618053,
                 0.27075444917114927
-            ]
+            ],
+            "alpha": 0.5
         },
         "results": {
             "status": "ok",
@@ -6333,14 +6383,14 @@
         },
         "instance_generator": "random_points_unit_square_with_masses",
         "instance_arguments": {
-            "n": 5
+            "n": 5,
+            "alpha": 0.5
         },
         "solver": "baron",
         "solver_options": "maxtime=300",
         "formulation": "dbt",
         "formulation_arguments": {
             "maximum_degree": 3,
-            "alpha": 0.5,
             "use_bind_first_steiner": false,
             "use_convex_hull": true,
             "use_obj_lb": false

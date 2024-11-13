@@ -109,7 +109,7 @@ def random_points_unit_square(n):
     return {"terminals": points}
 
 
-def random_points_unit_square_with_masses(n):
+def random_points_unit_square_with_masses(n, alpha):
     points = [[random(), random()] for _ in range(n)]
     # M = max(norm(x, y, range(len(points[0]))) for x in points for y in points if x != y)
     # points = [[x[j] / M for j in range(len(x))] for x in points]
@@ -120,7 +120,7 @@ def random_points_unit_square_with_masses(n):
 
     masses = [-sum(masses)] + masses
 
-    return {"terminals": points, "masses": masses}
+    return {"terminals": points, "masses": masses, "alpha": alpha}
 
 
 def fixed_points(*args, **kwargs):

@@ -50,6 +50,8 @@ class Experiment:
         self.formulation = formulation
         self.formulation_arguments = formulation_arguments
 
+        assert "alpha" not in self.formulation_arguments
+
         self.seed = seed
 
         self.n_runs = n_runs
