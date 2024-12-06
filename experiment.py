@@ -8,6 +8,7 @@ from pyomo.environ import Var
 import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 
+from formulations.dbt import dbt
 from formulations.mmx import mmx_model
 from formulations.gmmx import gmmx
 from problems.closest_counterexample import random_points_unit_square, random_points_unit_square_with_masses, \
@@ -123,6 +124,10 @@ class Experiment:
         return results
 
     def save_to_disk(self, results: List[Dict]):
+
+        if not os.path.exists(self.save_location):
+            os.makedirs(self.save_location)
+
         with open(f'{self.save_location}/{datetime.datetime.now().isoformat()}_{self.experiment_name}.json', 'w') as f:
             json.dump(results, f, indent=4)
 
@@ -142,27 +147,27 @@ class Experiment:
 
 
 if __name__ == '__main__':
-    for bind in [True, False]:
+    for bind in [False]:
         exp = Experiment(
             instance_generator=random_points_unit_square_with_masses,
-            instance_arguments={'n': 4},
+            instance_arguments={'n': 5, "alpha": 0},
             solver='baron',
             solver_options='maxtime=300',
-            formulation=gmmx,
+            formulation=dbt,
             formulation_arguments={
-                'maximum_degree': 3,
-                'alpha': .5,
                 'use_bind_first_steiner': bind,
-                'use_obj_lb': True
+                'use_better_obj': True,
+                'use_obj_lb': False,
+                'use_convex_hull': False,
             },
-            seed=83810,
+            seed=23324,
             save_folder='runs',
-            experiment_name=f'gmmx',
-            tee=False,
-            n_runs=100
+            experiment_name=f'dbt',
+            tee=True,
+            n_runs=1
         )
 
-        results = exp.run(multithreaded=True, n_threads=3)
+        results = exp.run(multithreaded=False, n_threads=3)
         exp.save_to_disk(results)
 
 # todo:

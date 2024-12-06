@@ -1,0 +1,40 @@
+Xia:
+    - Only theoretical paper
+    - Obscure placental data (draft)
+    - Traffic applications without any data
+    - Optimal Transport and Placental Function
+
+
+Theory and Approximate Solvers for Branched Optimal Transport with Multiple Sources:
+    - greedy algorithm with no guarantee
+    - BT problem
+    - proof on degree
+    - good heuristic might be useful for lower bound on objective
+    - no bibliography?
+
+
+https://www.mimuw.edu.pl/~miekisz/matuszakoptymaltran.pdf
+    - approximate solutions 2012
+
+https://arxiv.org/pdf/2003.13797:
+    - very interesting
+    - There exist very efficient algorithms in a planar geometry providing a globally optimal Steiner tree
+    (see for instance the GeoSteiner method [ 21] or Melzak’s full Steiner tree algorithm [26]).
+    - For the general transportation network problem, a widely used approach was inspired by elliptic approximations of
+    free-discontinuity problems in the sense of Modica–Mortola and Ambrosio–Tortorelli via phase fields. In [29, 12, 27, 17, 16, 37 ]
+
+
+https://onlinelibrary.wiley.com/doi/10.1111/itor.12207:
+    - review of steiner tree in higher dimensions
+
+
+https://arxiv.org/pdf/1601.07402:
+    - alternative formulations and interesting applications in the refs
+
+
+https://cvgmt.sns.it/media/doc/paper/2849/brancolini-wirth__micropatterns__cvgmt.pdf:
+    - check references for more applications
+
+
+https://sci-hub.ru/https://link.springer.com/book/10.1007/978-3-540-85799-0:
+    - book on optimal transport

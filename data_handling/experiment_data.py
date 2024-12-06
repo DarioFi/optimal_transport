@@ -193,7 +193,7 @@ class Database:
         assert sum([len(v) for v in new_db.values()]) == len(self)
         return new_db
 
-    def index_on(self, *args):
+    def index_on(self, *args,):
         new_db = {}
 
         for exp in self.experiments:
@@ -201,8 +201,10 @@ class Database:
             key = []
             for arg in args:
                 if isinstance(arg, C):
+                    key.append(arg.name)
                     key.append(extract_C(exp, arg))
                 else:
+                    key.append(arg)
                     key.append(getattr(exp, arg))
 
             key = recursive_freeze(key)
@@ -213,6 +215,9 @@ class Database:
                 new_db[key] = [exp]
 
         return new_db
+
+    def hierarchical_index(self):
+        raise NotImplementedError("Not implemented yet")
 
 
 def extract_C(exp: ExperimentData, c: C):

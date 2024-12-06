@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 def visualize(data: ExperimentData):
     terminals = data.instance['terminals']
     masses = data.instance['masses']
+    alpha = data.instance['alpha']
 
     plt.figure()
     plt.title(data.experiment_name)
@@ -58,10 +59,9 @@ def visualize(data: ExperimentData):
         if value > 0:
             value = min(value, 1)
 
-            a = .5
             distance = ((all_points_indexed[key[0]][0] - all_points_indexed[key[1]][0]) ** 2 + (
                     all_points_indexed[key[0]][1] - all_points_indexed[key[1]][1]) ** 2) ** 0.5
-            cost += value ** a * distance
+            cost += value ** alpha * distance
 
             value = value ** .3
 
@@ -83,6 +83,7 @@ def visualize(data: ExperimentData):
         color = 'ro' if mass < 0 else 'bo'
         plt.plot(terminal[0], terminal[1], color, alpha=1)
 
+    print(f"Cost is:  {cost}")
     # todo : fix colors overlapping
     plt.show()
 
@@ -91,18 +92,17 @@ if __name__ == '__main__':
     import json, os
 
     # get the last file in that directory with alphabetical order
-    with open("../runs/" + sorted(os.listdir("../runs"))[-1], "r") as f:
+    with open("../garbage/" + sorted(os.listdir("../garbage"))[-2], "r") as f:
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
         jd = json.load(f)[-1]
 
-    db = Database.populate_from_folder("../runs/")
+    db = Database.populate_from_folder("../garbage/")
 
-    query = Query().add_filter(C("formulation") == "dbt").add_filter(
-        C("instance_arguments//n") == 6).add_filter(C("results//termination_condition") == "optimal")
+
+
+    query = Query().add_filter(C("formulation") == "dbt")
 
     exps = query.apply(db)
 
-    tot = 10
+    visualize(exps[0])
 
-    for i in range(tot):
-        visualize(exps[i])

@@ -209,19 +209,70 @@
 
     \section{Preliminaries theorems}
 
-    Here we define the theorems that we will use.
+    Here we define the theorems that we will use. We start from a series of definitions necessary to specify why we can
+    treat solutions to the branched transport problem as graphs.
 
         {\color{red} Before giving each theorem, you should briefly say (in a couple of sentences) where/how each result is used.}
 
     \begin{definition}
-        \textbf{Branching point}
-        TODO: add it
+        \textbf{Loop-free}
+        A traffic plan $\mathbf{P}$ is loop-free if there is a prametrization $\chi$ of $\mathbf{P}$ such that for almost every $\omega$
+        the path $\chi(\omega)$ is injective on $[0, T(\chi(\omega))]$.
     \end{definition}
 
     \begin{definition}
-        \textbf{Loop-free}
-        TODO: add it
+        Let $\chi$ be a loop-free traffic plan, so that $t_x(\omega) := \chi^{-1}(\omega, \cdot)(x)$ is well defined.
+        Let $x, y$ in $S_\chi$. Define
+        \[
+            \Omega_{\overset{\rightarrow}{x}y} := \{\omega \in \Omega_x^\chi \cap \Omega_y^\chi : t_x(\omega) < t_y(\omega)\},
+        \]
+        the set of fibers passing through $x$ and then through $y$.
+        The restriction of $\chi$ to $\bigcup_{\omega \in \Omega_{\overset{\rightarrow}{x}y}} \{\omega\} \times [t_x(\omega), t_y(\omega)]$ is denoted by $\chi_{xy}$.
+        It is the traffic plan made of all pieces of fibers of $\chi$ joining $x$ to $y$. Denote its support by $\Gamma^{xy} = S_{\chi_{xy}}$.
+
     \end{definition}
+
+    \begin{definition}
+        \textbf{Strictly single path}
+        A \textit{traffic plan} $\chi$ has the \textit{single path property} if for every pair $x, y$ such that
+        $\lvert \Omega_{\overset{\rightarrow}{x}y} \rvert > 0$, almost all fibers in $\Omega_{\overset{\rightarrow}{x}y}$
+        coincide between $x$ and $y$ with an arc $\Gamma^{xy}$ joining $x$ to $y$. We say that the traffic plan has
+        the \textit{strict single path property} if for every $x, y$, either there is no fiber joining $x$ to $y$
+        or $\lvert \Omega_{\overset{\rightarrow}{x}y} \rvert > 0$ and all fibers in $\Gamma^{xy}$ coincide between $x$ and $y$.
+    \end{definition}
+
+
+
+    \begin{definition}
+        \textbf{Normal}
+        A traffic plan $\chi$ is normal if it is loop-free, strictly single path and for every fiber $\omega$
+        we have that $| \chi(\omega, t)|_\chi$ is bounded away from zero on any compact set contained in $[0, T(\chi(\omega))]$.
+            {\color{teal} What are we doing here exactly? Does it make sense to define it like this?}
+    \end{definition}
+
+    \begin{definition}
+        \textbf{F-connected}
+        Let $\chi$ be an optimal and normal traffic plan. Given an opens et $V \subset \R^N$, two points $x,y$ are said to be F-connected in $V$
+        if there is a chain $x_1=x,\cdot, x_l= y$ such that $\Gamma_{x_{i}x_{i+1}} \subset V$
+    \end{definition}
+
+    \begin{definition}
+        \textbf{Cuts}
+        Assume that $\chi$ is an optimal, normal, F-connected traffic plan. We call cuts of $\chi$ atx the F-connected components of
+        $\chi$ in $\R^N \setminus \{x\}$
+    \end{definition}
+
+    \begin{definition}
+        \textbf{Branching point}
+        Let $\chi$ be an optimal traffic plan. If $\chi$ is F -connected, a branching point of $\chi$ is a point $x \in S_{\chi}$ such that
+        there are at least two cuts of $\chi$ at $x$ of the same kind (after-cut or before-cut).
+        We call branches of $\chi$ at $x$ the before-cuts or after-cuts at $x$.
+        Observe that if $x$ is a branching point such that neither $\mu^+$ nor $\mu^-$ contain a Dirac mass at $x$, then $\chi$ has at least
+        three cuts.
+        If $\chi$ is not F -connected we define the branching points of $\chi$ as the branching points of its F -connected components.
+    \end{definition}
+
+
 
     \begin{theorem}
         \textbf{Loop-free property \cite[Proposition 4.9]{Bernot}}
@@ -245,11 +296,26 @@
         plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
         of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
         of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
-            {\color{red} Define a branching point.}
 
             {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
 
     \end{theorem}
+
+    {\color{teal} Alternatively we can define it with the other formulation, which are currents. The following will be less formal
+    as I am not that familiar with the subject but we know from \cite{Bernot} that the two formulations are equivalent.}
+
+    \begin{definition}
+        \textbf{Currents and graphs definition}
+        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
+        measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
+        $\theta$ is a scalar field.
+        We define the energy of a current as:
+        \begin{equation}
+            \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
+        \end{equation}
+
+        Here $E$ is contained in a countable union of curves of class $C^1$.
+    \end{definition}
 
     \begin{theorem}
         \textbf{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
@@ -304,12 +370,13 @@
 
     \end{theorem}
 
-    {\color{red} Again you need to motivate the following, otherwise, it seems completely irrelevant.}
+    {\color{red} Again you need to motivate the following, otherwise, it seems completely irrelevant. DONE}
 
     \begin{theorem}
         \textbf{Spherical cap results \cite[Theorem 1 and 2]{Rankin}}
         \label{definition:spherical_cap_results} \\
-        The following result will be used to bound the number of branches in the optimal transport problem in~\ref{lemma:degree_definition}. \\
+        The following result provides an upper bound on the number of branches in the optimal transport problem described
+        in~\ref{lemma:degree_definition}, once a minimum angle between branches is determined.\\
         Let $S_N$ denote the "surface" of an $N$-dimensional unit sphere in Euclidean space of
         $N$ dimensions. We may suppose that the sphere is centred at the origin of coordinates $O$
         By a spherical cap $Cap(\beta, N)$ of angular radius $\beta \le \pi$ and centre $P$ on $S_N$ , we mean the set of
@@ -542,19 +609,19 @@
     \end{equation}
     {\color{red} Please fix the notation.}
     This special case has been extensively studied, especially computationally,
-    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}. {\color{red} fix?}
+    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}.
 
     \subsection{Instance specific bounds}
 
     We now have a bound on the cosine of the angle between two edges given their flows. In~\ref{lemma:bound_general_direction} we have
-    taken the supremum over all possible masses to obtain an instance independent bound. {\color{red} Please specify the result you are referring to. DONE}
+    taken the supremum over all possible masses to obtain an instance independent bound.
     We now focus on looking for a bound that holds at every branching point of a specific instance of the problem,
     so we assume that we already know the set $M$.
 
         {\color{red} You have a couple of results already depending on $m_1, m_2$. What you do mean we now focus on an instance specific bound?
-    I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence. TODO: finisci}
+    I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence.}
 
-    We now focus on the case where there is only one source and therefore the optimal solution is a tree.
+    We also focus on the case where there is only one source and therefore the optimal solution is a tree.
     In this case, thanks to the loop-free property of the optimal solution, we know that the masses on the edges are
     combinations of masses in $M$. We can then maximize the bound of the cosine under this constraint to find the smallest
     angle that can be achieved in a specific instance of the problem.
@@ -734,7 +801,8 @@
 
     \section{Formulating DBT as a mathematical optimization problem}
 
-    {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta, we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
+    {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta
+        , we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
 
 
     {\color{red} Get rid of MMX, give the optimization problems better names related to the problem name.}
@@ -748,8 +816,8 @@
         \text{(DBT)}: \; \min &\sum_{[i,j] \in E_1} f_{ij}^{\alpha}\|p_i - x^j\| + \sum_{[i,j] \in E_2} f_{ji}^{\alpha}\|x^i - x^j\| \\
         & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P \\
         & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\}, \label{dbt_form:connectedness} \\
-        & \sum_{i \in S} f_{ji} = m_j \quad \text{for } j \in P^+ \label{dbt_form:sum_terminals} \\
-        & \sum_{i \in S} f_{ji} = -m_j \quad \text{for } j \in P^- \label{dbt_form:sum_sink} \text{todo: understand how to treat this in a decent way} \\
+        & \sum_{i \in S} f_{ji} = m_j \quad \text{for } j \in P^+ \label{dbt_form:sum_sinks} \\
+        & \sum_{i \in S} f_{ji} = -m_j \quad \text{for } j \in P^- \label{dbt_form:sum_sources} \\
         & \sum_{i \in P} f_{ij} + \sum_{k < j, k \in S} f_{kj} + \sum_{k > j, k \in S} f_{jk} = 0 \quad \text{for } j \in S \label{dbt_form:sum_steiner_0}  \\
         & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S \label{dbt_form:degree_bound} \\
         & f_{ij} \le y_{ij} \quad \text{for } [i,j] \in E \\
@@ -775,9 +843,9 @@
         \leftskip 0.8 cm\labelsep=.3 cm
         \item[$\alpha \in (0,1)$] is the cost parameter
         \item [$M$] is the set of masses $\{m_1, \ldots, m_n\}$ of the terminals
-        \item [$f_{ij}$] flow on the oriented edge $(i, j) \in E$  {\color{red} inconsistent notation.}
-        \item [$y_{ij}$] binary variable indicating the presence of an un-oriented edge connecting $i$ to $j$  {\color{red} inconsistent notation.}
-        \item [$ deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in~\ref{lemma:degree_definition}
+        \item [$f_{ij}$] flow on the edge $(i, j) \in E$ going from $j$ to $i$  {\color{red} I end up with opposite flows but it makes sense to have the first indices
+        reserved for the terminals so I am unsure whether to change this}
+        \item [$y_{ij}$] binary variable indicating the presence of an un-oriented edge connecting $i$ to $j$.
     \end{itemizeb}
 
     \subsection{Proof of correctness}
@@ -790,11 +858,10 @@
     Outline of the proof:
     \begin{enumerate}
         \item construction of the map that takes feasible solutions to graphs
-        \item proof that flows are correct {\color{teal} write this properly}
         \item proof that the objective functions are the same
         \item proof of optimality for connected optimal solution where terminals are leaves and branching points have degree 3
-        \item proof of optimality for connected optimal solution where terminals are leaves {\color{teal} TODO: this is what we need to correct}
-        \item proof of optimality for connected optimal solution
+        \item dropping the assumption that terminals are leaves
+        \item general proof
     \end{enumerate}
 
     \subsection{Step 1}
@@ -810,38 +877,39 @@
     \end{enumerate}
 
     Note that this function is not injective, as we can permute the indices of the Steiner points and still get the same graph.
-    We first show that $\phi(GMMX)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
+    We first show that $\phi(\cdot)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
     constraints work.
 
-    The (only) source is a special terminal, and here we constraint it to be connected to $x_{|P|+1}$, the first Steiner point~\ref{dbt_form:sum_sink}.
+    The (only) source is a special terminal, and here we constraint it to be connected
+    to the first Steiner point (which has index $|P|+1$) because of~\ref{dbt_form:sum_sources}.
 
     We observe that the constraints form a tree were leaves are sink terminals, so in any optimal solutions the flows all go "downstream".
-    For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, called $S_p = \{s_1, \dots, s_m\}$,
+    This is not a problem as the indices of the tree are topologically sorted due to~\ref{dbt_form:connectedness}.
+    For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, indexed by $S_p = \{s_1, \dots, s_m\}$,
     at the same coordinates.
     The total flow of the collapsed vertex is:
-        {\color{teal} FINISCI QUI CON CARTA E PENNA}
     \begin{equation}
-        \sum_{i \in S} f_{ip} = m_p
+        \sum_{i \in S_p} \left[ \sum_{j<i}^{f_{ji}} - \sum_{j>i}^{f_{ij}}   \right] + \sum_{j \in S} f_{pj} = m_p
     \end{equation}
-    By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_terminals} we get that the final flow is exactly $m_p$.
+    By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_sinks} we get that the final flow is exactly $m_p$.
 
-    We can apply the same construction also for coinciding Steiner points. {\color{teal} FINISCI ANCHE QUI}
+    We can apply the same construction also for coinciding Steiner points that do not coincide with any terminal and get
+    that the flow is conserved.
 
-    Outside of any terminal the same computations yield a sum of $0$.
-    We have also proved now that the set of feasible solutions of GMMX is a subset of the set of feasible solutions of DBT through $\phi$.
+    We have also proved now that the set of feasible solutions of the formulation is a subset of the set of feasible solutions of DBT through $\phi$.
     This means that to prove the equivalence we only need to show that for any optimal solution in DBT
-    there is a corresponding optimal solution in GMMX that maps to it.
+    there is a corresponding optimal solution of the formulation that maps to it.
 
     \subsection{Step 2}
-    By calling $GMMX$ and $DBT$ the feasible regions of the respective problems, we show that the following diagram commutes:
+    By calling $Formulations$ and $Graphs$ the feasible regions of the MINLP formulation and DBT problem respectively, we show that the following diagram commutes:
     \[
         \begin{tikzcd}
             & \mathbb{R}  \\
-            GMMX \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & DBT  \arrow[ul, "Obj"]
+            Formulations \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & Graphs  \arrow[ul, "Obj"]
         \end{tikzcd}
     \]
 
-    The objective function in GMMX is the sum of $(f_{ij} + f_{ji})^\alpha$ which is, after passing through $\phi$, the flow
+    The objective function in the formulation is the sum of $(f_{ij} + f_{ji})^\alpha$ which is, after passing through $\phi$, the flow
     along the edge $(i,j)$, weighted by $\| p_i - x^j \|$ or $\|x^i-x^j \|$ which are the euclidean distances between
     Steiner points and terminals.
     The fact that there could be a degeneracy is not important as those points have $0$ distance and do not contribute to the
@@ -849,10 +917,12 @@
 
     \subsection{Step 3}
 
-    We now show that there is an element in $GMMX$ that maps to a connected optimal solution of DBT where terminals are leaves.
-    For each steiner point $s_i$ in the graph we can set $x^i = s_i$. We then set $y_{ij} = 1$ and $f_{ij}, f_{ji}$ to
-    the appropriate value for each edge $(i,j)$ in the optimal solution of DBT. We are not violating the degree constraints
-    as we are mapping an optimal solution of DBT.
+    We now show that there is a feasible solution to the MNILP that maps to a connected optimal solution of DBT where terminals are
+    leaves and branching points have degree 3.
+    For each steiner point $s_i$ in the graph we can set $x^i = s_i$. We then set $y_{ij} = 1$ and re-order the steiner points
+    so that the indices are topologically sorted with respect to the tree structure of the graph.
+    We can then set $f_{ij}$ or $f_{ji}$ $j$ to the appropriate value for each edge $(i,j)$ in the optimal solution of DBT.
+    We are not violating the degree constraints as we are mapping an optimal solution of DBT.
     By an edge counting argument (crucially using that the solution is a tree) we can show that there are enough Steiner points to connect all the terminals.
     \begin{equation}
         |S| + |P| - 1 = \frac{1}{2} \left( 3|S| + \sum_{i \in P} d(i) \right)
@@ -868,9 +938,10 @@
     the steiner points in a topological order, which exists as it is a tree.
 
     \subsection{Step 4}
-    Now we tackle the case where the terminals can have degree higher than $1$. We will show that we can add more degenerate
-    steiner points to the graph until we reduce it to the case where all terminals are leaves. During this procedure we
-    need to track how many steiner points we add.
+    Now we tackle the case where the terminals can have degree higher than $1$ while still assuming that the branching points have
+    degree $3$.
+    We will show that we can add more degenerate steiner points to the graph until we reduce it to the case where all terminals are leaves.
+    During this procedure we need to track how many steiner points we add.
     From equation~\ref{eq:edge_counting} we know that for every "extra" degree we have one extra Steiner point to work with.
     Define the following procedure:
     \begin{enumerate}
@@ -885,19 +956,22 @@
     re-order the Steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
 
     \subsection{Step 5}
-    In the case of a disconnected optimal solution we would have a finite union of $T$ trees, where each tree is an optimal solution
-    to a subproblem of the DBT. We can find a solution in GMMX of each tree using only $|P| - T$ Steiner points.
-    We can use the remaining $T-1$ steiner points to connect the trees, by adding a Steiner point on an arbitrary terminal
-    of each tree and connecting them with an edge of flow $0$. We then have to re-order steiner points to satisfy the connectivity.
 
+    We can proceed as in step 4, for each branching point with degree $d(i)$ we can add $d(i) - 3$ degenerate steiner points
+    and connect them in a chain. We can then re-order the steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
+    From~\ref{eq:edge_counting} we get that there are enough steiner points to apply this procedure to every branching point.
 
     \begin{remark}
-        The case of disjoint trees can only occur if there are multiple sources. In this case there is a symmetry in the ordering
-        of the trees and this can heavily slow down solvers.
+        This formulation can be easily extended to multiple sources by adding negative masses to the terminals and adding a new
+        constraint~\ref{dbt_form:sum_sources} for each source.
+        We restrict our numerical analysis as the case of multiple sources often presents disconnected solutions (unions of trees)
+        and due to the symmetry of the problem there are many optimal solutions to the formulation, making it very difficult for a sovler to
+        tackle.
     \end{remark}
 
     \subsection{MMX}
-    This formulation is due to~\cite[Section 2]{mmx}
+    In the case where $\alpha=0$ we can remove all the flows and we are left with the original formulation for the euclidean
+    Steiner tree due to~\cite[Section 2]{mmx}
     \begin{align}
         \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
         & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P^+, \\
@@ -916,8 +990,6 @@
         \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
         \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
     \end{itemizeb}
-
-    We will prove its correctness by showing that the generalization of this formulation is equivalent to the DBT problem.
 
 
     \section{Numerical results}
