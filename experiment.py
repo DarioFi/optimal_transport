@@ -69,7 +69,14 @@ class Experiment:
 
         solver = SolverFactory(self.solver)
 
-        results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
+
+        if self.solver == "gurobi_persistent":
+            # For persistent solvers, set the instance first
+            solver.set_instance(formulation)
+            results = solver.solve(tee=self.tee, options=self.solver_options)
+        else:
+            results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
+
 
         results_serializable = extract_results(formulation, results)
 

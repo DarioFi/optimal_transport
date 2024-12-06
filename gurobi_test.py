@@ -8,7 +8,7 @@ n_runs = 20
 exp = Experiment(
     instance_generator=random_points_unit_square_with_masses,
     instance_arguments={'n': n, "alpha": 0.5},
-    solver='gurobi_direct',
+    solver='gurobi_persistent',
     solver_options='TimeLimit=300',
     formulation=dbt,
     formulation_arguments={
