@@ -24,5 +24,5 @@ exp = Experiment(
     n_runs=n_runs
 )
 
-results_proper = exp.run(multithreaded=True, n_threads=4)
+results_proper = exp.run(multithreaded=False, n_threads=4)
 exp.save_to_disk(results_proper)
