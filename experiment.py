@@ -112,13 +112,13 @@ class Experiment:
         :return:
         """
 
-        # check if results objective value is complex
+        # results is a dict, explore all values to find complex ones
 
-        if isinstance(results['objective'], complex):
-            print("Complex objective value of:  ", results['objective'])
-            print(results)
-        else:
-            print("Objective value: ", results['objective'])
+        print(results)
+
+
+
+
 
         # todo: extract solution from results
         serialized_data = {
