@@ -116,6 +116,7 @@ class Experiment:
 
         print(results)
 
+        print(instance)
 
 
 
@@ -135,6 +136,8 @@ class Experiment:
             'seed': seed,
             'cpu': self.cpu_name
         }
+
+        print(serialized_data)
 
         return serialized_data
 
