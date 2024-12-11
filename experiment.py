@@ -112,16 +112,12 @@ class Experiment:
         :return:
         """
 
-        # results is a dict, explore all values to find complex ones
+        objective = results["objective"]
 
-        print(results)
+        if isinstance(objective, complex):
+            assert abs(objective.imag) < 1e-5
+            results["objective"] = objective.real
 
-        print(instance)
-
-
-
-
-        # todo: extract solution from results
         serialized_data = {
             'experiment_name': self.experiment_name,
             'instance': instance,
