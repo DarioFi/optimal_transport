@@ -96,7 +96,7 @@ class Experiment:
             solver.set_instance(formulation)
             results = solver.solve(tee=self.tee, options=self.solver_options)
         else:
-            results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options, keepfiles=True)
+            results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
 
         results_serializable = extract_results(formulation, results)
 

@@ -142,6 +142,8 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     assert all(m > 0 for m in masses[1:])  # todo: masses are irrelevant
     assert alpha == 0
 
+    USE_GUROBI = False
+
     model = pyo.ConcreteModel()
 
     P = len(terminals)
@@ -157,7 +159,11 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     model.E = model.E1 + model.E2
 
     # model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
-    model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals)
+    if USE_GUROBI:
+        model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals)
+    else:
+        model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
+
     model.y = pyo.Var(model.E, domain=pyo.Binary)
 
     # terminals have degree 1 constraint
@@ -186,7 +192,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
         # bind the source to the first steiner point
 
         model.y[0, min(model.S)].fix(1)
-        model.f[0, min(model.S)].fix(-masses[0])
+
 
     if use_convex_hull:
         model.c = pyo.Var(model.S, model.P, domain=pyo.NonNegativeReals)
@@ -204,7 +210,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
-    USE_GUROBI = False
     if USE_GUROBI:
         model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals)
 
