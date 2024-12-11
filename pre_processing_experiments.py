@@ -60,3 +60,29 @@ nm.run_save(True, 8)
 
 print(f"{len(nm.queued_experiments)=}")
 # todo: question, why does bind first steiner worsen the results?
+
+
+if False:
+    exp = Experiment(
+        instance_generator=random_points_unit_square_with_masses,
+        instance_arguments={'n': 5, 'alpha': 0.2},
+        formulation=dbt,
+        formulation_arguments={
+            'use_bind_first_steiner': True,
+            'use_convex_hull': True,
+            'use_obj_lb': False,
+            'use_better_obj': False
+        },
+        solver='baron',
+        solver_options=solver_opt,
+        tee=False,
+        seed=145767,
+        n_runs=50,
+        save_folder='garbage',
+        experiment_name='garbage'
+    )
+
+    res = exp.run(True, 8)
+
+
+    exp.save_to_disk(res)
