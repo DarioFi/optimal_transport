@@ -2,11 +2,12 @@ import datetime
 import json
 import os
 import random
+from multiprocessing.managers import Value
 from typing import List, Dict, Callable, Optional
 
 from pyomo.environ import Var
 import pyomo.environ as pyo
-from pyomo.opt import SolverFactory
+from pyomo.opt import SolverFactory, UndefinedData
 
 from formulations.dbt import dbt
 from formulations.mmx import mmx_model
@@ -22,17 +23,38 @@ def extract_results(model, result):
         'objective': model.obj(),
         'lower_bound': result.Problem[0]["Lower bound"],
         'upper_bound': result.Problem[0]["Upper bound"],
-        'wallclock_time': result.Problem[0]["Wall time"],
-        'time': result.solver.time,
+
         # 'variables': {v.name: pyo.value(model.__getattribute__(v.name)) for v in model.component_objects(Var)}
     }
+
+    try:
+        name = result.solver.name.lower()
+    except:
+        name = "unknown"
+    # if solver is gurobi
+    if 'gurobi' in name:
+        time = result.solver[0]["System time"]
+        if not isinstance(time, UndefinedData):
+            results_dict['time'] = time
+        else:
+            results_dict['time'] = None
+
+        results_dict['wallclock_time'] = result.solver[0]["Wallclock time"]
+    else:
+        results_dict['time'] = result.Problem[0]["cpu time"]
+        results_dict['wallclock_time'] = result.Problem[0]["Wall time"]
+
     vars_dict = {}
     for x in model.component_objects(Var):
         indices = dict(x)
         vars_dict[x.name] = {}
         z = vars_dict[x.name]
         for key, value in indices.items():
-            z[str(key)] = float(pyo.value(value))
+            try:
+                z[str(key)] = float(pyo.value(value))
+            except ValueError:
+                pass
+
     results_dict['variables'] = vars_dict
     return results_dict
 
@@ -69,14 +91,12 @@ class Experiment:
 
         solver = SolverFactory(self.solver)
 
-
         if self.solver == "gurobi_persistent":
             # For persistent solvers, set the instance first
             solver.set_instance(formulation)
             results = solver.solve(tee=self.tee, options=self.solver_options)
         else:
-            results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
-
+            results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options, keepfiles=True)
 
         results_serializable = extract_results(formulation, results)
 

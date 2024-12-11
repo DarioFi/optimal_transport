@@ -2,7 +2,7 @@ import sys
 
 from experiment_manager import ExperimentManager
 from problems.closest_counterexample import random_points_unit_square_with_masses
-from formulations.dbt import dbt
+from formulations.dbt import dbt, dbt_alpha_0
 
 import itertools as it
 
@@ -19,7 +19,10 @@ nm.baron_solver(300)
 nm.fixed_params['n_runs'] = 50
 nm.fixed_params['save_folder'] = 'runs/'
 
-nm.fixed_params['formulation'] = dbt
+if alpha != 0:
+    nm.fixed_params['formulation'] = dbt
+else:
+    nm.fixed_params['formulation'] = dbt_alpha_0
 
 bools_grid = it.product([True, False], repeat=3)
 

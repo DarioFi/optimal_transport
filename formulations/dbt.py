@@ -1,3 +1,5 @@
+from re import purge
+
 import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 
@@ -102,6 +104,12 @@ def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_con
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
+        model.pprint()
+        # Write a BARON options file to specify RELAXATION_ONLY_EQUATIONS
+        with open('baron_options.txt', 'w') as f:
+            f.write('RELAXATION_ONLY_EQUATIONS {}\n'.format(' '.join("convex_hull_constraint")))
+            f.write('RELAXATION_ONLY_EQUATIONS {}\n'.format(' '.join("convex_hull_sum_constraint")))
+
     def objective_rule(model):
 
         if use_better_obj:
@@ -148,7 +156,8 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     model.E2 = [(i, j) for i in model.S for j in model.S if i < j]
     model.E = model.E1 + model.E2
 
-    model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
+    # model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
+    model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals)
     model.y = pyo.Var(model.E, domain=pyo.Binary)
 
     # terminals have degree 1 constraint
@@ -195,27 +204,64 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
-    def objective_rule(model):
+    USE_GUROBI = False
+    if USE_GUROBI:
+        model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals)
 
-        if use_better_obj:
-            return (sum(
-                model.y[i, j] *
-                norm_y(
-                    terminals[i], [model.x[j, d] for d in model.D], model.y[i, j]) for (i, j) in model.E1) +
-                    sum(model.y[i, j] * norm_y([model.x[i, d] for d in model.D],
-                                               [model.x[j, d] for d in model.D],
-                                               model.y[i, j]) for (i, j) in model.E2))
+        def x_equality_constraint(model, i, d):
+            return model.x[i, d] == terminals[i][d]
 
-        else:
-            return sum(
+        model.x_equality_constraint = pyo.Constraint(model.P, model.D, rule=x_equality_constraint)
 
-                model.y[i, j] * norm(terminals[i], [model.x[j, d] for d in model.D]) for (i, j) in
-                model.E1) + sum(
-                model.y[i, j] * norm([model.x[i, d] for d in model.D], [model.x[j, d] for d in model.D]) for
-                (i, j)
-                in model.E2)
 
-    model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
+
+        model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+        def inside_norm_constraint(model, i, j, d):
+            return model.inside_norm_not_sq[i, j, d] == (model.x[i, d] * model.y[i, j] - model.x[j, d] * model.y[i, j])
+            # return model.inside_norm[i, j, d] == (model.x[i, d] - model.x[j, d]) ** 2
+
+        model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
+
+        model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+        def inside_norm_sq_constraint(model, i, j, d):
+            return model.inside_norm[i, j, d] == model.inside_norm_not_sq[i, j, d] ** 2
+
+        model.inside_norm_sq_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_sq_constraint)
+
+        def norm_e2_constraint(model, i, j):
+            return model.norm[i, j] ** 2 == sum(model.inside_norm[i, j, d] for d in model.D)
+
+        model.norm_constraint = pyo.Constraint(model.E, rule=norm_e2_constraint)
+
+        def objective_rule(model):
+            return sum(model.y[i, j] * model.norm[i, j] for (i, j) in model.E)
+
+        model.pprint()
+        model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
+
+
+    else:
+        def objective_rule(model):
+
+            if use_better_obj:
+                return (sum(
+                    model.y[i, j] *
+                    norm_y(
+                        terminals[i], [model.x[j, d] for d in model.D], model.y[i, j]) for (i, j) in model.E1) +
+                        sum(model.y[i, j] * norm_y([model.x[i, d] for d in model.D],
+                                                   [model.x[j, d] for d in model.D],
+                                                   model.y[i, j]) for (i, j) in model.E2))
+
+            else:
+                return sum(
+
+                    model.y[i, j] * norm(terminals[i], [model.x[j, d] for d in model.D]) for (i, j) in
+                    model.E1) + sum(
+                    model.y[i, j] * norm([model.x[i, d] for d in model.D], [model.x[j, d] for d in model.D]) for
+                    (i, j)
+                    in model.E2)
+
+        model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
     return model
 

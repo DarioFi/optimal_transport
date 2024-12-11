@@ -43,7 +43,11 @@ def visualize(data: ExperimentData):
     for point, value in steiner_points.items():
         plt.plot(value[0], value[1], 'go')
 
-    flows = data.results['variables']['f']
+    try:
+        flows = data.results['variables']['f']
+
+    except:
+        flows = data.results['variables']['y']
 
     new_flow = {}
 
@@ -96,13 +100,11 @@ if __name__ == '__main__':
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
         jd = json.load(f)[-1]
 
-    db = Database.populate_from_folder("../garbage/")
+    db = Database.populate_from_folder("../gurobi_test_thrash/")
 
-
-
-    query = Query().add_filter(C("formulation") == "dbt")
+    query = Query()
 
     exps = query.apply(db)
 
     visualize(exps[0])
-
+    visualize(exps[1])
