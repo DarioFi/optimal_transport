@@ -11,7 +11,7 @@ from problems.closest_counterexample import random_points_unit_square_with_masse
 # todo: branching priorities to set
 
 # solver_opt = "MaxIter=1"
-solver_opt = "FirstFeas=1 NumFeas=1 MaxTime=300"
+solver_opt = "FirstFeas=1 NumFeas=1"
 # solver_opt = "MaxTime=60"
 # alpha = float(sys.argv[1])
 
@@ -19,7 +19,7 @@ nm = ExperimentManager()
 
 nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
 
-n_alpha = it.product([4, 5, 6, 7, 8], [0, 0.2, 0.5, 0.8])
+n_alpha = it.product([4, 5, 6, 7], [0, 0.2, 0.5, 0.8])
 nm.grid_params['instance_arguments'] = []
 
 for n, alpha in n_alpha:
@@ -58,4 +58,5 @@ nm.fixed_params['experiment_name'] = 'relaxation_test'
 nm.build_experiments()
 nm.run_save(True, 8)
 
+print(f"{len(nm.queued_experiments)=}")
 # todo: question, why does bind first steiner worsen the results?
