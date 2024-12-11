@@ -9,7 +9,7 @@ n_runs = 1
 
 solvers = [
     "gurobi_persistent",
-    "baron",
+    # "baron",
 ]
 
 solver_options = [

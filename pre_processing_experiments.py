@@ -1,7 +1,9 @@
 # idea: disable pre processing by setting max 1 iteration in the solver
-import math
+import sys
+import itertools as it
 
-from formulations.dbt import dbt
+from experiment_manager import ExperimentManager
+from formulations.dbt import dbt, dbt_alpha_0
 from experiment import Experiment
 from problems.closest_counterexample import random_points_unit_square_with_masses
 
@@ -9,42 +11,51 @@ from problems.closest_counterexample import random_points_unit_square_with_masse
 # todo: branching priorities to set
 
 # solver_opt = "MaxIter=1"
-# solver_opt = "FirstFeas=1 NumFeas=1"
-solver_opt = "MaxTime=60"
+solver_opt = "FirstFeas=1 NumFeas=1 MaxTime=300"
+# solver_opt = "MaxTime=60"
+# alpha = float(sys.argv[1])
 
-# "LPSOL=gurobi"
+nm = ExperimentManager()
 
-n = 5
-n_runs = 1
+nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
 
-exp = Experiment(
-    instance_generator=random_points_unit_square_with_masses,
-    instance_arguments={'n': n, "alpha": 0.5},
-    solver='baron',
-    solver_options=solver_opt,
-    formulation=dbt,
-    formulation_arguments={
-        'use_bind_first_steiner': True,
-        'use_better_obj': True,
+n_alpha = it.product([4, 5, 6, 7, 8], [0, 0.2, 0.5, 0.8])
+nm.grid_params['instance_arguments'] = []
+
+for n, alpha in n_alpha:
+    nm.grid_params['instance_arguments'].append({'n': n, 'alpha': alpha})
+
+nm.fixed_params['solver'] = 'baron'
+nm.fixed_params['solver_options'] = solver_opt
+nm.fixed_params['tee'] = False
+
+
+nm.fixed_params['n_runs'] = 50
+nm.fixed_params['save_folder'] = 'pre_processing_runs'
+
+if alpha != 0:
+    nm.fixed_params['formulation'] = dbt
+else:
+    nm.fixed_params['formulation'] = dbt_alpha_0
+
+
+bools_grid = it.product([True, False], repeat=3)
+
+nm.grid_params['formulation_arguments'] = []
+
+for grid in bools_grid:
+    nm.grid_params['formulation_arguments'].append({
+        'use_bind_first_steiner': grid[0],
+        'use_convex_hull': grid[1],
         'use_obj_lb': False,
-        'use_convex_hull': True,
-    },
-    seed=23324,
-    save_folder='gurobi_test',
-    experiment_name=f'relaxation_test',
-    tee=True,
-    n_runs=n_runs
-)
+        'use_better_obj': grid[2]
+    })
 
-results_proper = exp.run(multithreaded=False, n_threads=4)
+nm.fixed_params['seed'] = 145767
+nm.fixed_params['experiment_name'] = 'relaxation_test'
 
-for x in results_proper:
-    try:
-        gap = x['results']['upper_bound'] / x['results']['lower_bound']
-    except ZeroDivisionError:
-        gap = math.inf
 
-    print(f"{x['results']['lower_bound']:4f} {x['results']['upper_bound']:4f} Gap: {gap:4f} Time: {x['results']['time']:2f}")
-
+nm.build_experiments()
+nm.run_save(True, 8)
 
 # todo: question, why does bind first steiner worsen the results?

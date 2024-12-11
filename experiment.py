@@ -23,6 +23,7 @@ def extract_results(model, result):
         'objective': model.obj(),
         'lower_bound': result.Problem[0]["Lower bound"],
         'upper_bound': result.Problem[0]["Upper bound"],
+        'iterations': result.Problem[0]["Iterations"],
 
         # 'variables': {v.name: pyo.value(model.__getattribute__(v.name)) for v in model.component_objects(Var)}
     }

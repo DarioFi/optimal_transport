@@ -104,7 +104,6 @@ def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_con
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
-        model.pprint()
         # Write a BARON options file to specify RELAXATION_ONLY_EQUATIONS
         with open('baron_options.txt', 'w') as f:
             f.write('RELAXATION_ONLY_EQUATIONS {}\n'.format(' '.join("convex_hull_constraint")))
@@ -241,7 +240,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
         def objective_rule(model):
             return sum(model.y[i, j] * model.norm[i, j] for (i, j) in model.E)
 
-        model.pprint()
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
 
@@ -286,7 +284,6 @@ if __name__ == '__main__':
                     use_convex_hull=use_convex_hull,
                     use_better_obj=use_better_obj)
 
-        # model.pprint()
 
         solver = SolverFactory('baron')
         results = solver.solve(model, tee=False)
