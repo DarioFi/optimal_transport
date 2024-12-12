@@ -3,27 +3,27 @@ from problems.closest_counterexample import random_points_unit_square_with_masse
 
 from formulations.dbt import dbt_alpha_0, dbt
 
-n = 3
+n = 10
 
-n_runs = 1
+n_runs = 50
 
 solvers = [
-    "gurobi_persistent",
-    # "baron",
+    # "gurobi_persistent",
+    "baron",
 ]
 
 solver_options = [
-    {"threads": 8},
-    "",
+    # {"threads": 8},
+    "MaxIter=1",
 ]
 
 for solver, opts in zip(solvers, solver_options):
     exp = Experiment(
         instance_generator=random_points_unit_square_with_masses,
-        instance_arguments={'n': n, "alpha": 0},
+        instance_arguments={'n': n, "alpha": 0.5},
         solver=solver,
         solver_options=opts,
-        formulation=dbt_alpha_0,
+        formulation=dbt,
         formulation_arguments={
             'use_bind_first_steiner': False,
             'use_better_obj': False,
@@ -38,4 +38,4 @@ for solver, opts in zip(solvers, solver_options):
     )
 
     results_proper = exp.run(multithreaded=False, n_threads=4)
-    exp.save_to_disk(results_proper)
+    # exp.save_to_disk(results_proper)

@@ -4,6 +4,8 @@ import itertools
 
 import random
 
+import tqdm
+
 import formulations.dbt
 import formulations.gmmx
 from experiment import Experiment
@@ -35,7 +37,7 @@ class ExperimentManager:
                                   grid_combinations]
 
         experiments = []
-        for combination in grid_combinations_dict:
+        for combination in tqdm.tqdm(grid_combinations_dict):
             experiments.append(Experiment(**combination, **self.fixed_params))
 
         self.queued_experiments = experiments
@@ -52,13 +54,30 @@ class ExperimentManager:
         # todo: this seed handling is pretty bad
         self.fixed_params['seed'] = random.randint(0, 100000)
 
-    def run_save(self, multi_threaded: bool, n_threads: Optional[int]):
-        for exp in self.queued_experiments:
+    def run_save(self, multi_threaded: bool, n_threads: Optional[int], bar=True, exp_tee=False, accumulate=None):
 
-            print(exp)
+        iterator = tqdm.tqdm(self.queued_experiments) if bar else self.queued_experiments
+
+        if accumulate is None:
+            accumulate = 1
+
+        acc_res = []
+        acc_counter = 0
+
+        for exp in iterator:
+            if exp_tee:
+                print(exp)
 
             results = exp.run(multi_threaded, n_threads)
-            exp.save_to_disk(results)
+            acc_res.extend(results)
+            acc_counter += 1
+            if acc_counter >= accumulate:
+                exp.save_to_disk(acc_res)
+                acc_res = []
+                acc_counter = 0
+
+        if acc_counter > 0:
+            exp.save_to_disk(acc_res)
 
 
 if __name__ == '__main__':
@@ -83,8 +102,6 @@ if __name__ == '__main__':
     nm.random_seed()
     nm.fixed_params['tee'] = True
     nm.fixed_params['experiment_name'] = 'test_manager'
-
-
 
     nm.grid_params['formulation'] = [
         formulations.dbt.dbt,

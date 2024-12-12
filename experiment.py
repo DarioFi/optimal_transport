@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import random
-from multiprocessing.managers import Value
 from typing import List, Dict, Callable, Optional
 
 from pyomo.environ import Var
@@ -17,15 +16,18 @@ from problems.closest_counterexample import random_points_unit_square, random_po
 
 
 def extract_results(model, result):
+    try:
+        obj = model.obj()
+    except ValueError:
+        obj = None
     results_dict = {
         'status': str(result.solver.status),
         'termination_condition': str(result.solver.termination_condition),
-        'objective': model.obj(),
+        'objective': obj,
         'lower_bound': result.Problem[0]["Lower bound"],
         'upper_bound': result.Problem[0]["Upper bound"],
         'iterations': result.Problem[0]["Iterations"],
 
-        # 'variables': {v.name: pyo.value(model.__getattribute__(v.name)) for v in model.component_objects(Var)}
     }
 
     try:
@@ -133,8 +135,6 @@ class Experiment:
             'cpu': self.cpu_name
         }
 
-        print(serialized_data)
-
         return serialized_data
 
     def run(self, multithreaded: bool, n_threads: Optional[int] = None):
@@ -207,8 +207,4 @@ if __name__ == '__main__':
         exp.save_to_disk(results)
 
 # todo:
-# experiment manager that runs multiple experiments with grid search or similar
-# maybe parallelize the experiments
-# visualization
-# install Gurobi on the VM
-# install CPLEX on the VM
+# install Gurobi on the VM as an LPSOLVER
