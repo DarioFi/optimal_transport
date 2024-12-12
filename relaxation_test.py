@@ -114,17 +114,23 @@ nm.fixed_params['save_folder'] = 'relaxation_runs'
 nm.fixed_params['seed'] = 145767
 nm.fixed_params['formulation'] = dbt_alpha_0
 
-bools_grid = it.product([True, False], repeat=3)
+# bools_grid = it.product([True, False], repeat=3)
+#
+# nm.grid_params['formulation_arguments'] = []
+# for grid in bools_grid:
+#     nm.grid_params['formulation_arguments'].append({
+#         'use_bind_first_steiner': grid[0],
+#         'use_convex_hull': grid[1],
+#         'use_obj_lb': False,
+#         'use_better_obj': grid[2]
+#     })
 
-nm.grid_params['formulation_arguments'] = []
-
-for grid in bools_grid:
-    nm.grid_params['formulation_arguments'].append({
-        'use_bind_first_steiner': grid[0],
-        'use_convex_hull': grid[1],
-        'use_obj_lb': False,
-        'use_better_obj': grid[2]
-    })
+nm.fixed_params['formulation_arguments'] = {
+    'use_bind_first_steiner': False,
+    'use_convex_hull': False,
+    'use_obj_lb': False,
+    'use_better_obj': False
+}
 
 nm.grid_params['solver_options'] = formatted_combinations
 
@@ -133,4 +139,4 @@ nm.build_experiments()
 
 print(f"{len(nm.queued_experiments)=}")
 
-nm.run_save(True, 12, bar=True, exp_tee=False, accumulate=50)
+nm.run_save(True, 8, bar=True, exp_tee=False, accumulate=50)
