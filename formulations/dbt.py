@@ -3,8 +3,6 @@ from re import purge
 import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 
-from formulations.utils import get_lower_bound
-
 
 def norm(p1, p2):
     return sum((x - y) ** 2 for x, y in zip(p1, p2)) ** 0.5
@@ -134,14 +132,13 @@ def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_con
     return model
 
 
-def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj):
+def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj,
+                use_gurobi=False):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     assert masses[0] < 0
     assert all(m > 0 for m in masses[1:])  # todo: masses are irrelevant
     assert alpha == 0
-
-    USE_GUROBI = False
 
     model = pyo.ConcreteModel()
 
@@ -158,7 +155,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     model.E = model.E1 + model.E2
 
     # model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
-    if USE_GUROBI:
+    if use_gurobi:
         model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals)
     else:
         model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
@@ -189,9 +186,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
     if use_bind_first_steiner:
         # bind the source to the first steiner point
-
         model.y[0, min(model.S)].fix(1)
-
 
     if use_convex_hull:
         model.c = pyo.Var(model.S, model.P, domain=pyo.NonNegativeReals)
@@ -209,7 +204,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
-    if USE_GUROBI:
+    if use_gurobi:
         model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals)
 
         def x_equality_constraint(model, i, d):
@@ -217,20 +212,29 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.x_equality_constraint = pyo.Constraint(model.P, model.D, rule=x_equality_constraint)
 
+        if use_better_obj:
+
+            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+            model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+
+            def inside_norm_constraint(model, i, j, d):
+                return model.inside_norm_not_sq[i, j, d] == (
+                        model.x[i, d] * model.y[i, j] - model.x[j, d] * model.y[i, j])
+
+            def inside_norm_sq_constraint(model, i, j, d):
+                return model.inside_norm[i, j, d] == model.inside_norm_not_sq[i, j, d] ** 2
+
+            model.inside_norm_sq_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_sq_constraint)
+            model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
 
 
-        model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
-        def inside_norm_constraint(model, i, j, d):
-            return model.inside_norm_not_sq[i, j, d] == (model.x[i, d] * model.y[i, j] - model.x[j, d] * model.y[i, j])
-            # return model.inside_norm[i, j, d] == (model.x[i, d] - model.x[j, d]) ** 2
+        else:
+            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
 
-        model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
+            def inside_norm_constraint(model, i, j, d):
+                return model.inside_norm[i, j, d] == (model.x[i, d] - model.x[j, d]) ** 2
 
-        model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
-        def inside_norm_sq_constraint(model, i, j, d):
-            return model.inside_norm[i, j, d] == model.inside_norm_not_sq[i, j, d] ** 2
-
-        model.inside_norm_sq_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_sq_constraint)
+            model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
 
         def norm_e2_constraint(model, i, j):
             return model.norm[i, j] ** 2 == sum(model.inside_norm[i, j, d] for d in model.D)
@@ -242,6 +246,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
+        model.pprint()
 
     else:
         def objective_rule(model):
@@ -283,7 +288,6 @@ if __name__ == '__main__':
         model = dbt(terminals, masses, alpha, use_bind_first_steiner=bind_first_steiner, use_obj_lb=use_obj_lb,
                     use_convex_hull=use_convex_hull,
                     use_better_obj=use_better_obj)
-
 
         solver = SolverFactory('baron')
         results = solver.solve(model, tee=False)

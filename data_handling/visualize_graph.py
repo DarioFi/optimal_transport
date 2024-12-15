@@ -100,11 +100,10 @@ if __name__ == '__main__':
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
         jd = json.load(f)[-1]
 
-    db = Database.populate_from_folder("../gurobi_test_thrash/")
+    db = Database.populate_from_folder("../garbage/")
 
     query = Query()
 
     exps = query.apply(db)
 
     visualize(exps[0])
-    visualize(exps[1])

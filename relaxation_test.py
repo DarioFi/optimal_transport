@@ -54,25 +54,6 @@ Also, for testing just the convex relaxation I am running baron with arguments t
 """
 baron_example_options = "DoLocal=0 TDo=0 MDo=0 LBTTDo=0 OBTTDo=0 PDo=0 MaxIter=1"
 
-exp = Experiment(
-    formulation=dbt_alpha_0,
-    solver="baron",
-    solver_options=baron_example_options,
-    instance_generator=random_points_unit_square_with_masses,
-    instance_arguments={'n': 5, 'alpha': 0},
-    n_runs=10,
-    save_folder='relaxation_runs',
-    experiment_name='relaxation',
-    tee=True,
-    seed=145767,
-    formulation_arguments={
-        'use_bind_first_steiner': False,
-        'use_convex_hull': False,
-        'use_obj_lb': False,
-        'use_better_obj': False
-    }
-)
-
 # todo:
 # DoLocal and NumLoc
 # Tree Management??
@@ -82,7 +63,7 @@ exp = Experiment(
 
 all_combos = {
     'DoLocal': [0, 1],
-    'NumLoc': [-2, -1, 10],  # todo whatt???
+    'NumLoc': [-2, 10],  # todo whatt???
     'TDo': [0, 1],
     'MDo': [0, 1],
     'LBTTDo': [0, 1],
@@ -92,6 +73,8 @@ all_combos = {
 
 keys, values = zip(*all_combos.items())
 combinations = list(it.product(*values))
+
+
 
 print(f"{len(combinations)=}")
 
@@ -106,7 +89,7 @@ nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
 nm.fixed_params['instance_arguments'] = {'n': 5, 'alpha': 0}
 
 nm.fixed_params['solver'] = 'baron'
-nm.fixed_params['tee'] = False
+nm.fixed_params['tee'] = True
 
 nm.fixed_params['n_runs'] = 50
 nm.fixed_params['save_folder'] = 'relaxation_runs'
@@ -139,4 +122,27 @@ nm.build_experiments()
 
 print(f"{len(nm.queued_experiments)=}")
 
-nm.run_save(True, 8, bar=True, exp_tee=False, accumulate=50)
+# nm.run_save(True, 8, bar=True, exp_tee=True, accumulate=20)
+
+
+exp = Experiment(
+    formulation=dbt_alpha_0,
+    solver="baron",
+    solver_options="",
+    instance_generator=random_points_unit_square_with_masses,
+    instance_arguments={'n': 5, 'alpha': 0},
+    n_runs=50,
+    save_folder='relaxation_runs_real_solutions',
+    experiment_name='relaxation',
+    tee=True,
+    seed=145767,
+    formulation_arguments={
+        'use_bind_first_steiner': False,
+        'use_convex_hull': False,
+        'use_obj_lb': False,
+        'use_better_obj': False
+    }
+)
+
+results = exp.run(True, n_threads=8)
+exp.save_to_disk(results)

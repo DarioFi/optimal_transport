@@ -193,7 +193,7 @@ class Database:
         assert sum([len(v) for v in new_db.values()]) == len(self)
         return new_db
 
-    def index_on(self, *args,):
+    def index_on(self, *args,) -> Dict:
         new_db = {}
 
         for exp in self.experiments:

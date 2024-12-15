@@ -20,13 +20,19 @@ def extract_results(model, result):
         obj = model.obj()
     except ValueError:
         obj = None
+
+    try:
+        iterations = result.Problem[0]["Iterations"]
+    except:
+        iterations = None  # todo: fix this for gurobi
+
     results_dict = {
         'status': str(result.solver.status),
         'termination_condition': str(result.solver.termination_condition),
         'objective': obj,
         'lower_bound': result.Problem[0]["Lower bound"],
         'upper_bound': result.Problem[0]["Upper bound"],
-        'iterations': result.Problem[0]["Iterations"],
+        'iterations': iterations,
 
     }
 
