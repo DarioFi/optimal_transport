@@ -96,14 +96,19 @@ if __name__ == '__main__':
     import json, os
 
     # get the last file in that directory with alphabetical order
-    with open("../garbage/" + sorted(os.listdir("../garbage"))[-2], "r") as f:
+    # with open("../garbage/" + sorted(os.listdir("../garbage"))[-2], "r") as f:
         # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
-        jd = json.load(f)[-1]
+        # jd = json.load(f)[-1]
 
-    db = Database.populate_from_folder("../garbage/")
+    db = Database.populate_from_folder("../gurobi_test_thrash/")
 
     query = Query()
 
     exps = query.apply(db)
 
     visualize(exps[0])
+    visualize(exps[1])
+    visualize(exps[2])
+    visualize(exps[3])
+    visualize(exps[4])
+    visualize(exps[5])

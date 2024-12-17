@@ -156,9 +156,9 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
     # model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
     if use_gurobi:
-        model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals)
+        model.x = pyo.Var(model.S.union(model.P), model.D, domain=pyo.Reals, bounds=(0, 1))
     else:
-        model.x = pyo.Var(model.S, model.D, domain=pyo.Reals)
+        model.x = pyo.Var(model.S, model.D, domain=pyo.Reals, bounds=(0, 1))
 
     model.y = pyo.Var(model.E, domain=pyo.Binary)
 
@@ -204,8 +204,10 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.convex_hull_sum_constraint = pyo.Constraint(model.S, rule=convex_hull_sum_constraint)
 
+    max_norm = D ** 0.5
+
     if use_gurobi:
-        model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals)
+        model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals, bounds=(0, max_norm))
 
         def x_equality_constraint(model, i, d):
             return model.x[i, d] == terminals[i][d]
@@ -214,30 +216,30 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         if use_better_obj:
 
-            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
-            model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals, bounds=(0, 1))
+            model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals, bounds=(0, 1))
 
             def inside_norm_constraint(model, i, j, d):
                 return model.inside_norm_not_sq[i, j, d] == (
                         model.x[i, d] * model.y[i, j] - model.x[j, d] * model.y[i, j])
 
             def inside_norm_sq_constraint(model, i, j, d):
-                return model.inside_norm[i, j, d] == model.inside_norm_not_sq[i, j, d] ** 2
+                return model.inside_norm[i, j, d] >= model.inside_norm_not_sq[i, j, d] ** 2
 
             model.inside_norm_sq_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_sq_constraint)
             model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
 
 
         else:
-            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals)
+            model.inside_norm = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals, bounds=(0, 1))
 
             def inside_norm_constraint(model, i, j, d):
-                return model.inside_norm[i, j, d] == (model.x[i, d] - model.x[j, d]) ** 2
+                return model.inside_norm[i, j, d] >= (model.x[i, d] - model.x[j, d]) ** 2
 
             model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
 
         def norm_e2_constraint(model, i, j):
-            return model.norm[i, j] ** 2 == sum(model.inside_norm[i, j, d] for d in model.D)
+            return model.norm[i, j] >= sum(model.inside_norm[i, j, d] for d in model.D) ** 0.5
 
         model.norm_constraint = pyo.Constraint(model.E, rule=norm_e2_constraint)
 
@@ -246,7 +248,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
-        model.pprint()
 
     else:
         def objective_rule(model):
