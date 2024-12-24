@@ -28,7 +28,8 @@ class ExperimentManager:
 
     def build_experiments(self):
         """
-        Cleans the list of experiments and builds a new list of Experiment objects
+        Builds a list of experiments to run based on the grid parameters and fixed parameters. The experiments are stored
+        in the queued_experiments attribute
         :return:
         """
 
@@ -46,6 +47,9 @@ class ExperimentManager:
         return copy.deepcopy(self)
 
     def baron_solver(self, maxtime: int):
+        """
+        Sets the solver to baron with a maximum time
+        """
         self.fixed_params['solver'] = 'baron'
         self.fixed_params['tee'] = False
         self.fixed_params['solver_options'] = f'maxtime={maxtime}'
@@ -55,6 +59,8 @@ class ExperimentManager:
         self.fixed_params['seed'] = random.randint(0, 100000)
 
     def run_save(self, multi_threaded: bool, n_threads: Optional[int], bar=True, exp_tee=False, accumulate=None):
+
+        assert len(self.queued_experiments) > 0, "No experiments to run. Call build_experiments first"
 
         iterator = tqdm.tqdm(self.queued_experiments) if bar else self.queued_experiments
 
@@ -80,32 +86,3 @@ class ExperimentManager:
             exp.save_to_disk(acc_res)
 
 
-if __name__ == '__main__':
-    nm = ExperimentManager()
-
-    nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
-    nm.fixed_params['instance_arguments'] = {'n': 6}
-
-    nm.baron_solver(10)
-
-    nm.fixed_params['n_runs'] = 10
-    nm.fixed_params['save_folder'] = 'runs'
-
-    nm.fixed_params['formulation_arguments'] = {
-        'maximum_degree': 3,
-        'alpha': .5,
-        'use_bind_first_steiner': True,
-        'use_convex_hull': True,
-        'use_obj_lb': False
-    }
-
-    nm.random_seed()
-    nm.fixed_params['tee'] = True
-    nm.fixed_params['experiment_name'] = 'test_manager'
-
-    nm.grid_params['formulation'] = [
-        formulations.dbt.dbt,
-    ]
-
-    nm.build_experiments()
-    nm.run_save(False, 4)

@@ -1,0 +1,41 @@
+OPTIONS {
+ResName: "/tmp/tmpf_tab7hu.baron.soln";
+TimName: "/tmp/tmpq0ggctx5.baron.tim";
+Summary: 0;
+}
+
+POSITIVE_VARIABLES ONE_VAR_CONST__, x1, x10, x11, x3, x5, x6, x7, x8, x9;
+
+VARIABLES x2, x4;
+
+LOWER_BOUNDS{
+x1: 0;
+x10: 0;
+x11: 0;
+x3: 0;
+x5: 0;
+x6: 0;
+x7: 0;
+x8: 0;
+x9: 0;
+}
+
+EQUATIONS c_e_FIX_ONE_VAR_CONST__, c1, c2, c3, c4, c5, c6, c7, c8, c9;
+
+c_e_FIX_ONE_VAR_CONST__:  ONE_VAR_CONST__  == 1;
+c1: x1 - (0.1 - x2) ^ 2 == 0;
+c2: x3 - (0.9 - x4) ^ 2 == 0;
+c3: x5 - (0.9 - x2) ^ 2 == 0;
+c4: x6 - (0.1 - x4) ^ 2 == 0;
+c5: x7 - (0.9 - x2) ^ 2 == 0;
+c6: x8 - (0.9 - x4) ^ 2 == 0;
+c7: x9 ^ 2 - (x1 + x3) == 0;
+c8: x10 ^ 2 - (x5 + x6) == 0;
+c9: x11 ^ 2 - (x7 + x8) == 0;
+
+OBJ: minimize x9 + x10 + x11;
+
+STARTING_POINT{
+ONE_VAR_CONST__: 1;
+}
+

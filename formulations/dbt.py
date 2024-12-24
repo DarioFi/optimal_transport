@@ -296,3 +296,4 @@ if __name__ == '__main__':
         print(results.problem.lower_bound, results.problem.upper_bound)
         print(results.problem.cpu_time)
         print(results.problem.wall_time)
+

@@ -15,7 +15,10 @@ from problems.closest_counterexample import random_points_unit_square, random_po
     fixed_points
 
 
-def extract_results(model, result):
+def extract_results(model, result) -> Dict:
+    """
+    Extract the results from a pyomo model and a solver result
+    """
     try:
         obj = model.obj()
     except ValueError:
@@ -69,6 +72,11 @@ def extract_results(model, result):
 
 
 class Experiment:
+    """
+    This class defines a single experiment, consisting of instance generators, formulations, solver, solver options, seed
+    and number of runs. It can run (in parallel too) and save the results to disk.
+    """
+
     def __init__(self, instance_generator: Callable, instance_arguments: Dict, solver: str, solver_options: str,
                  formulation: Callable, n_runs: int,
                  formulation_arguments: Dict, seed: int, save_folder: str, experiment_name: str, tee: bool):
@@ -111,13 +119,9 @@ class Experiment:
 
         return instance, results_serializable
 
-    def serialize(self, instance, results, seed):
+    def serialize(self, instance, results, seed) -> Dict:
         """
         Build a dictionary with the instance, formulation, results and all the parameters of the experiment
-        :param instance:
-        :param formulation:
-        :param results:
-        :return:
         """
 
         objective = results["objective"]
@@ -143,7 +147,13 @@ class Experiment:
 
         return serialized_data
 
-    def run(self, multithreaded: bool, n_threads: Optional[int] = None):
+    def run(self, multithreaded: bool, n_threads: Optional[int] = None) -> List[Dict]:
+        """
+        Run the experiment n_runs times calling _single_run each time
+        :param multithreaded: whether to spawn multiple threads using multiprocessing
+        :param n_threads: number of threads to spawn, ignored if multithreaded is False
+        :return:
+        """
         random.seed(self.seed)
         seeds = [random.randint(0, 100000) for _ in range(self.n_runs)]
         results = []
@@ -166,7 +176,9 @@ class Experiment:
         return results
 
     def save_to_disk(self, results: List[Dict]):
-
+        """
+        Save the results to disk in a json file
+        """
         if not os.path.exists(self.save_location):
             os.makedirs(self.save_location)
 
@@ -186,31 +198,3 @@ class Experiment:
         s += f"Number of runs: {self.n_runs}\n"
         s += f"Seed: {self.seed}\n"
         return s
-
-
-if __name__ == '__main__':
-    for bind in [False]:
-        exp = Experiment(
-            instance_generator=random_points_unit_square_with_masses,
-            instance_arguments={'n': 5, "alpha": 0},
-            solver='baron',
-            solver_options='maxtime=300',
-            formulation=dbt,
-            formulation_arguments={
-                'use_bind_first_steiner': bind,
-                'use_better_obj': True,
-                'use_obj_lb': False,
-                'use_convex_hull': False,
-            },
-            seed=23324,
-            save_folder='runs',
-            experiment_name=f'dbt',
-            tee=True,
-            n_runs=1
-        )
-
-        results = exp.run(multithreaded=False, n_threads=3)
-        exp.save_to_disk(results)
-
-# todo:
-# install Gurobi on the VM as an LPSOLVER
