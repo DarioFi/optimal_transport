@@ -994,6 +994,42 @@
 
     \section{Numerical results}
 
+
+    \section{Convex Hull}
+    A possible way to write the convex hull constraint is to use \cite[2.11]{Conforti2014} and the property that a polyhedron is the convex hull
+    of its vertices.
+    In this case we get:
+    \begin{align}
+        x &= \sum_{i \in P} x_i \\
+        x_j &= \lambda_j p_j \\
+        \sum \lambda_{j} &= 1 \\
+    \end{align}
+    Where $x$ is our point, $x_i$ are auxiliary variables and $\lambda_i$ are the coefficients of the convex combination.
+    We have $\lambda \in [0,1]$ when working with the relaxation (so the convex hull of the union)
+    and $\lambda \in \{0,1\}$ when working just with the union.
+    Which implies:
+    \begin{align}
+        x &= \sum_{i}{\lambda_i p_i} \\
+        \sum \lambda_{j} &= 1
+    \end{align}
+    Which is the same as our old convex hull constraint.
+
+    If we consider 2 points at the same time we can write $x=[x^1, x^2]$ where each $x^i$ is a branching point. We then get:
+    \begin{align}
+        x &= \sum_{i,j}{x_{ij}} \\
+        x_{ij} &= [\lambda_{ij} p_i, \lambda_{ij} p_j] \\
+        \sum \lambda_{ij} &= 1
+    \end{align}
+    which implies:
+    \begin{align}
+        x^1 &= \sum_{i,j}{\lambda_{ij} p_i} \\
+        x^2 &= \sum_{i,j}{\lambda_{ij} p_j} \\
+    \end{align}
+
+
+
+
+
     \newpage
     \printbibliography
 

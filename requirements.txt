@@ -1,2 +1,5 @@
 numpy<2.0.0
 sympy
+pyomo
+matplotlib
+tqdm

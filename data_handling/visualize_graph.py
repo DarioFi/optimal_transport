@@ -93,13 +93,6 @@ def visualize(data: ExperimentData):
 
 
 if __name__ == '__main__':
-    import json, os
-
-    # get the last file in that directory with alphabetical order
-    # with open("../garbage/" + sorted(os.listdir("../garbage"))[-2], "r") as f:
-        # with open("../runs/test_2024-10-05T18:30:36.965463.json", "r") as f:
-        # jd = json.load(f)[-1]
-
     db = Database.populate_from_folder("../gurobi_test_thrash/")
 
     query = Query()

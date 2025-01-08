@@ -24,7 +24,6 @@ class ExperimentManager:
 
         self.queued_experiments: List[Experiment] = []
 
-        # todo: think about how to handle multi-threading
 
     def build_experiments(self):
         """
@@ -58,14 +57,20 @@ class ExperimentManager:
         # todo: this seed handling is pretty bad
         self.fixed_params['seed'] = random.randint(0, 100000)
 
-    def run_save(self, multi_threaded: bool, n_threads: Optional[int], bar=True, exp_tee=False, accumulate=None):
+    def run_save(self, multi_threaded: bool, n_threads: Optional[int], bar=True, exp_tee=False, accumulate=1):
+        """
+        Runs the experiments and saves the results to disk
+        :param multi_threaded: bool
+        :param n_threads: Optional[int], ignored if multi_threaded is False
+        :param bar: whether to use a tqdm progress bar (stderr)
+        :param exp_tee: whether to print experiment details to stdout
+        :param accumulate: how many experiment to run before saving to disk
+        :return:
+        """
 
         assert len(self.queued_experiments) > 0, "No experiments to run. Call build_experiments first"
 
         iterator = tqdm.tqdm(self.queued_experiments) if bar else self.queued_experiments
-
-        if accumulate is None:
-            accumulate = 1
 
         acc_res = []
         acc_counter = 0
