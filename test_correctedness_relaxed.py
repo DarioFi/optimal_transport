@@ -15,7 +15,7 @@ exp_relaxed = Experiment(
     solver="baron",
     solver_options=solver_opt,
     instance_generator=random_points_unit_square_with_masses,
-    instance_arguments={'n': 15, 'alpha': 0},
+    instance_arguments={'n': 5, 'alpha': 0},
     n_runs=n_runs,
     save_folder='temp_formulation_test',
     experiment_name='test_formulation',
@@ -23,7 +23,8 @@ exp_relaxed = Experiment(
     seed=145767,
     formulation_arguments={
         'relax_y': True,
-        'relax_w': True
+        'relax_w': True,
+        'disjunctive_w': False,
     }
 )
 

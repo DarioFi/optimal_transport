@@ -1,3 +1,5 @@
+import itertools
+
 import pyomo.environ as pyo
 
 
@@ -5,7 +7,70 @@ def norm(p1, p2):
     return sum((x - y) ** 2 for x, y in zip(p1, p2)) ** 0.5
 
 
-def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool):
+class pyomo_wrapper:
+    """
+    Wrapper class to stop pyomo from flattening tuples
+    """
+
+    def __init__(self, data):
+        self.data = data
+
+    def __str__(self):
+        return str(self.data)
+
+
+def add_bilinear(model, z, x, y, index_sets, relaxed: bool, constraint_name: str):
+    """
+    Add constraint z[i_z] = x[i_x] * y[i_y] for (i_z, i_x, i_y) in index_sets
+    :param index_sets:
+    :param model:
+    :param z:
+    :param x:
+    :param y:
+    :param relaxed:
+    :param constraint_name:
+    :return:
+    """
+
+    index_wrapped = [pyomo_wrapper(i) for i in index_sets]
+
+    if relaxed is False:
+        def bilinear_constraint_rule(model, ind):
+            i_z, i_x, i_y = ind.data
+            return z[i_z] == x[i_x] * y[i_y]
+
+        model.add_component(constraint_name, pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule))
+
+    else:
+        # instead of having z = x * y we now need
+        # z >= 0
+        # z >= x + y - 1
+        # z <= x
+        # z <= y
+
+        def bilinear_constraint_rule_1(model, ind):
+            i_z, i_x, i_y = ind.data
+            return z[i_z] >= 0
+
+        def bilinear_constraint_rule_2(model, ind):
+            i_z, i_x, i_y = ind.data
+            return z[i_z] >= x[i_x] + y[i_y] - 1
+
+        def bilinear_constraint_rule_3(model, ind):
+            i_z, i_x, i_y = ind.data
+            return z[i_z] <= x[i_x]
+
+        def bilinear_constraint_rule_4(model, ind):
+            i_z, i_x, i_y = ind.data
+            return z[i_z] <= y[i_y]
+
+        model.add_component(constraint_name + "_1", pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule_1))
+        model.add_component(constraint_name + "_2", pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule_2))
+        model.add_component(constraint_name + "_3", pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule_3))
+        model.add_component(constraint_name + "_4", pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule_4))
+
+
+def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: bool):
     assert alpha == 0
     P = len(terminals)
     S = len(terminals) - 2
@@ -21,9 +86,9 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool):
     model.E2 = [(i, j) for i in model.S for j in model.S if i < j]
     model.E = model.E1 + model.E2
 
+    terminals_dict = {(i, d): terminals[i][d] for i in range(P) for d in range(D)}
     model.x = pyo.Var(model.S, model.D, domain=pyo.Reals, bounds=(0, 1))
 
-    # todo: relax y to reals?
     if relax_y:
         model.y = pyo.Var(model.E, domain=pyo.NonNegativeReals, bounds=(0, 1))
     else:
@@ -67,82 +132,29 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool):
 
     # region bilinear-terms
 
-    w_index = [(i, j) for i in model.S for j in model.S if i != j] + [(i, j) for i in model.S for j in model.P] + [(j, i) for i in
-                                                                                                         model.S for j
-                                                                                                         in model.P]
+    w_index = [(i, j) for i in model.S for j in model.S if i != j] + [(i, j) for i in model.S for j in model.P] + [
+        (j, i) for i in
+        model.S for j
+        in model.P]
 
     model.w = pyo.Var(w_index, model.D, domain=pyo.NonNegativeReals, bounds=(0, 1))
 
-    if not relax_w:
-        def w_s_s_constraint(model, i, j, d):
-            if i < j:
-                return model.w[(i, j), d] == model.x[i, d] * model.y[i, j]
-            elif i > j:
-                return model.w[(i, j), d] == model.x[i, d] * model.y[j, i]
-            else:
-                return pyo.Constraint.Skip
+    w_index_s_s = [
+        ((((i, j), d), (i, d), (min(i, j), max(i, j)))) for i in model.S for j in model.S for d in model.D if
+        i != j
+    ]
+    add_bilinear(model, model.w, model.x, model.y, w_index_s_s, relax_w, "w_bilinear_constraint_s_s")
 
-        model.w_s_s_cosntraint = pyo.Constraint(model.S, model.S, model.D, rule=w_s_s_constraint)
+    w_index_p_s = [
+        ((((i, j), d), (i, d), (min(i, j), max(i, j)))) for i in model.P for j in model.S for d in model.D
+    ]
+    # note: this is never relaxed because terminals are constant and therefore this constraint is actually linear
+    add_bilinear(model, model.w, terminals_dict, model.y, w_index_p_s, False, "w_bilinear_constraint_p_s")
 
-        def w_p_s_constraint(model, i, j, d):
-            if i in model.P:
-                return model.w[(i, j), d] == model.y[i, j] * terminals[i][d]
-            elif j in model.P:
-                return model.w[(i, j), d] == model.y[j, i] * model.x[i, d]
-
-        model.w_p_s_constraint = pyo.Constraint(model.S, model.P, model.D, rule=w_p_s_constraint)
-        model.w_s_p_constraint = pyo.Constraint(model.P, model.S, model.D, rule=w_p_s_constraint)
-
-    else:
-
-        # instead of having w = x * y we now need
-        # w >= 0
-        # w >= x + y - 1
-        # w <= x
-        # w <= y
-
-        def w_relaxation_constraint_1(model, i, j, d):
-            if i == j: return pyo.Constraint.Skip
-            return model.w[(i, j), d] >= 0
-
-        def w_relaxation_constraint_2(model, i, j, d):
-            if i < j:
-                return model.w[(i, j), d] >= model.x[i, d] + model.y[i, j] - 1
-            elif j < i:
-                return model.w[(i, j), d] >= model.x[i, d] + model.y[j, i] - 1
-            else:
-                return pyo.Constraint.Skip
-
-        def w_relaxation_constraint_3(model, i, j, d):
-            if i == j: return pyo.Constraint.Skip
-            return model.w[(i, j), d] <= model.x[i, d]
-
-        def w_relaxation_constraint_4(model, i, j, d):
-
-            if i < j:
-                return model.w[(i, j), d] <= model.y[i, j]
-            elif j < i:
-                return model.w[(i, j), d] <= model.y[j, i]
-            else:
-                return pyo.Constraint.Skip
-
-        model.w_relaxation_constraint_1 = pyo.Constraint(model.S, model.S, model.D, rule=w_relaxation_constraint_1)
-        model.w_relaxation_constraint_2 = pyo.Constraint(model.S, model.S, model.D, rule=w_relaxation_constraint_2)
-        model.w_relaxation_constraint_3 = pyo.Constraint(model.S, model.S, model.D, rule=w_relaxation_constraint_3)
-        model.w_relaxation_constraint_4 = pyo.Constraint(model.S, model.S, model.D, rule=w_relaxation_constraint_4)
-
-        model.w_relaxation_constraint_1_p = pyo.Constraint(model.S, model.P, model.D, rule=w_relaxation_constraint_1)
-        model.w_relaxation_constraint_2_p = pyo.Constraint(model.S, model.P, model.D, rule=w_relaxation_constraint_2)
-        model.w_relaxation_constraint_3_p = pyo.Constraint(model.S, model.P, model.D, rule=w_relaxation_constraint_3)
-        model.w_relaxation_constraint_4_p = pyo.Constraint(model.S, model.P, model.D, rule=w_relaxation_constraint_4)
-
-        # w[p, s] does not need to be relaxed as w = terminal * y is alread a linear constraint
-        # implement this
-
-        def w_p_s_non_relaxed(model, i, j, d):
-            return model.w[(i, j), d] == model.y[i, j] * terminals[i][d]
-
-        model.w_p_s_non_relaxed = pyo.Constraint(model.P, model.S, model.D, rule=w_p_s_non_relaxed)
+    w_index_s_p = [
+        ((((i, j), d), (i, d), (min(i, j), max(i, j)))) for i in model.S for j in model.P for d in model.D
+    ]
+    add_bilinear(model, model.w, model.x, model.y, w_index_s_p, relax_w, "w_bilinear_constraint_s_p")
 
     # endregion
 
@@ -168,7 +180,19 @@ if __name__ == '__main__':
         masses=[0, 0, 0, 0],
         alpha=0,
         relax_w=True,
-        relax_y=True
+        relax_y=False,
+        disjunctive_w=False,
+    )
+
+    m.pprint()
+
+    m = dbt_relaxed_alpha0(
+        [[0, 1], [0, 0], [1, 0], [1, 1]],
+        masses=[0, 0, 0, 0],
+        alpha=0,
+        relax_w=True,
+        relax_y=False,
+        disjunctive_w=False,
     )
 
     m.pprint()
