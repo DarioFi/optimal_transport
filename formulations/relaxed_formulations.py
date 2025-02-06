@@ -148,6 +148,7 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
     w_index_p_s = [
         ((((i, j), d), (i, d), (min(i, j), max(i, j)))) for i in model.P for j in model.S for d in model.D
     ]
+
     # note: this is never relaxed because terminals are constant and therefore this constraint is actually linear
     add_bilinear(model, model.w, terminals_dict, model.y, w_index_p_s, False, "w_bilinear_constraint_p_s")
 

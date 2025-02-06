@@ -15,6 +15,14 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 
+
+\usepackage{threeparttable}
+\usepackage{caption}
+
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{multirow}
+
 \usepackage{hyperref}\hypersetup{colorlinks=true, citecolor=blue}
 
 \usepackage{biblatex}
@@ -996,39 +1004,61 @@
 
 
     \section{Convex Hull}
-    A possible way to write the convex hull constraint is to use \cite[2.11]{Conforti2014} and the property that a polyhedron is the convex hull
-    of its vertices.
-    In this case we get:
-    \begin{align}
-        x &= \sum_{i \in P} x_i \\
-        x_j &= \lambda_j p_j \\
-        \sum \lambda_{j} &= 1 \\
-    \end{align}
-    Where $x$ is our point, $x_i$ are auxiliary variables and $\lambda_i$ are the coefficients of the convex combination.
-    We have $\lambda \in [0,1]$ when working with the relaxation (so the convex hull of the union)
-    and $\lambda \in \{0,1\}$ when working just with the union.
-    Which implies:
-    \begin{align}
-        x &= \sum_{i}{\lambda_i p_i} \\
-        \sum \lambda_{j} &= 1
-    \end{align}
-    Which is the same as our old convex hull constraint.
 
-    If we consider 2 points at the same time we can write $x=[x^1, x^2]$ where each $x^i$ is a branching point. We then get:
+    We now aim to write an equivalent formulation where we move the complexity from the objective function to the constraints.
+    To achieve this we introduce additional bilinear terms $w_{ij}$ in order to make the objective function convex.
+
     \begin{align}
-        x &= \sum_{i,j}{x_{ij}} \\
-        x_{ij} &= [\lambda_{ij} p_i, \lambda_{ij} p_j] \\
-        \sum \lambda_{ij} &= 1
-    \end{align}
-    which implies:
-    \begin{align}
-        x^1 &= \sum_{i,j}{\lambda_{ij} p_i} \\
-        x^2 &= \sum_{i,j}{\lambda_{ij} p_j} \\
+        \textbf{y-polytope:} \quad & \sum_{t \in T \setminus \{1\}} y_{s,s'} + \sum_{s' \in S, s < s'} y_{s,s'} = 2 \quad \forall s \in S \quad \text{(each Steiner has two kids)} \\
+        & \sum_{s' \in S, s' < s} y_{s',s} = 1 \quad \forall s \in S \setminus \{1\} \quad \text{(each Steiner has a Steiner parent)} \\
+        & \sum_{s \in S} y_{s,t} = 1 \quad \forall t \in T \quad \text{(each terminal is a leaf)} \\
+        & y_{1,1} = 1 \\
+        & y_{s,t} \geq 0 \quad \forall s \in S, t \in T \\
+        & y_{s,s'} \geq 0 \quad \forall s, s' \in S \\
+        \\
+        \textbf{x-polytope:} \quad & x_s = \sum_{t \in T} \lambda_{s,t} p_t \quad \forall s \in S \\
+        & \sum_{t \in T} \lambda_{s,t} = 1 \quad \forall s \in S \\
+        & \lambda_{s,t} \geq 0 \quad \forall s \in S, t \in T \\
+        \\
+        \textbf{Bilinear terms:} \quad & w_{s,t} = s_s \cdot y_{s,t} \quad \forall s \in S, t \in T \\
+        & w_{s,s'} = x_s \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        & w_{s',s} = x_s \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        \textbf{Objective:} \quad & \sum_{s \in S, t \in T} \| w_{s,t} - p_t y_{s,t} \| + \sum_{s, s' \in S, s < s'} \| w_{s,s'} - w_{s',s} \| \\
     \end{align}
 
+    We can now use the convex hull condition in a different way by exploiting disjunctive programming~\cite[2.11]{Conforti2014}.
+    We have the following:
+    \begin{equation}
+        x = (x_1, \ldots, x_{|S|}) \in \text{conv}(P \times \ldots \times P)
+    \end{equation}
 
 
-
+    \begin{table*}[ht]
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \setlength{\tabcolsep}{6pt}
+        \begin{threeparttable}
+            \begin{tabular}{l cc|cc|cc}
+                \toprule
+                \textbf{Formulation} & \multicolumn{2}{c|}{\(\mathbf{N=4}\)} & \multicolumn{2}{c|}{\(\mathbf{N=5}\)} & \multicolumn{2}{c}{\(\mathbf{N=6}\)} \\
+                \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+                & Avg LB  & Avg Time & Avg LB                     & Avg Time                   & Avg LB                     & Avg Time                    \\
+                \midrule
+                DBT (exact solutions)            & 1.08721 & 0.47950  & 1.31719\textsuperscript{a} & 2.07564\textsuperscript{a} & 1.52883\textsuperscript{a} & 19.87462\textsuperscript{a} \\
+                DBT convex relaxation            & 0.36753 & 0.90600  & 0.05242\textsuperscript{a} & 0.26872\textsuperscript{a} & 0.00469           & 0.08875           \\
+                DBT convex relaxation \(w\) only & 1.08721 & 0.28725  & 1.33244\textsuperscript{b} & 2.02711\textsuperscript{b} & 1.54766\textsuperscript{c} & 23.06500\textsuperscript{c} \\
+                DBT pre-processing only          & 0.92279 & 0.36025  & 0.92912                    & 0.67375                    & 0.90109                    & 2.41075                     \\
+                \bottomrule
+            \end{tabular}
+        \end{threeparttable}
+        \begin{tablenotes}[flushleft,para]
+            \footnotesize
+            \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
+        \end{tablenotes}
+        \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
+        \label{tab:experiment_results_grouped}
+    \end{table*}
 
     \newpage
     \printbibliography
