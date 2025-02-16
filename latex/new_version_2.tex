@@ -94,11 +94,18 @@
 
 \newcommand{\R}{\mathbb{R}}
 
+\usepackage{pifont} % For tick and cross symbols
+% Define commands for tick and cross
+\newcommand{\yes}{\ding{51}}
+\newcommand{\no}{\ding{55}}
+\newcommand{\na}{---} % For not applicable
+
 
 \begin{document}
     \author{Antonio De Rosa, Dario Filatrella, Aida Khajavirad}
 
     \maketitle
+
 
 
     \tableofcontents
@@ -1032,6 +1039,13 @@
         x = (x_1, \ldots, x_{|S|}) \in \text{conv}(P \times \ldots \times P)
     \end{equation}
 
+    if we define TODO capisci che cazzo sta succedendo
+    \begin{equation}
+        a
+    \end{equation}
+
+
+
 
     \begin{table*}[ht]
         \centering
@@ -1058,6 +1072,37 @@
         \end{tablenotes}
         \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
         \label{tab:experiment_results_grouped}
+    \end{table*}
+
+
+    \begin{table*}[ht]
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \setlength{\tabcolsep}{4pt}
+        \begin{threeparttable}
+            \begin{tabular}{l c c c c c c c c c r r r}
+                \toprule
+                \textbf{Termination} & \textbf{DoLocal} & \textbf{TDo} & \textbf{MDo} & \textbf{LBTTDo} & \textbf{OBTTDo} & \textbf{PDo} & \textbf{BO} & \textbf{CH} & \textbf{Avg LB} & \textbf{Avg UB} & \textbf{Time (s)} \\
+                \midrule
+                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no                 & \no                  & 0.88373         & 2.64849         & 5.11650           \\
+                 MaxIter=1            & \no              & \no          & \no          & \yes            & \no             & \no          & \no                 & \no                  & 0.88373         & 2.64849         & 4.53950           \\
+                 MaxIter=1            & \yes             & \yes         & \yes         & \no             & \yes            & \yes         & \no                 & \no                  & 0.20039         & 2.25245         & 0.53300 \\
+                 Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \no                 & \no                  & 1.45655         & 1.45655         & 42.46600          \\
+                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes                & \no                  & 0.54355         & 2.48274         & 6.99500           \\
+                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no                 & \yes                 & 0.77710         & 1.72245         & 4.80400           \\
+                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes                & \yes                 & 0.46670         & 2.82511 & 5.95500 \\
+                 Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \yes                & \no                  & 1.45655         & 1.45655         & 37.80450          \\
+                \bottomrule
+            \end{tabular}
+            \begin{tablenotes}[flushleft,para]
+                \footnotesize
+                % You can add additional inline notes here if needed.
+            \end{tablenotes}
+        \end{threeparttable}
+        \caption{Ablation study results showing solver configuration options (ticks indicate enabled features) and performance metrics for $n=5$.
+        DoLocal, TDo, MDo, LBTTDo, OBTTDo, PDo are Baron options. BO stands for "Better objective" and CH for "Convex hull".}
+        \label{tab:ablation_configs}
     \end{table*}
 
     \newpage

@@ -10,15 +10,8 @@ n_threads = 6
 # solver_opt = "maxiter=1 maxtime=300 LBTTDo=0 "
 # solver_opt = "maxiter=1 maxtime=300 TDo=0 MDo=0 LBTTDo=0 OBTTDO=0 PDo=0"
 
-# tests to run: (on n=4,5,6) possibly with asterisks if not enough time
-# - full solutions - ok
-# - pre-processing only solutions - ok
-# - relaxed w - ok
-# - relaxed y - ok
-# - full relaxation - ok
 
-
-for n in [4,5,6]:
+for n in [4, 5, 6]:
     print("Running tests for n=", n)
 
     print("Running full solutions")
@@ -65,28 +58,6 @@ for n in [4,5,6]:
     data = exp.run(multithreaded=True, n_threads=n_threads)
     exp.save_to_disk(data)
 
-    # print("Running relaxed y")
-    # exp = Experiment(
-    #     formulation=dbt_relaxed_alpha0,
-    #     solver="baron",
-    #     solver_options="maxtime=300",
-    #     instance_generator=random_points_unit_square_with_masses,
-    #     instance_arguments={'n': n, 'alpha': 0},
-    #     n_runs=n_runs,
-    #     save_folder='table_latex',
-    #     experiment_name='relax_y',
-    #     tee=True,
-    #     seed=145767,
-    #     formulation_arguments={
-    #         'relax_y': True,
-    #         'relax_w': False,
-    #         'disjunctive_w': False,
-    #     }
-    # )
-    #
-    # data = exp.run(multithreaded=True, n_threads=n_threads)
-    # exp.save_to_disk(data)
-
     print("Running relaxed w")
     exp = Experiment(
         formulation=dbt_relaxed_alpha0,
@@ -106,8 +77,8 @@ for n in [4,5,6]:
         }
     )
 
-    # data = exp.run(multithreaded=True, n_threads=n_threads)
-    # exp.save_to_disk(data)
+    data = exp.run(multithreaded=True, n_threads=n_threads)
+    exp.save_to_disk(data)
 
     print("Running full relaxation")
     exp = Experiment(
@@ -128,8 +99,5 @@ for n in [4,5,6]:
         }
     )
 
-    # data = exp.run(multithreaded=True, n_threads=n_threads)
-    # exp.save_to_disk(data)
-
-# tests to run:
-# ablation on preprocessing options (we should already have the data but maybe run again with new formulation?)
+    data = exp.run(multithreaded=True, n_threads=n_threads)
+    exp.save_to_disk(data)

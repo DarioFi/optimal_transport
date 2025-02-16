@@ -133,6 +133,7 @@ def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_con
 
 
 def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj,
+                geometric_cut_50=False,
                 use_gurobi=False):
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
@@ -248,7 +249,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
-
     else:
         def objective_rule(model):
 
@@ -271,6 +271,24 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
                     in model.E2)
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
+
+    # ouzia maculan (2966.pdf) geometric cut
+
+    eta = {
+        i: min(norm(terminals[i], terminals[j]) for j in model.P if i != j)
+        for i in model.P
+    }
+
+    def geometric_cut_50(model, edge, s):
+        i, j = edge
+        if norm(terminals[i], terminals[j]) > (eta[i] ** 2 + eta[j] ** 2 + eta[i] * eta[j]) ** 0.5:
+            return model.y[i, s] + model.y[j, s] <= 1
+        else:
+            return pyo.Constraint.Skip
+
+    if geometric_cut_50:
+        model.geometric_cut_50 = pyo.Constraint(model.E1, model.S, rule=geometric_cut_50)
+
 
     return model
 
@@ -296,4 +314,3 @@ if __name__ == '__main__':
         print(results.problem.lower_bound, results.problem.upper_bound)
         print(results.problem.cpu_time)
         print(results.problem.wall_time)
-
