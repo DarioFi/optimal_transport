@@ -70,7 +70,7 @@ def add_bilinear(model, z, x, y, index_sets, relaxed: bool, constraint_name: str
         model.add_component(constraint_name + "_4", pyo.Constraint(index_wrapped, rule=bilinear_constraint_rule_4))
 
 
-def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: bool):
+def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: bool, use_geometric_cut_50: bool):
     assert alpha == 0
     P = len(terminals)
     S = len(terminals) - 2
@@ -172,6 +172,22 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
 
     model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
+    eta = {
+        i: min(norm(terminals[i], terminals[j]) for j in model.P if i != j)
+        for i in model.P
+    }
+
+    def geometric_cut_50(model, i, j, s):
+        # i, j = edge
+        a = 0
+        if norm(terminals[i], terminals[j]) > (eta[i] ** 2 + eta[j] ** 2 + eta[i] * eta[j]) ** 0.5:
+            return model.y[i, s] + model.y[j, s] <= 1
+        else:
+            return pyo.Constraint.Skip
+
+    if use_geometric_cut_50:
+        model.geometric_cut_50 = pyo.Constraint(model.P, model.P, model.S, rule=geometric_cut_50)
+
     return model
 
 
@@ -183,17 +199,8 @@ if __name__ == '__main__':
         relax_w=True,
         relax_y=False,
         disjunctive_w=False,
+        use_geometric_cut_50=False
     )
 
     m.pprint()
 
-    m = dbt_relaxed_alpha0(
-        [[0, 1], [0, 0], [1, 0], [1, 1]],
-        masses=[0, 0, 0, 0],
-        alpha=0,
-        relax_w=True,
-        relax_y=False,
-        disjunctive_w=False,
-    )
-
-    m.pprint()

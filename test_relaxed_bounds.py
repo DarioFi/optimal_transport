@@ -30,11 +30,12 @@ for n in [4, 5, 6]:
             'relax_y': False,
             'relax_w': False,
             'disjunctive_w': False,
+            'use_geometric_cut_50': False
         }
     )
 
-    data = exp.run(multithreaded=True, n_threads=n_threads)
-    exp.save_to_disk(data)
+    # data = exp.run(multithreaded=True, n_threads=n_threads)
+    # exp.save_to_disk(data)
 
     print("Running pre-processing only solutions")
     exp = Experiment(
@@ -52,11 +53,12 @@ for n in [4, 5, 6]:
             'relax_y': False,
             'relax_w': False,
             'disjunctive_w': False,
+            'use_geometric_cut_50': False
         }
     )
 
-    data = exp.run(multithreaded=True, n_threads=n_threads)
-    exp.save_to_disk(data)
+    # data = exp.run(multithreaded=True, n_threads=n_threads)
+    # exp.save_to_disk(data)
 
     print("Running relaxed w")
     exp = Experiment(
@@ -74,11 +76,12 @@ for n in [4, 5, 6]:
             'relax_y': False,
             'relax_w': True,
             'disjunctive_w': False,
+            'use_geometric_cut_50': False
         }
     )
 
-    data = exp.run(multithreaded=True, n_threads=n_threads)
-    exp.save_to_disk(data)
+    # data = exp.run(multithreaded=True, n_threads=n_threads)
+    # exp.save_to_disk(data)
 
     print("Running full relaxation")
     exp = Experiment(
@@ -96,6 +99,53 @@ for n in [4, 5, 6]:
             'relax_y': True,
             'relax_w': True,
             'disjunctive_w': False,
+            'use_geometric_cut_50': False
+        }
+    )
+
+    # data = exp.run(multithreaded=True, n_threads=n_threads)
+    # exp.save_to_disk(data)
+
+    print("Running full solutions + cuts")
+    exp = Experiment(
+        formulation=dbt_relaxed_alpha0,
+        solver="baron",
+        solver_options="maxtime=300",
+        instance_generator=random_points_unit_square_with_masses,
+        instance_arguments={'n': n, 'alpha': 0},
+        n_runs=n_runs,
+        save_folder='table_latex',
+        experiment_name='full_solutions_with_cuts',
+        tee=True,
+        seed=145767,
+        formulation_arguments={
+            'relax_y': False,
+            'relax_w': False,
+            'disjunctive_w': False,
+            'use_geometric_cut_50': True
+        }
+    )
+
+    data = exp.run(multithreaded=True, n_threads=n_threads)
+    exp.save_to_disk(data)
+
+    print("Running full solutions + cuts")
+    exp = Experiment(
+        formulation=dbt_relaxed_alpha0,
+        solver="baron",
+        solver_options="MaxIter=1 maxtime=300",
+        instance_generator=random_points_unit_square_with_masses,
+        instance_arguments={'n': n, 'alpha': 0},
+        n_runs=n_runs,
+        save_folder='table_latex',
+        experiment_name='full_solutions_with_cuts_preprocessing_only',
+        tee=False,
+        seed=145767,
+        formulation_arguments={
+            'relax_y': False,
+            'relax_w': False,
+            'disjunctive_w': False,
+            'use_geometric_cut_50': True
         }
     )
 
