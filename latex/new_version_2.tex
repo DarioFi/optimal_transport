@@ -1029,7 +1029,7 @@
         \\
         \textbf{Bilinear terms:} \quad & w_{s,t} = s_s \cdot y_{s,t} \quad \forall s \in S, t \in T \\
         & w_{s,s'} = x_s \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
-        & w_{s',s} = x_s \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        & w_{s',s} = x_{s'} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
         \textbf{Objective:} \quad & \sum_{s \in S, t \in T} \| w_{s,t} - p_t y_{s,t} \| + \sum_{s, s' \in S, s < s'} \| w_{s,s'} - w_{s',s} \| \\
     \end{align}
 
@@ -1039,11 +1039,31 @@
         x = (x_1, \ldots, x_{|S|}) \in \text{conv}(P \times \ldots \times P)
     \end{equation}
 
-    if we define TODO capisci che cazzo sta succedendo
-    \begin{equation}
-        a
-    \end{equation}
+    If we fix each $x$ to be a point in $P$ we can write:
+    \begin{align}
+        x_i &= P_{a(i)} \\
+        w &= b_a y
+    \end{align}
+    Where $a: S \rightarrow P$ is a function that maps each Steiner point to a terminal and $b_a$ is the matrix of the bilinear
+    constraints once $x$ is fixed to an assignment $a$.
+    Calling the set of all possible $a$ as $\mathcal{A}$ we can write the problem as:
+    \begin{align}
+        x &= \sum_{a \in \mathcal{A}} x_a \\
+        w &= \sum_{a \in \mathcal{A}} w_a \\
+        x_s &= \lambda_a P_{a(s)} \\
+        w_a &= \lambda_a b_a y \\
+        \sum_{a \in \mathcal{A}} \lambda_a &= 1 \\
+        \lambda_a &\geq 0
+    \end{align}
 
+    We now need to explicitely state $w_a$
+    \begin{align}
+        w_{a, s,t} &= \lambda_a \cdot s_s \cdot y_{s,t} \quad \forall s \in S, t \in T \\
+        w_{a, s,s'} &= \lambda_a \cdot P_{a(s)} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        w_{a, s',s} &= \lambda_a \cdot P_{a(s')} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+    \end{align}
+
+    We can observe that the first equation does not depend on $x$.
 
 
 
@@ -1060,19 +1080,22 @@
                 & Avg LB  & Avg Time & Avg LB                     & Avg Time                   & Avg LB                     & Avg Time                    \\
                 \midrule
                 DBT (exact solutions)            & 1.08721 & 0.47950  & 1.31719\textsuperscript{a} & 2.07564\textsuperscript{a} & 1.52883\textsuperscript{a} & 19.87462\textsuperscript{a} \\
+                DBT + cuts (exact solutions)     & 1.08721 & 0.20500  & 1.32985\textsuperscript{a} & 1.35615\textsuperscript{a} & 1.53823                    & 6.88175                     \\
                 DBT convex relaxation            & 0.36753 & 0.90600  & 0.05242\textsuperscript{a} & 0.26872\textsuperscript{a} & 0.00469           & 0.08875           \\
                 DBT convex relaxation \(w\) only & 1.08721 & 0.28725  & 1.33244\textsuperscript{b} & 2.02711\textsuperscript{b} & 1.54766\textsuperscript{c} & 23.06500\textsuperscript{c} \\
                 DBT pre-processing only          & 0.92279 & 0.36025  & 0.92912                    & 0.67375                    & 0.90109                    & 2.41075                     \\
+                DBT + cuts preprocessing only    & 1.01456 & 0.14950  & 1.01968                    & 0.57225                    & 0.97563                    & 1.62675                     \\
                 \bottomrule
             \end{tabular}
+            \begin{tablenotes}[flushleft,para]
+                \footnotesize
+                \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
+            \end{tablenotes}
         \end{threeparttable}
-        \begin{tablenotes}[flushleft,para]
-            \footnotesize
-            \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
-        \end{tablenotes}
         \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
-        \label{tab:experiment_results_grouped}
+        \label{tab:experiment_results_grouped_2}
     \end{table*}
+
 
 
     \begin{table*}[ht]
@@ -1085,14 +1108,14 @@
                 \toprule
                 \textbf{Termination} & \textbf{DoLocal} & \textbf{TDo} & \textbf{MDo} & \textbf{LBTTDo} & \textbf{OBTTDo} & \textbf{PDo} & \textbf{BO} & \textbf{CH} & \textbf{Avg LB} & \textbf{Avg UB} & \textbf{Time (s)} \\
                 \midrule
-                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no                 & \no                  & 0.88373         & 2.64849         & 5.11650           \\
-                 MaxIter=1            & \no              & \no          & \no          & \yes            & \no             & \no          & \no                 & \no                  & 0.88373         & 2.64849         & 4.53950           \\
-                 MaxIter=1            & \yes             & \yes         & \yes         & \no             & \yes            & \yes         & \no                 & \no                  & 0.20039         & 2.25245         & 0.53300 \\
-                 Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \no                 & \no                  & 1.45655         & 1.45655         & 42.46600          \\
-                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes                & \no                  & 0.54355         & 2.48274         & 6.99500           \\
-                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no                 & \yes                 & 0.77710         & 1.72245         & 4.80400           \\
-                 MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes                & \yes                 & 0.46670         & 2.82511 & 5.95500 \\
-                 Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \yes                & \no                  & 1.45655         & 1.45655         & 37.80450          \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no         & \no         & 0.88373         & 2.64849         & 5.11650           \\
+                MaxIter=1            & \no              & \no          & \no          & \yes            & \no             & \no          & \no         & \no         & 0.88373         & 2.64849         & 4.53950           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \no             & \yes            & \yes         & \no         & \no         & 0.20039         & 2.25245         & 0.53300           \\
+                Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \no         & \no         & 1.45655         & 1.45655         & 42.46600          \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes        & \no         & 0.54355         & 2.48274         & 6.99500           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no         & \yes        & 0.77710         & 1.72245         & 4.80400           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes        & \yes        & 0.46670         & 2.82511         & 5.95500           \\
+                Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \yes        & \no         & 1.45655         & 1.45655         & 37.80450          \\
                 \bottomrule
             \end{tabular}
             \begin{tablenotes}[flushleft,para]
