@@ -44,7 +44,7 @@ def extract_results(model, result) -> Dict:
     except:
         name = "unknown"
     # if solver is gurobi
-    if 'gurobi' in name:
+    if 'gurobi' in name or 'baron' not in name:
         time = result.solver[0]["System time"]
         if not isinstance(time, UndefinedData):
             results_dict['time'] = time

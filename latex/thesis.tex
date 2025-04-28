@@ -1,0 +1,219 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    left=25mm,
+    right=25mm,
+}
+\nocite{*}
+
+
+\linespread{1.3}
+
+
+% Packages
+\usepackage{amsmath}
+\usepackage{tikz-cd}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{threeparttable}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, citecolor=blue}
+
+\usepackage{biblatex}
+\usepackage{textcomp}
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+\addbibresource{bib.bib}
+
+\newenvironment{itemizeb}
+{\begin{itemize}
+     \itemsep=2pt}{
+\end{itemize}}
+
+\numberwithin{equation}{section}
+
+
+\newtheoremstyle{mytheorem}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3pt
+{\it}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{~\rm#3}}% Manually specify head
+
+\newtheoremstyle{myremark}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3ptontinuo dentro e fuori dall'infermeria, poi Barzagli e i due mesi di stop per l'infortunio alla spalla, infine a
+{\rm}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{~\rm#3}}% Manually specify head
+
+\newtheoremstyle{myparagraph}
+{}% measure of space to leave above the theorem. E.g.: 3pt
+{}% measure of space to leave below the theorem. E.g.: 3pt
+{\rm}% name of font to use in the body of the theorem
+{\parindent}% measure of space to indent
+{\bf}% name of head font
+{.}% punctuation between head and body
+{ }% space after theorem head; " " = normal interword space
+{\thmnumber{#2.~}\thmname{#1}\thmnote{#3}}% Manually specify head
+
+\theoremstyle{mytheorem}
+\newtheorem{maintheorem}{Theorem}
+\newtheorem{theorem}[subsection]{Theorem}
+\newtheorem{definition}[subsubsection]{Definition}
+\newtheorem{lemma}[subsection]{Lemma}
+\newtheorem{corollary}[subsection]{Corollary}
+\newtheorem{proposition}[subsection]{Proposition}
+\newtheorem{question}[subsection]{Question}
+
+\theoremstyle{myremark}
+\newtheorem{remark}[subsection]{Remark}
+%\newtheorem*{remark*}{Remark}
+%\newtheorem{remarks}[subsection]{Remarks}
+%\newtheorem*{remarks*}{Remarks}
+\newtheorem{problem}[subsection]{Problem}
+\theoremstyle{myparagraph}
+\newtheorem{parag}[subsection]{}
+\newtheorem*{parag*}{}
+
+
+\renewcommand\qedsymbol{$\boxempty$}
+
+
+\newcommand{\R}{\mathbb{R}}
+
+\usepackage{pifont} % For tick and cross symbols
+% Define commands for tick and cross
+\newcommand{\yes}{\ding{51}}
+\newcommand{\no}{\ding{55}}
+\newcommand{\na}{---} % For not applicable
+
+
+
+\author{Dario Filatrella}
+
+\title{Branched optimal transport}
+\date{August 2024}
+
+\begin{document}
+
+    \large
+
+    \pagenumbering{gobble}
+
+    \maketitle
+
+    \newpage
+
+    \tableofcontents
+
+    \newpage
+
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
+    \thispagestyle{empty}
+
+
+    \section{Note burocratiche per la Bocconi}
+
+    un lavoro (tesi di ricerca) atto a produrre nuova conoscenza o nuove metodologie
+    scientifiche, o finalizzato ad analizzare un problema e a fornirne adeguata soluzione.
+    Il lavoro deve includere una approfondita review della letteratura, la definizione di un
+    problema di ricerca basato su un research gap, la metodologia di ricerca utilizzata,
+    l’analisi dei risultati ottenuti.
+    La tesi si sviluppa orientativamente in 50 pagine (circa 18.000 parole).
+
+    Durante la seduta di laurea il candidato può distribuire materiali alla commissione (indicativamente un
+    massimo di 12 slides comprensive di tabelle, grafici, etc.) che possano rappresentare un supporto utile
+    alla discussione. A questo proposito, si raccomanda di utilizzare solo materiale cartaceo e riciclabile
+    (evitando copertine e rilegature plastificate). Si ricorda che non è consentita la proiezione di slides
+    durante la presentazione.
+
+    Cv@b da compilare (opzionale)
+
+    inserisce l’abstract che sintetizza l’oggetto del lavoro in un massimo di 4000
+    caratteri - vedi NOTA IMPORTANTE;
+
+    Il file definitivo, in formato pdf, deve contenere, in testa, 4 pagine così ordinate
+    I pagina: una pagina bianca;
+    II pagina una pagina bianca;
+    III pagina: dedica o ringraziamenti (oppure una pagina bianca);
+    IV pagina: una pagina bianca.
+    Il testo del proprio lavoro (indice, premessa, contenuto etc) DEVE iniziare, numerazione delle
+    pagine compresa, DOPO le 4 pagine sopradescritte; inoltre, il contenuto della tesi non deve
+    includere il frontespizio che verrà riprodotto automaticamente in fase di stampa e riporterà le
+    informazioni sul titolo inserite dallo studente online, nè l'abstract.
+    Inoltre, deve rispettare i seguenti parametri:
+    Dimensione massima del file: 10 MB
+    Formato: cm 29x21 (A4)
+    Margine destro e sinistro 2.5 cm
+    Battitura pagine: da 26 a 30 righe
+    Carattere consigliato Arial/Tahoma/Verdana
+    Corpo 12
+    Pagine numerate
+
+
+    \section{Background}
+    \begin{itemize}
+        \item discorso organico sull-argomento
+        \item introduzione storica potenzialmente
+        \item obbiettivo del lavoro (stabilità dei risultati e lato computazionale)
+    \end{itemize}
+
+    TODO: FA DAVVERO PENA
+    The first mathematical formulation of an \textit{optimal transport} problem was given by Gaspard Monge in 1781~\cite[Monge]{monge1781mémoire}.
+    In his work, Monge considered the problem of moving a pile of soil from one location to another (in fact, a special case of the problem is known as the \textit{Earth-mover distance}).
+    The modern formulation of the problem is due to Kantorovich~\cite[Kantorovich 1958]{Kantorovich1958}, almost two centuries later.
+    The language used by Kantorovich is that of \textit{measure theory} and formally the problem is stated as follows:
+    given $X \subset \R^d$, two probability measures $\mu_0, \mu_1$ on $X$ with finite and equal mass, a cost function $c: X \times X \to \R^+$ find a transport map $T: X \to X$ that realizes the following infimum:
+    \begin{equation}
+        \inf \left\{ \int_X c(x, T(x)) d\mu_0(x) \, : \, T_\# \mu_0 = \mu_1 \right\}
+        \label{eq:monge}
+    \end{equation}
+
+    Intuitively the cost function $c$ represents the cost of moving a unit mass from $x$ to $y$, and the functional to be minimized represents is the sum (integral)
+    over all the particles that need to be moved.
+    There are of course many variations, we could add assumptions on $X$ (compactness, convexity, etc.) or remove assumptions (considering $X$ to be a generic metric space).
+
+
+    {\color{red}TODO: la bibliografia non funziona non compare Monge}
+
+
+    \section{Literature review}
+
+
+    \section{More advanced results (stability)}
+
+
+    \section{Literature review computazionale e numerica}
+
+
+    \section{Miei risultati teorici (con anche controesempi per spiegare le difficoltà numeriche)}
+
+
+    \section{Risultati numerici}
+
+
+    \section{Conclusioni e future development}
+
+
+    \newpage
+
+    \printbibliography
+
+
+\end{document}

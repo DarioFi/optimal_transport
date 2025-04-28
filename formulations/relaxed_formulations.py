@@ -1,4 +1,5 @@
 import itertools
+from typing import Dict
 
 import pyomo.environ as pyo
 
@@ -83,10 +84,11 @@ def enumerate_assignments(A, B):
 
 
 def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
-                       use_geometric_cut_50: bool):
+                       use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
     """
 
     :param terminals:
+    :param alpha:
     :param alpha:
     :param masses:
     :param relax_y:
@@ -99,6 +101,11 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
     P = len(terminals)
     S = len(terminals) - 2
     D = len(terminals[0])  # Dimension of points
+
+    # assert terminals are in the unit cube
+    for i in range(P):
+        for d in range(D):
+            assert terminals[i][d] >= 0 and terminals[i][d] <= 1
 
     model = pyo.ConcreteModel()
 
@@ -119,6 +126,13 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
         model.y = pyo.Var(model.E, domain=pyo.Binary)
 
     # region Y-polytope
+
+    # todo: run tests on all the branching variables
+
+    # model.priority = pyo.Suffix(direction=pyo.Suffix.EXPORT)
+    # model.priority[model.y] = 1
+    # model.priority[model.x] = 1
+    # model.priority[model.w] = 0
 
     def terminals_leaf_constraint(model, i):
         return sum(model.y[i, j] for j in model.S) == 1
@@ -163,7 +177,7 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
 
     model.cc = pyo.Var(classic_s, model.P, domain=pyo.NonNegativeReals, bounds=(0, 1))
 
-    def convex_hull_constraint(model, i, d):
+    def convex_hull_constraint(model, i, d):  # TODO: it could be refined by eliminating interior points of P
         return sum(terminals[j][d] * model.cc[i, j] for j in model.P) == model.x[i, d]
 
     model.convex_hull_constraint = pyo.Constraint(classic_s, model.D, rule=convex_hull_constraint)
@@ -265,12 +279,123 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
 
     # endregion
 
+    # region angles
+
+    # (x[i] - x[j], x[k] - x[j]) = -1/2 |x[i] - x[j]| | |x[k] - x[j]|
+    # warning: this holds when the i,j,k are in the correct order and only if they are connected
+
+    if angles_constraint:
+        # todo: add min distance from terminals for each steiner point and use that to activate the constraint
+        # it is probably crazy bad
+
+        M_val = 10
+
+        model.epsilon = 1e-4
+
+        # Auxiliary variable for absolute value |w - p|
+        model.delta = pyo.Var(model.S, model.P, model.D, domain=pyo.NonNegativeReals)
+
+        # Auxiliary variable for L1 distance dist(i,j)
+        model.dist = pyo.Var(model.S, model.P, domain=pyo.NonNegativeReals)
+
+        # Auxiliary binary variable b[i,j] = 1 iff dist[i,j] <= epsilon
+        model.b = pyo.Var(model.S, model.P, domain=pyo.Binary)
+
+        model.x_active = pyo.Var(model.S, domain=pyo.Binary)
+
+        # --- 3. Define Constraints ---
+
+        # Constraints to linearize absolute value: delta[i,j,d] >= |w[i,d] - p[j,d]|
+        def abs_val_pos_rule(m, i, j, d):
+            return m.delta[i, j, d] >= m.x[i, d] - terminals[j][d]
+
+        model.abs_val_pos_con = pyo.Constraint(model.S, model.P, model.D, rule=abs_val_pos_rule)
+
+        def abs_val_neg_rule(m, i, j, d):
+            return m.delta[i, j, d] >= -(m.x[i, d] - terminals[j][d])
+
+        model.abs_val_neg_con = pyo.Constraint(model.S, model.P, model.D, rule=abs_val_neg_rule)
+
+        # Constraint to define L1 distance: dist[i,j] = sum(delta[i,j,d])
+        # In optimization, if the objective minimizes distance, >= might suffice.
+        # But = is safer to ensure dist actually represents the sum.
+        def dist_calc_rule(m, i, j):
+            return m.dist[i, j] == sum(m.delta[i, j, d] for d in m.D)
+
+        model.dist_calc_con = pyo.Constraint(model.S, model.P, rule=dist_calc_rule)
+
+        # Constraints to link dist[i,j] and binary indicator b[i,j]
+        # b[i,j] = 1 <=> dist[i,j] <= epsilon
+        # Constraint 1: b[i,j] = 1 => dist[i,j] <= epsilon
+        # Using Big M: dist[i,j] <= epsilon + M * (1 - b[i,j])
+        def indicator_upper_bound_rule(m, i, j):
+            # If b[i,j] = 1, dist[i,j] <= epsilon
+            # If b[i,j] = 0, dist[i,j] <= epsilon + M (non-binding)
+            return m.dist[i, j] <= m.epsilon + M_val * (1 - m.b[i, j])
+
+        model.Sndicator_upper_con = pyo.Constraint(model.S, model.P, rule=indicator_upper_bound_rule)
+
+        # Constraint 2: b[i,j] = 0 => dist[i,j] > epsilon (or >= epsilon + small_delta)
+        # Using Big M: dist[i,j] >= (epsilon + small_delta) - M' * b[i,j]
+        # Using epsilon for simplicity (accepting dist=epsilon might allow b=0):
+        # dist[i,j] >= epsilon * (1 - b[i,j])
+        def indicator_lower_bound_rule(m, i, j):
+            # If b[i,j] = 0, dist[i,j] >= epsilon
+            # If b[i,j] = 1, dist[i,j] >= 0 (non-binding as dist>=0)
+            # Note: For strict inequality (> epsilon), you'd use:
+            # small_delta = 1e-6
+            # return m.dist[i, j] >= (m.epsilon + small_delta) - M_val * m.b[i, j]
+            return m.dist[i, j] >= m.epsilon * (1 - m.b[i, j])
+
+        model.Sndicator_lower_con = pyo.Constraint(model.S, model.P, rule=indicator_lower_bound_rule)
+
+        # Constraints to link y[i] and b[i,j]
+        # y[i] = 1 iff sum(b[i,j] for j in J) >= 1
+        # Constraint 1: y[i] = 1 => sum(b[i,j]) >= 1
+        # Implemented as: sum(b[i,j]) >= y[i]
+        def y_link_lower_rule(m, i):
+            # If y[i] = 1, sum(b) >= 1
+            # If y[i] = 0, sum(b) >= 0 (non-binding)
+            return sum(m.b[i, j] for j in m.P) >= m.x_active[i]
+
+        model.y_link_lower_con = pyo.Constraint(model.S, rule=y_link_lower_rule)
+
+        # Constraint 2: y[i] = 0 => sum(b[i,j]) = 0
+        # Implemented using Big M: sum(b[i,j]) <= |J| * y[i]
+        def y_link_upper_rule(m, i):
+            # If y[i] = 0, sum(b) <= 0 => sum(b) = 0
+            # If y[i] = 1, sum(b) <= |J| (non-binding)
+            return sum(m.b[i, j] for j in m.P) <= len(m.P) * m.x_active[i]
+
+        model.y_link_upper_con = pyo.Constraint(model.S, rule=y_link_upper_rule)
+
+        def non_deg_x_constraint(model, i):
+            # non_deg_x > 1/2 if min(x[i], p[i]) > epsilon
+            return model.non_deg_x[i] >= 1 / 2 * sum(model.x[i, d] for d in model.D) - 1 / 2
+
+        def angle_constraint(model, i, j, k):
+            return model.x_active[j] * sum(model.w[(i, j), d] - model.w[(j, i), d] for d in model.D) * sum(
+                model.w[(k, j), d] - model.w[(j, k), d] for d in model.D) == \
+                model.x_active[j] * (-1) / 2 * norm([model.w[(i, j), d] for d in model.D],
+                                                    [model.w[(j, i), d] for d in model.D]) * norm(
+                    [model.w[(k, j), d] for d in model.D], [model.w[(j, k), d] for d in model.D])
+
+        use = model.S
+        index_angles = [
+            (i, j, k) for i in use for j in use for k in use if i != j and i != k and j != k and i < k
+        ]
+        # model.angle_constraint = pyo.Constraint(index_angles, rule=angle_constraint)
+
+    # endregion
+
     def objective_rule(model):
         return sum(
-            norm([model.w[(i, j), d] for d in model.D], [model.w[(j, i), d] for d in model.D]) for i in model.S for j in
+            norm([model.w[(i, j), d] for d in model.D], [model.w[(j, i), d] for d in model.D]) for i in model.S for
+            j in
             model.S if i < j
         ) + sum(
-            norm([model.w[(i, j), d] for d in model.D], [model.w[(j, i), d] for d in model.D]) for i in model.P for j in
+            norm([model.w[(i, j), d] for d in model.D], [model.w[(j, i), d] for d in model.D]) for i in model.P for
+            j in
             model.S
         )
 
@@ -292,10 +417,35 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
     if use_geometric_cut_50:
         model.geometric_cut_50 = pyo.Constraint(model.P, model.P, model.S, rule=geometric_cut_50)
 
+    if starting_position is not None:
+        for key, value in starting_position.items():
+            try:
+                var = getattr(model, key)
+
+                for i, v in value.items():
+                    if isinstance(i, str):
+                        i = eval(i)
+                    var[i].value = v
+
+            except AttributeError:
+                raise AttributeError(f"Model does not have attribute {key}")
+
     return model
 
 
 if __name__ == '__main__':
+
+    sp = {
+        'x': {
+            (4,0): 0.5,
+            (4,1): 0.5,
+            (5,0): 0.5,
+            (5,1): 0.5,
+
+        },
+        # 'palle': None
+    }
+
     m = dbt_relaxed_alpha0(
         [[0, 1], [0, 0], [1, 0], [1, 1]],
         masses=[0, 0, 0, 0],
@@ -303,7 +453,9 @@ if __name__ == '__main__':
         relax_w=False,
         relax_y=False,
         disjunctive_w=2,
-        use_geometric_cut_50=False
+        use_geometric_cut_50=False,
+        angles_constraint=False,
+        starting_position=sp
     )
 
     m.pprint()

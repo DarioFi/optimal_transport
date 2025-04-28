@@ -137,7 +137,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     assert masses[0] < 0
-    assert all(m > 0 for m in masses[1:])  # todo: masses are irrelevant
+    assert all(m > 0 for m in masses[1:])  # masses are irrelevant
     assert alpha == 0
 
     model = pyo.ConcreteModel()
@@ -209,10 +209,16 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
     if use_gurobi:
         model.norm = pyo.Var(model.E, domain=pyo.NonNegativeReals, bounds=(0, max_norm))
 
-        def x_equality_constraint(model, i, d):
-            return model.x[i, d] == terminals[i][d]
+        # def x_equality_constraint(model, i, d):
+        #     return model.x[i, d] == terminals[i][d]
+        # model.x_equality_constraint = pyo.Constraint(model.P, model.D, rule=x_equality_constraint)
 
-        model.x_equality_constraint = pyo.Constraint(model.P, model.D, rule=x_equality_constraint)
+        for i in model.P:
+            for d in model.D:
+                model.x[i, d].fix(terminals[i][d])
+
+        # model.x[3, 0].fix(.5)
+        # model.x[3, 1].fix(.7)
 
         if use_better_obj:
 
@@ -220,7 +226,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
             model.inside_norm_not_sq = pyo.Var(model.E, model.D, domain=pyo.NonNegativeReals, bounds=(0, 1))
 
             def inside_norm_constraint(model, i, j, d):
-                return model.inside_norm_not_sq[i, j, d] == (
+                return model.inside_norm_not_sq[i, j, d] >= (
                         model.x[i, d] * model.y[i, j] - model.x[j, d] * model.y[i, j])
 
             def inside_norm_sq_constraint(model, i, j, d):
@@ -239,7 +245,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
             model.inside_norm_constraint = pyo.Constraint(model.E, model.D, rule=inside_norm_constraint)
 
         def norm_e2_constraint(model, i, j):
-            return model.norm[i, j] >= sum(model.inside_norm[i, j, d] for d in model.D) ** 0.5
+            return model.norm[i, j] ** 2 >= sum(model.inside_norm[i, j, d] for d in model.D)
 
         model.norm_constraint = pyo.Constraint(model.E, rule=norm_e2_constraint)
 
@@ -247,6 +253,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
             return sum(model.y[i, j] * model.norm[i, j] for (i, j) in model.E)
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
+
 
     else:
         def objective_rule(model):
@@ -273,8 +280,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
     # ouzia maculan (2966.pdf) geometric cut
 
-
-
+    model.pprint()
 
     return model
 

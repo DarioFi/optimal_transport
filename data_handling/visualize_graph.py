@@ -7,10 +7,11 @@ def visualize(data: ExperimentData):
     masses = data.instance['masses']
     alpha = data.instance['alpha']
 
+
     plt.figure()
     plt.title(data.experiment_name)
     plt.axis('equal')
-    plt.axis('off')
+    # plt.axis('off')
 
     steiner_points = []
     x = data.results['variables']['x']
@@ -58,14 +59,17 @@ def visualize(data: ExperimentData):
     all_points_indexed = terminals + list(steiner_points.values())
 
     cost = 0
-
+    flat_length = 0
     for key, value in new_flow.items():
-        if value > 0:
+        if value > 1e-8:
             value = min(value, 1)
 
             distance = ((all_points_indexed[key[0]][0] - all_points_indexed[key[1]][0]) ** 2 + (
                     all_points_indexed[key[0]][1] - all_points_indexed[key[1]][1]) ** 2) ** 0.5
             cost += value ** alpha * distance
+            flat_length += distance
+            print(key, value)
+            print(distance)
 
             value = value ** .3
 
@@ -88,7 +92,9 @@ def visualize(data: ExperimentData):
         plt.plot(terminal[0], terminal[1], color, alpha=1)
 
     print(f"Cost is:  {cost}")
+    print(f"Flat_length: {flat_length}")
     # todo : fix colors overlapping
+    plt.grid()
     plt.show()
 
 
