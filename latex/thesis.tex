@@ -9,7 +9,7 @@
 \nocite{*}
 
 
-\linespread{1.3}
+\linespread{1.2}
 
 
 % Packages
@@ -32,6 +32,7 @@
 \usepackage{mathtools}
 \usepackage{stmaryrd}
 \addbibresource{bib.bib}
+
 
 \newenvironment{itemizeb}
 {\begin{itemize}
@@ -200,7 +201,7 @@
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
         \item [$P$] Set of terminals $\{p_1, \ldots, p_n\}$
-        \item [$S$] Set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, ..., 2|P|-2\}$)
+        \item [$S$] Set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$)
         \item[$E$] Set of all edges
         \item [$E_1$] Set of edges connecting terminals to Steiner points
         \item [$E_2$] Set of edges connecting Steiner points
@@ -211,7 +212,7 @@
         \item [$P^-$] set of terminals with negative masses (sources)
         \item [$f_{xy}$] flow on the edge connecting $x$ to $y$
         \item [$y_{xy}$] binary variable indicating the presence of an edge between $x$ and $y$
-        \item [$deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in~\ref{lemma:degree_definition}
+        \item [$\deg(\alpha, N, M)$] maximum degree of a vertex in the graph as defined in~\ref{lemma:degree_definition}
     \end{itemizeb}
 
     \newpage
@@ -219,7 +220,11 @@
 
     \section{Introduction}
 
-    TODO: SCRITTO DAVVERO MALE
+    TODO: check that everything is in third person
+
+    TODO: SCRITTO DAVVERO MALE MA L'INTRODUZIONE SI SCRIVE PER ULTIMA
+
+    TODO: CHOOSE STYLE FOR CITATIONS
     The aim of this work is to study the \textit{branched optimal transport} problem, a variation of the optimal transport problem.
     The work is divided into two parts: the first provides results on the structure of an optimal transport plan and the second
     provides experimental results and possible improvements to current mathematical formulations for solving such problems.
@@ -248,12 +253,14 @@
         \label{eq:monge}
     \end{equation}
 
-    Intuitively the cost function $c$ represents the cost of moving a unit mass from $x$ to $y$, and the functional to be minimized represents is the sum (integral)
+    Intuitively the cost function $c(x,y)$ represents the cost of moving a unit mass from $x$ to $y$, and the functional to be minimized represents is the sum (integral)
     over all the particles that need to be moved. Importantly, the particles do not interact with each other and there is no notion of \textit{path} involved in the transport.
-    There are of course many variations, we could add assumptions on $X$ (compactness, convexity, etc.) or remove assumptions (considering $X$ to be a generic metric space).
-    Very often the cost function is taken to be the Euclidean distance but different functions are also very interesting and studied, particularly the taxicab (or $l^1$) distance.
+    This formulation is very generic and flexible: many authors and studies consider restrictions with extra assumptions (e.g. $c$ is a distance function, $X$ is a compact/convex set, etc.)
+    while other study even more general settings (e.g. $X$ is a generic metric space).
+    Nevertheless, all of the above choices lead to interesting paths that will be briefly explored in the literature review (todo: ha senso dirlo?)
+    and this work will also juggle between different assumptions, particularly in the computational study where the problem is restricted to atomic measures.
 
-        {\color{red}TODO: la bibliografia non funziona non compaiono nè Monge nè Kantorovich}
+    TODO: la bibliografia ogni tanto non compila correttamente
 
     \subsection{Branched optimal transport}
 
@@ -277,16 +284,25 @@
     Below both formulations with their many properties will be stated, together with the equivalence theorem. The notation and naming conventions used, together with the main lemmas are taken from~\cite[Chapter 1 - TODO]{Bernot}.
 
     \subsubsection{Lagrangian formulation}
-    Given $X \subset \mathbb{R}^N$ compact, $K$ space of 1-Lipschitz path which are eventually constant on $X$ and
+
+    The Lagrangian formulation, intuitively, works as follows: it first considers all the possible 1-Lipschitz paths which are eventually constant with domain in $X \subset \mathbb{R}^N$ and assigns
+    a measure of probability on those paths. The idea is that each of those paths is a possible way to transport a unit of mass and assigning a mass $\lambda$ to a path $\gamma$
+    means that we are transporting $\lambda$ units of mass along that path. In the case of non-atomic starting and ending measures, no single path will
+    have a positive mass, but we will have a density (a measure) on the space of paths. Then saying that a measure on the space of paths is a transport plan
+    for given $\mu^+$ and $\mu^-$ is equivalent to giving a condition on the push-forward of the starting and stopping time of the paths. This push-forward operation
+    can be seen as measuring how much mass ends in a certain point $x$ of the space $X$ after the transport.
+
+    Formally, given $X \subset \mathbb{R}^N$ compact, $K$ space of 1-Lipschitz path which are eventually constant on $X$ and
     two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is a measure $\mathbf{P}$ on $K$ that transports $\mu^+$ to $\mu^-$.
-    Formally, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$, where $T(\gamma)$
+
+    In order to define what "transport" means, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$, where $T(\gamma)$
     is the stopping time of the path $\gamma$.
     $\mathbf{P}$ is a traffic plan if:
     \[
         \mu^+ = (\pi_0)_{\#}\mathbf{P}, \quad \mu^- = (\pi_\infty)_{\#}\mathbf{P}
     \]
 
-    \subsection{Parameterized Traffic Plans}
+    \subsubsection*{Parameterized Traffic Plans}
     The next paragraph is copied from~\cite{Bernot} TODO: magari togli sta scritta :
 
     According to Skorokhod theorem~\cite[Theorem A.3]{Bernot}, we can parameterize any traffic plan $\mathbf{P}$ by a measurable function
@@ -317,8 +333,7 @@
         The relationship is further discussed in~\ref{lemma:loop_free}.
 
             {\color{red} Are you saying we have regularity and hence we can assume they are equal?
-        Also why do we care about this equality? Is there one formulation that we always use? do we need to define both?
-        Also why do you this here and then again get back to it in 4.1. What about putting everything in 4.1?}
+        Also why do we care about this equality? Is there one formulation that we always use? do we need to define both?}
     \end{remark}
 
 
@@ -395,7 +410,7 @@
         The minimum of $\mathcal{E}^{\alpha}$ on the set of traffic plans, if it exists, is attained
         at a loop-free traffic plan. Moreover $\inf\mathcal{E}^{\alpha} =\inf E^\alpha$, where both
         infima are taken indifferently over the set of all traffic plans or over the set of loop-free traffic
-        plans. {\color{red} define loop-free traffic plan.}
+        plans.
 
             {\color{red} For example the following should be the key result for us; please put the theorem in and say a sentence about its importance for us.}
     \end{theorem}
@@ -405,7 +420,6 @@
         \cite[Theorem ?]{well_posedness}
         The finite graph structure of optimal traffic plans holds for all $\alpha$.
         todo: properly understand the assumptions
-        \\
 
         Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
         plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
@@ -438,7 +452,15 @@
         If a traffic plan $P$ has a branching point of degree at least 4, then there exists
         a traffic plan $P'$ with strictly smaller value of Gilbert functional.
 
+
     \end{theorem}
+
+    \begin{remark}
+        TODO: check that this flows
+
+        Those bounds are tightly related to the dimensionality of the space. In particular, in dimension 2 a sharper result is obtained
+        in~\cite{TODO COSO CHE DIMOSTRA CHE E' 3}. That result is not expandible to higher dimensions as it uses ad hoc space properties.
+    \end{remark}
 
     \begin{figure}[h]
         \includegraphics[scale=0.5]{angle_bound_example}
@@ -537,16 +559,247 @@
 
     \section{Literature review computazionale e numerica}
 
-    TODO: preambolo su come l'ottimizzazione avvenga in 2 step volendo e su come
+    TODO: preambolo su come l'ottimizzazione avvenga in 2 step volendo e su come funziona geosteiner
     Sota is Geosteiner.
     Insert papers on formulations and possible improvements. In particular add cuts
 
+
+    Currently the state-of-the-art is GeoSteiner~\cite[TODO]{TODO}.
+    It works with a two stage optimization procedure, explained in details in~\cite{warme1998spanning} and~\cite{winter1997euclidean}, briefly it enumerates
+    possible topologies, called FST (full steiner trees) for subsets of the graph and then concatenates them to form a full solution.
+    As noted in the paper this approach is computationally exponential but on random instances it seems to scale well (todo: add graph of performance).
+
+    \cite{warme2000exact} provides a follow-up on the algorithm with better heuristcs and manages to solve up to 2000 terminals.
+
+    \cite{wang2008exact} presents a complexity theory analysis of the problem, improving the running time to $O(2.684^n)$ for the Euclidean Steiner tree problem.
+    It is useful to note that better asymptotic bounds are not translated into better performance, for instance the best polynomial approximation algorithm
+    for the ESTP is due to~\cite{byrka2010improved} with an approximation factor of $1.39$. In practice this factor is quite high and for practical
+    application it is possible to achieve good approximations in a very short time (although without a guarantee on the approximation factor).
+
+    It is also worth noting approximating within a factor of $96/95$ is NP-hard, as proved in~\cite{chlebik2008steiner}.
+
+
+    \cite{warme2000exact} provides a follow-up on the algorithm with better heuristcs and manages to solve up to 2000 terminals.
+
+    \cite{wang2008exact} gives an overview of
+
+    \subsection{Discrete branched transport}
+
+    The Discrete Branched Transport (DBT) is a special case of branched transport
+    where the measures $\mu^+$ and $\mu^-$ are finite and atomic.
+
+    Formally, we can define the DBT as follows: \\
+    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
+    corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
+    \begin{itemize}
+        \item $\sum_{i=1}^{n} m_i = 0$
+        \item $P^+$ is the set of terminals with positive mass (sources) and $P^-$ is the set of terminals with negative mass (sinks)
+    \end{itemize}
+
+    the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
+    consists of Steiner points
+        {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?
+    This terminology is used in the euclidean steiner tree problem and in the other formulation (MMX). Should I sttle for one and just say that they are synonim?
+    }
+
+    $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
+    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
+    The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
+    such that the following cost function is minimized:
+    \[
+        \sum_{(x,y) \in E} f_{xy}^\alpha \|x - y\|
+    \]
+    \begin{remark}
+        It follows from~\ref{lemma:loop_free} that the optimal solution of a DBT problem is a union of trees.
+        In the special case where there is only one source then the optimal solution is a tree becuase of the connectivity
+        of the solution.
+    \end{remark}
+    \begin{remark}
+
+        The problem remains unchanged if the signs of the masses are inverted, meaning that sources and sinks can be swapped.
+        Therefore, it is sufficient to analyze either the case of a single source or a single sink, as they are the same problem.
+
+    \end{remark}
+
+    TODO: remark difficulties for multiple sources
+
+    \subsection{Euclidean Steiner Tree problem}
+
+    The ESTP is a special case of DBT, where  $\alpha=0$ and only a single source is present.
+    This implies that the cost function is the sum of the lengths of the edges, and it does not take into account the flow on the edges.
+    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
+    The objective function is then:
+    \begin{equation}
+        \sum_{(x,y) \in E} \|x - y\|
+    \end{equation}
+    {\color{red} Please fix the notation.}
+    This special case has been extensively studied, especially computationally,
+    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}.
+
     \subsection{Solver choice}
+
     TODO Explain the current landscape of solvers and why we chose the one we did.
     TODO Maybe talk about how they work and do some literature review on this. We will need it later to explain the results
+    TODO: should this be in this section??
+
+    In order to evaluate the performance of a specific formulation it is necessary to fix both a solver and possibly a specific hardware.
+    There are many numerical solvers available, both commercial and open-source, each of them with different features and performance. The latter is
+    inherently tied to how much the heuristics of the solver are well suited for the problem: a general MNLIP problem is NP-hard, thus, as far as currently
+    known, there is no polynomial time algorithm to solve it but many heuristics and approximation can yield very good performances.
+    For the experiments BARON~\cite[TODO: ]{khajavirad2018hybrid}~\cite[TODO]{sahinidis1996baron} has been chosen as a solver. The main reason is the capability of handling
+    non-convex and non-differentiable constraints and objective functions without numerical problems. This allows for handling nth-roots and
+    other non-linear function easily and permits to focus on the substance of the problem rather than on the numerical stability and
+    on making the formulation respect precise rules.
+    For certain experiments GUROBI~\cite[TODO: ]{gurobi} was also used, but it yield a worse overall performance and it is more restrictive
+    on the type of constraints permitted. In particular, GUROBI has allowed non-convex constraints only since version 11 (todo: insert date) and
+    it is still a somewhat experimental feature (todo: check this).
+    The main drawback of BARON is that it is a commercial solver and thus it is not possible to share the code used for the experiments.
 
 
     \section{Miei risultati teorici (con anche controesempi per spiegare le difficoltà numeriche)}
+
+    In this section, we present the main results, which provide lower bounds on the angles between edges.
+    These bounds depend either on the specific instance of the problem $(\mu^{\pm}, N, \alpha)$ or only on the pair $(N, \alpha)$.
+    Once we have these bounds, we can use the results for spherical cap packing~\ref{definition:spherical_cap_results}
+    to obtain upper bounds on the number of branches in the optimal transport problem.
+
+    The following lemma offers an improvement over~\cite[Lemma 12.16]{Bernot},
+    where the competitor is considered along the edge instead of the span defined by the three vertices.
+
+    \begin{lemma}
+        \label{lemma:bound_opposite_direction}
+        Consider a vertex $s$ and two terminals $s_1, s_2$ connected to it (as illustrated in \ref{fig:angle_bound_example_inverted}). Let $m_1, m_2$ be the masses of the two edges connecting
+        $s$ to $s_1, s_2$ respectively, such that $m_1 \ge m_2$ and $m_1$ is flowing toward $s$ and $m_2$ is flowing away from $s$.
+        Let $\theta$ be the angle between the two edges. Then, for every $\alpha \in (0,1]$:
+
+        \begin{equation}
+            \cos(\theta) \le \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+        \end{equation}
+
+        \begin{proof}
+            We can assume $p_1$ and $p_2$ lie on the unit circle by zooming enough and then rescaling, using the property that every restriction of an optimal
+            solution is optimal~\cite[Chapter 8]{Bernot}. Calling the candidate new branching point $x$ and setting $s=(0,0)$.
+            We can write the cost $f$ of this configuration of the tree as:
+            \begin{equation}
+                f(x) = m_1^{\alpha}\|p_1 - x \| + m_2^{\alpha} \|p_2 - x\| + (m_1-m_2)^{\alpha} \|x\|
+            \end{equation}
+            By setting $x = \epsilon v$ with $\|v\|=1$ and expanding to the first order around $\epsilon=0$:
+            \begin{equation}
+                f(\epsilon v) = f(0) - \epsilon m_1^{\alpha} v \cdot p_1 - \epsilon m_2^{\alpha} v \cdot p_2 + (m_1-m_2)^{\alpha} \epsilon + o(\epsilon)
+            \end{equation}
+
+            Given that we only want to check when $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
+
+            \begin{figure}[h]
+                \includegraphics[scale=0.5]{circle}
+                \centering
+                \caption{Diagram of $p_1$, $p_2$ and $s$ for edges flowing in opposite directions}
+            \end{figure}
+
+            We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
+            \begin{equation}
+                f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
+            \end{equation}
+
+            To prove that $\theta$ is not optimal we have two options:
+            \begin{itemize}
+                \item prove that there exists $\beta$ such that the first order coefficient is negative
+                \item prove that the first order coefficient is bigger than $0$ for all $\beta$
+            \end{itemize}
+
+
+            To do this we want to fix $\theta, m_1, m_2$ and study the minimum of this function:
+            \begin{equation}
+            (m_1-m_2)
+                ^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
+            \end{equation}
+
+            Calling $t = \cos(\beta)$ we get that the following equations needs to have a solution for $\beta$:
+            \begin{equation}
+                \label{eq:optimality_condition_proof}
+                (m_1-m_2)
+                ^{\alpha} + \cos\beta(-m_2^\alpha-m_1^\alpha t) + \sin\beta(m_1^\alpha \sqrt{1-t^2}) = 0
+            \end{equation}
+
+            Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
+            We also need to verify whether this point corresponds to a local minimum.
+
+            We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
+            span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
+            is not optimal, this function must cross zero.
+
+
+            By solving equation \ref{eq:optimality_condition_proof}, using that $c^2 \le a^2 + b^2$ is a necessary and
+            sufficient condition for an equation of the form $a\cos\beta + b\cos\beta = c$ to have a solution, we get:
+            \begin{equation}
+                \label{eq:optimality_condition_proof_2}
+                t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+    We notice that~\ref{eq:optimality_condition_proof_2} is almost the same as~\cite[lemma 12.2]{Bernot}.
+    In fact the only difference is that along the edge conencting $s$ to the branching point here we have the difference
+    of the masses instead of the sum.
+
+    \begin{lemma}
+        \label{lemma:difference_bound_decreasing}
+        The function:
+        \begin{equation}
+            f(m_1, m_2) = \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
+        \end{equation}
+        is decreasing in the ratio $\frac{m_2}{m_1}$ and that $\frac{m_2}{m_1} \rightarrow 0$ is $0$.
+
+        \begin{proof}
+            We notice $f$ is homogeneous and can therefore be reparametrized in terms of the ratio of the masses. Calling $m= \frac{m_2}{m_1}$
+            we get:
+            \begin{equation}
+                f(m_1, m_2) = g(m_1/m_2) \coloneqq \frac{(1 - m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
+            \end{equation}
+            We can then verify that this function is indeed decreasing in $m$ as $(1-m)^ {2\alpha}$, $-m^{2\alpha}$
+            and $1/ m^\alpha$ are all decreasing functions.
+            Therefore
+            \begin{equation}
+                \sup_{m_1, m_2} f(m_1,m_2) = \lim_{m \rightarrow 0} g(m) = 0
+            \end{equation}
+            To compute the limit we apply de l'Hopital's rule and get:
+            \begin{equation}
+                \lim_{m \rightarrow 0} g(m) = \lim_{m \rightarrow 0} \frac{-2\alpha (1-m)^{2\alpha-1} - 2\alpha m^{2\alpha-1}}{2\alpha m^{\alpha-1}} = 0
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+
+    \begin{lemma}
+        \label{lemma:bound_general_direction}
+
+        Let $\mathbf{P}$ be an optimal traffic plan transporting $\mu^+$ to $\mu^-$ with finite energy and finite graph structure.
+        Consider a branching point $s$ located outside the support of $\mu^{\pm}$, with two branches connecting $s$ to points $x_1$ and $x_2$.
+        Denoting the angle $\angle x_1 s x_2$ by $\theta$, the following inequality holds:
+
+        \begin{equation}
+            \label{eq:bound_general_direction}
+            \cos(\theta) \le \max\left( 2^{2\alpha - 1} - 1, 0 \right).
+        \end{equation}
+
+        Furthermore, the degree is bounded by $C \left( \frac{\theta_{\max}}{2}, N \right)$, where $\theta_{\max}$
+        is the angle that realizes the maximum in equation~\ref{eq:bound_general_direction}.
+
+        \begin{proof}
+            By combining lemmas~\ref{lemma:bound_opposite_direction} and~\ref{lemma:difference_bound_decreasing}, along with~\cite[Lemma 12.5]{Bernot}, we obtain a bound on $\cos \theta$ that applies to all masses and depends only on $\alpha$.
+
+            Taking the supremum over all masses, we conclude that for a three-point system, there is no branching point if
+            \begin{equation}
+                \cos(\theta) \le \max \left( \max\left( 2^{2\alpha - 1} - 1, 0 \right), 0 \right).
+            \end{equation}
+        \end{proof}
+
+    \end{lemma}
+
+    \begin{corollary}
+        In the case where $\mu^+$ and $\mu^-$ are two measures with finite support we know that lemma~\ref{lemma:bound_general_direction}
+        holds also for points in their support.
+    \end{corollary}
 
     \subsection{Degree of a vertex}
 
@@ -554,25 +807,329 @@
 
     \subsection{Instance specific bounds}
 
-    \subsection{Minimum distance proof and counterexample}
+    We now have a bound on the cosine of the angle between two edges given their flows. In~\ref{lemma:bound_general_direction} we have
+    taken the supremum over all possible masses to obtain an instance independent bound.
+    We now focus on looking for a bound that holds at every branching point of a specific instance of the problem,
+    so we assume that we already know the set $M$.
+
+        {\color{red} You have a couple of results already depending on $m_1, m_2$. What you do mean we now focus on an instance specific bound?
+    I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence.}
+
+    We also focus on the case where there is only one source and therefore the optimal solution is a tree.
+    In this case, thanks to the loop-free property of the optimal solution, we know that the masses on the edges are
+    combinations of masses in $M$. We can then maximize the bound of the cosine under this constraint to find the smallest
+    angle that can be achieved in a specific instance of the problem.
+
+    \begin{lemma}
+        \label{lemma:degree_definition}
+        Given an instance of a DBT problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$
+            {\color{red} why did you add $-1$ to the set of masses?}
+        such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
+        a cost parameter $\alpha \in (0,1)$, consider a branching point $s$ with two branches attached to it,
+        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ we have:
+
+        If $\alpha \le 1/2$:
+        \begin{equation}
+            \cos(\theta) \le \max\left(
+                                     \frac{1 - m_{\min}^{2\alpha} - (1-m_{\min})^{2\alpha}}{2(m_{\min}(1-m_{\min}))^\alpha},
+                                     \frac{(1-m_{\min})^{2\alpha} - m_{\min}^{2\alpha} - 1}{2m_{\min}^\alpha}
+            \right)
+        \end{equation}
+
+        If $\alpha > 1/2$, define the ratio $r$ as:
+        \begin{equation}
+            \label{eq:ratio_definition}
+            r = \max \left\{ \frac{m_i}{m_j} \text{  s.t.  } A_i, A_j \subseteq M, A_i \cap A_j = \emptyset, m_i = \sum_{k \in A_i} m_k, m_j = \sum_{k \in A_j} m_k, m_i \le m_j \right\}
+        \end{equation}
+
+        Then we have:
+        \begin{equation}
+            \cos(\theta) \le \max\left(
+                                     \frac{ (1+r)^{2\alpha} - 1 - r^{2\alpha}}{2r^\alpha},
+                                     \frac{(1-m_{\min})^{2\alpha} - m_{\min}^{2\alpha} - 1}{2m_{\min}^\alpha}
+            \right)
+        \end{equation}
+
+
+        Defining $\theta_{\max}(M, \alpha)$ as the angle that achieves the maximum above, we can find an upper bound on the number of branches
+        at any point of an optimal solution and define it as:
+        \begin{equation}
+            \deg(M, N, \alpha) = C\left( \frac{ \theta_{\max}(M, \alpha) }{2}, N\right)
+        \end{equation}
+
+        Where $C$ is the function defined in~\ref{definition:spherical_cap_results}.
+    \end{lemma}
+
+    \begin{corollary}
+        At a branching point outside of the support of $P$ we know that the conservation of flow holds, therefore there is
+        at least one incoming edge and one outgoing edge. Given this we can slightly improve the bound with a strategy
+        similar to~\cite[Section 11]{Bernot}.
+            {\color{red} I dont understand. I am not sure that this is a useful remark/corollary}
+    \end{corollary}
+    \begin{remark}
+        Finding $r$ as in~\ref{eq:ratio_definition} is probably computationally a difficult problem, so we could try some heuristic to find a good approximation.
+        However, we need an upper bound on the ratio (rather than a lower bound) so it could be more difficult to obtain one (a feasible solution is
+        not enough, we need a relaxation guarantee or a dual solution). We can empirically observe from
+        (todo: include experiments from the notebooks) and~\ref{fig:first_bound_a_ge_1-2} that for most mass distributions there are subset with a ratio
+        close to 1 and that we do not gain much by finding anything even with a $30\%$ error.
+        So computationally it can make sense to just use $2^{2\alpha - 1} - 1$ as the bound.
+    \end{remark}
+
+
+    \begin{proof}
+
+        We proceed in a similar way to~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
+        over $m_1, m_2 \in [0,1]$ we maximize over the constraint that the masses on the branches $m_i,m_j$ are combinations of masses $M$.
+
+        We have two bounds to consider: the first applies to the case where both edges flow outward,
+        while the second applies to the case where one edge flows outward and the other flows inward.
+
+        todo: first/second bound is an awful name
+
+        \subsubsection{Optimizing the first bound}
+        We aim to maximize:
+        \begin{equation}
+            f(m_i, m_j) = \frac{(m_i + m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
+        \end{equation}
+
+        Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of~\ref{lemma:loop_free}) in the sense that there
+        exist sets $A_i, A_j \subseteq M$ such that $A_i, A_j \neq \emptyset$, $m_i = \sum_{k \in A_i} m_k$ and $m_j = \sum_{k \in A_j} m_k$ and $A_i \cap A_j = \emptyset$.
+
+        Similarly to~\ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
+
+        \begin{equation}
+            f(m) = \frac{(1 + m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
+        \end{equation}
+
+        We can also observe that $f(m) = f(1/m)$ so it is enough to consider $m \in [0,1]$.
+        From~\ref{lemma:bernot_angles_sum_bound} we know that there is a different behaviour depending on $\alpha$ (figures~\ref{fig:first_bound_a_le_1-2} and~\ref{fig:first_bound_a_ge_1-2}).:
+        \begin{itemize}
+            \item If $\alpha \le 1/2$ we have that the function is decreasing in $m$. Therefore the maximum is achieved when $m$ is the smallest.
+            \item If $\alpha > 1/2$ we have that the function is increasing in $m \in [0,1]$. The maximum is achieved when $m = 1$.
+        \end{itemize}
+
+        \subsubsection{Case $\alpha \le 1/2$}
+        In the first case, it is sufficient to take
+        \begin{align}
+            & m_i = \min_{k \in M} |m_k| \\
+            & m_j = \sum_{k \in M} m_k - m_i = 1 - m_i
+        \end{align}
+
+        \begin{figure}[h]
+            \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_le_1-2}
+            \centering
+            \caption{Plot of the first bound for $\alpha \le 1/2$}
+            \label{fig:first_bound_a_le_1-2}
+        \end{figure}
+
+        \subsubsection{Case $\alpha \ge 1/2$}
+
+        The definition~\ref{eq:ratio_definition} is just a more compact way to write the solution to the optimization problem
+        of finding the maximum ratio of two masses.
+%
+
+        \subsubsection{Optimizing the second bound}
+        We are aiming at maximizing the function (see figure~\ref{fig:second_bound}):
+        \begin{equation}
+            f(m_i, m_j) = \frac{(m_i - m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
+        \end{equation}
+        We know from~\ref{lemma:difference_bound_decreasing} that this function only depends on $m = \frac{m_j}{m_i}$ and that the following:
+        \begin{equation}
+            f(m) = \frac{(1 - m)^{2\alpha} - m^{2\alpha} - 1}{2m^\alpha}
+        \end{equation}
+        is decreasing.
+
+        We can now optimize the function over combinations of masses. Our objective is to minimize the ratio
+        $m$. The two masses are independent so we conclude that the minimum is achieved when
+        $m_i = \min_{k \in P^+} |m_k|$ and $m_j = \sum_{k \in P^+} m_k = 1$.
+
+    \end{proof}
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{f_diff_m1_m2}
+        \centering
+        \caption{Plot of the second bound}
+        \label{fig:second_bound}
+    \end{figure}
+
+
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_ge_1-2}
+        \centering
+        \caption{Plot of the first bound for $\alpha \ge 1/2$}
+        \label{fig:first_bound_a_ge_1-2}
+    \end{figure}
+
+    \subsection{Minimum distance proof todo da finire}
+
+    In this section we aim to find a bound on the minimum distance between branching points. This result can then be added
+    to the MINLP formulation to improve speed.
+
+    \begin{lemma}
+        Fix $\alpha \in (0,1)$ and $N$. For any $\delta > 0$ there exists $\mu^+ = \delta_{x_0}$ and $\mu^- = \sum_{i=1}^{4} m_i \delta_{x_i}$
+        where $x_i \in \R^N$ and $m_i$ are the masses of the terminals such that in the optimal solution of the DBT problem the distance between
+        the branching points smaller than $\delta$.
+    \end{lemma}
+    { \color{teal} I added this "lemma" to show that there is no good bound. There is a simple counterexample in
+    the github repo in "converging\_steiner\_counterexample.py" }
+
+    \begin{lemma}
+        Fix $\alpha \in (0,1)$, $N$ and a compact subset $K \subseteq \R^N$. For any $\epsilon > 0$ there exists $\delta(\epsilon)$ such that for any $\mu^+ = \delta_{x_0}$ and $\mu^-$
+        with support in $K$ and $\|\mu^-\| = 1$ we have that any optimal solution of the DBT has the following property:
+
+        If two branching points $x_i, x_j$ are at $\epsilon$-distance from $supp(\mu^-)$ then the distance between them is at least $\delta(\epsilon)$.
+    \end{lemma}
+
+    \begin{proof}
+        By contradiction, assume that there exists a $\epsilon > 0$ and a sequence of $\chi_n$ optimal solutions for $\mu^\pm_n$ such that
+        there are two branching points for each $\chi_n$ called $x_i^n, x_j^n$ such that $\|x_i^n - x_j^n\| \rightarrow 0$ and $d(x_i^n, supp(\mu^-_n)) \ge \epsilon$.
+        Up to passing to a subsequence we may assume that $x_i^n \rightarrow x$ and $x_j^n \rightarrow x$.
+
+            {\color{teal}
+        What to do now? Can I do a diagonalization argument to claim that I can do everything on finite graphs that converge to $\mu_+$?
+        In that case what exactly is graph convergence? I assume converging as vector measures is equivalent to anything reasonable.
+        }
+
+
+    \end{proof}
 
     \subsection{Uniform bound on length of fibers}
+
+    TODO: this is somewhat garbage we need to introduce the problem first (citing bernot).
+
+    What we want to show is that, for fixed $\alpha$, $\mu^+$ and $\mu^-$, the optimal transport parametrization $\chi$
+    is equibounded in the sense that there is no path $\gamma$ that is non self-intersecting and such that $|\gamma(t)|_\chi$ is decreasing and positive
+    for every $t$.
+    The idea of the proof is to assume that there is such a path and show that it is not optimal by finding a better competitor.
+    Without loss of generality, we can assume that $\gamma$ is parametrized by arc length and that $\gamma(0) = 1$.
+    We define a competitor $\tilde\chi$ as the union of two paths, $\tilde{\gamma}$ and $\tilde{\psi}$, defined as follows:
+    \begin{align*}
+        |\tilde{\gamma}(t)| &= |\gamma(t)| - |\gamma(K)| \quad \text{for } t \in [0, K] \\
+        |\tilde{\gamma}(t)| &= |\gamma(t)| \quad \text{for } t \in [K, \infty) \\
+        \tilde{\gamma}(t) &= \gamma(t) \quad \text{for } t \in [0, \infty) \\
+        |\tilde{\psi}(t)| &= \gamma(K) \\
+        \tilde{\psi}(t) &= \text{Straight line from } \gamma(0) \text{ to } \gamma(K)
+    \end{align*}
+
+    Basically, we cut from the beginning of $\gamma$ the part that is longer than $|\gamma(K)|$ and we add a straight line from
+    $\gamma(0)$ to $\gamma(K)$. We can arbitrarily start from 0 as we can just shift the path to the right and look at the restriction,
+    rescaling it so that it has mass 1.
+
+    We can now compute the cost of $\tilde{\chi}$:
+
+    \begin{align*}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) &= \int_0^K |\psi(t)|^\alpha \psi'(t) \, dt - \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \\
+        &\quad - \int_0^K \gamma(t)^\alpha \, dt \\
+        &\le |\gamma(K)|^\alpha diam(X) +  \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \\
+        &\quad - \int_0^K \gamma(t)^\alpha \, dt \\
+    \end{align*}
+
+    We can now use the concavity of the function $x \mapsto x^\alpha$ to expand to the first order the second term in the right hand side:
+
+    \begin{equation}
+        \int_0^K \left[\gamma(t) - \gamma(K)\right]^\alpha \, dt \le \int_0^K \gamma(t)^\alpha - \alpha \gamma(t)^{\alpha - 1} \gamma(K) \, dt
+    \end{equation}
+
+    by linearity of the integral, two terms cancel out and we are left with:
+
+    \begin{equation}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) \le |\gamma(K)|^\alpha diam(X) - \alpha \int_0^K \gamma(t)^{\alpha - 1} \gamma(K) \, dt
+    \end{equation}
+
+    We are left to prove that this is negative for some $K$. Here I got stuck, if we assume that there exist $\epsilon,\epsilon' > 0$ such that
+    $$t^{-\frac{1}{\alpha} - \epsilon'} \le |\gamma(t)| \le t^{-\frac{1}{\alpha} + \epsilon}$$
+    For convenience, we assume that the path starts from 1 instead of 0.
+    then the following computations will yield the desired result. However, I am not sure how to proceed for functions that decrease faster or slower than any power law.
+    I have tried expanding to first and second order the integral at different points but without any good result. What often happens is that
+    after some bounding, I get to an inequality that is too strong and fails for exponentials.
+
+    Here there are the computations for the power law case (setting $d=diam(X)$):
+    \begin{align*}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) &\le d|\gamma(K)|^\alpha - \alpha \int_0^K \gamma(t)^{\alpha - 1} \gamma(K) \, dt \\
+        &\le dK^{(-\frac{1}{\alpha} - \epsilon)\alpha} - \alpha\gamma(K)\int_1^K t^{(-\frac{1}{\alpha} - \epsilon)(\alpha - 1)} \, dt \\
+        &\le dK^{-1 - \epsilon\alpha} - \frac{\alpha}{-\epsilon\alpha + 1/\alpha + \epsilon} \left( \gamma(K) K^{-\epsilon\alpha + 1/\alpha + \epsilon} - \gamma(K) \right) \\
+        &\le dK^{-1 - \epsilon\alpha} - \frac{\alpha}{-\epsilon\alpha + 1/\alpha + \epsilon} \left( K^{-\epsilon\alpha + \epsilon - \epsilon'} - K^{-1/\alpha + \epsilon} \right) \\
+    \end{align*}
+
+    Observe that $\epsilon$ and $\epsilon'$ can be arbitrarily close which implies that $-\epsilon\alpha + \epsilon - \epsilon' > -1/\alpha - \epsilon$.
+    This means that for $K$ sufficiently large the sum of the two terms will be negative and we will have the contradiction.
+
+    We did not really use that the domain $X$ is compact, apart from the fact that the diameter is finite. I tried to use the fact
+    that the path $\gamma$ will get arbitrarily close to itself but without much success. I got to this result: //
+    Let $\gamma$: [0, $\infty$) $\to$ X be a continuous path. Then there exists $x \in X$ and $(t_n)_{n \in  \mathcal{N}} \to \infty$ such that
+    $\gamma(t_n) \to x$.
+    Proof: Consider the set $\{\gamma(n): n \in \mathcal{N}\}$, by compactness we can extract a subsequence that converges to some $x$.
+
+    This also allows us to do the "cut and jump" around a fixed point, but it didn't seem to help. Another thing I tried is to quantify how often
+    it can pass again but I did not find any known result online, and by a volume argument it seems that the time between intersections is too large.
+    Obviously, this cut would not be optimal either as if we zoom close enough this path should look like a Lebesgue segment
+    and its optimal transport parametrization is more complex than a straight line but I wouldn't know how to use this.
+
+    TODO: generate figure to explain this
+    TODO: maybe add the new way to propose a contradiction as the set with existence that i have saved as a picture of a whiteboard
 
 
     \section{Risultati numerici}
 
     \subsection{Defining the mathematical formulations}
 
-    \subsection{Alpha != 0}
+    TODO: remark the difference between difficult feasible regions and difficult (non convex) objective function
+
+    \subsection{General methodology and resources}
+
+    TODO: point generation
+    There is a lack of known and well defined benchmarks dataset for the DBT problem in the literature. In particular, the
+    datasets on which GeoSteiner is tested on are far too complicated for what MNILP (todo: check spelling) solvers are capable of ($n<10$).
+    The method chosen is therefore to randomly generate points in the unit square uniformly.
+    The problem has a clear scaling symmetry so the choices to make are:
+    \begin{itemize}
+        \item shape of the support of the measures
+        \item distribution of the points
+        \item correlation between points
+        \item distribution of the masses (todo: this hasnt really been decided)
+    \end{itemize}
+    The first does not really affect the problem, especially in low dimensionality where the convex hull (which is the space where the solution lives)
+    will always be more or less a sphere.
+    The second is extremely important as it will affect the difficulty of the problem. Many real systems exhibit symmetries and other particular
+    structures (such as clusters) which can be also correlated with the masses assigned to the points, for example an electricity grid will have a city with many
+    terminals with low demand and a very large source distant from the city. It has been decided to ignore this aspect and to generate
+    positions and masses independently and uniformly as the work focuses on general methods to improve performance rather than heuristics that
+    can work well on more specific datasets and to avoid biases.
+    As aforementioned (todo: add in the literature review) there are many ad-hoc techniques to detect symmetries and simplify the problem by eliminating
+    equivalent solutions, but this is not the focus of this work so those improvements have not been implemented in the main formulation (DBT~\ref{TODO}) and
+    will not produce large improvements on those random instances.
 
     \subsection{Alpha = 0}
+
+    \subsection{Alpha != 0}
+
+    \subsection{Instance specific bounds on angles maybe?? this only for alpha != 0 where we should redo experiments}
 
 
     \section{Conclusioni e future development}
 
 
-    \newpage
+    TODO: insert somewhere the connection with Euclidean Steiner Tree
 
+    TODO: add images
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{circle}
+        \centering
+        \caption{Diagram of $p_1$, $p_2$ and $s$ for edges flowing in opposite directions}
+    \end{figure}
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{circle}
+        \centering
+        \caption{Diagram of $p_1$, $p_2$ and $s$ for edges flowing in opposite directions}
+    \end{figure}
+
+
+    \newpage
+    TODO: remove
+    \newpage
     \printbibliography
 
 
