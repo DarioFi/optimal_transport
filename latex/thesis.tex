@@ -111,14 +111,14 @@
 
 \author{Dario Filatrella}
 
-\title{Branched optimal transport}
+\title{Branched optimal transport: structural results and Mixed Integer Non-Linear Programming formulations}
 \date{June 2025}
 
 \begin{document}
 
     \large
 
-    \pagenumbering{gobble}
+    \pagenumbering{gobble}  
 
     \maketitle
 
@@ -1078,7 +1078,166 @@
 
     \subsection{Defining the mathematical formulations}
 
-    TODO: remark the difference between difficult feasible regions and difficult (non convex) objective function
+    {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta
+        , we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
+
+
+    {\color{red} Get rid of MMX, give the optimization problems better names related to the problem name.}
+
+    \subsection{DBT Formulation}
+
+    In this section we present a formulation for the DBT problem with a cost parameter $\alpha$ and a
+    single source $p^-=\{p_0\}$ based on~\cite[MMX]{mmx}.
+
+    \begin{align}
+        \text{(DBT)}: \; \min &\sum_{[i,j] \in E_1} f_{ij}^{\alpha}\|p_i - x^j\| + \sum_{[i,j] \in E_2} f_{ji}^{\alpha}\|x^i - x^j\| \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\}, \label{dbt_form:connectedness} \\
+        & \sum_{i \in S} f_{ji} = m_j \quad \text{for } j \in P^+ \label{dbt_form:sum_sinks} \\
+        & \sum_{i \in S} f_{ji} = -m_j \quad \text{for } j \in P^- \label{dbt_form:sum_sources} \\
+        & \sum_{i \in P} f_{ij} + \sum_{k < j, k \in S} f_{kj} + \sum_{k > j, k \in S} f_{jk} = 0 \quad \text{for } j \in S \label{dbt_form:sum_steiner_0}  \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S \label{dbt_form:degree_bound} \\
+        & f_{ij} \le y_{ij} \quad \text{for } [i,j] \in E \\
+        & s_i = \sum_{j \in P} c_{ij} p_j \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad x^i \in \mathbb{R}^n, \quad i \in S \\
+        & f_{ij} \in [0,1] \quad \text{for } [i,j] \in E\\
+        & c_{ij} \in \R_+ \quad i \in S, \quad j \in P
+    \end{align}
+    {\color{red} Also constrain $x^i$ to be in the convex hull of terminals DONE} \\
+    {\color{red} Get rid of duplicates like $y_{ij}$ and $y_{ji}$. DONE} \\
+    {\color{red} why $f_{ij}$ and $y_{ij}$ are defined over different index sets? The index set over which $f_{ij}$ as defined does not seem correct. It should either be between two Steiners $i,j$ or a Steiner $i$  and a terminal $j$ (similar to what you did in MMX for Steiner). DONE} \\
+    where we define the followings:
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
+        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
+    \end{itemizeb}
+
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item[$\alpha \in (0,1)$] is the cost parameter
+        \item [$M$] is the set of masses $\{m_1, \ldots, m_n\}$ of the terminals
+        \item [$f_{ij}$] flow on the edge $(i, j) \in E$ going from $j$ to $i$  {\color{red} I end up with opposite flows but it makes sense to have the first indices
+        reserved for the terminals so I am unsure whether to change this}
+        \item [$y_{ij}$] binary variable indicating the presence of an un-oriented edge connecting $i$ to $j$.
+    \end{itemizeb}
+
+    \subsection{Proof of correctness}
+
+    When we say correctness we mean that, given an optimal solution of the DBT formulation we can reconstruct one of the optimal solutions
+    to the DBT problem.
+    Therefore we need to construct a function $\phi$ that maps feasible solutions of the formulation into feasible solutions of DBT (which are graphs)
+    and prove that the optimality is preserved.
+
+    Outline of the proof:
+    \begin{enumerate}
+        \item construction of the map that takes feasible solutions to graphs
+        \item proof that the objective functions are the same
+        \item proof of optimality for connected optimal solution where terminals are leaves and branching points have degree 3
+        \item dropping the assumption that terminals are leaves
+        \item general proof
+    \end{enumerate}
+
+    \subsection{Step 1}
+    We define a function $\phi$ that maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|} \times \R^{|E|}$ to a oriented weighted graph in $\mathbb{R}^N$ as follows:
+
+    \begin{enumerate}
+        \item For each $i \in P$, add a terminal at $p_i$.
+        \item For each $j \in S$, add a vertex $s_j \in \R^N$ with coordinates $x^j$.
+        \item If there are multiple vertices with the same coordinates, collapse them into one and identify them with any of the indices.
+        \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
+        \item Assign the flow $f_{ij}$ to the edge connecting $v_i$ to $v_j$. Note that either $(i,j) \in E$ or $(j,i) \in E$ but not both so flows
+        cannot cancel.
+    \end{enumerate}
+
+    Note that this function is not injective, as we can permute the indices of the Steiner points and still get the same graph.
+    We first show that $\phi(\cdot)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
+    constraints work.
+
+    The (only) source is a special terminal, and here we constraint it to be connected
+    to the first Steiner point (which has index $|P|+1$) because of~\ref{dbt_form:sum_sources}.
+
+    We observe that the constraints form a tree were leaves are sink terminals, so in any optimal solutions the flows all go "downstream".
+    This is not a problem as the indices of the tree are topologically sorted due to~\ref{dbt_form:connectedness}.
+    For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, indexed by $S_p = \{s_1, \dots, s_m\}$,
+    at the same coordinates.
+    The total flow of the collapsed vertex is:
+    \begin{equation}
+        \sum_{i \in S_p} \left[ \sum_{j<i}^{f_{ji}} - \sum_{j>i}^{f_{ij}}   \right] + \sum_{j \in S} f_{pj} = m_p
+    \end{equation}
+    By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_sinks} we get that the final flow is exactly $m_p$.
+
+    We can apply the same construction also for coinciding Steiner points that do not coincide with any terminal and get
+    that the flow is conserved.
+
+    We have also proved now that the set of feasible solutions of the formulation is a subset of the set of feasible solutions of DBT through $\phi$.
+    This means that to prove the equivalence we only need to show that for any optimal solution in DBT
+    there is a corresponding optimal solution of the formulation that maps to it.
+
+    \subsection{Step 2}
+    By calling $Formulations$ and $Graphs$ the feasible regions of the MINLP formulation and DBT problem respectively, we show that the following diagram commutes:
+    \[
+        \begin{tikzcd}
+            & \mathbb{R}  \\
+            Formulations \arrow[ur, "Obj"] \arrow[rr, "\phi"'] & & Graphs  \arrow[ul, "Obj"]
+        \end{tikzcd}
+    \]
+
+    The objective function in the formulation is the sum of $(f_{ij} + f_{ji})^\alpha$ which is, after passing through $\phi$, the flow
+    along the edge $(i,j)$, weighted by $\| p_i - x^j \|$ or $\|x^i-x^j \|$ which are the euclidean distances between
+    Steiner points and terminals.
+    The fact that there could be a degeneracy is not important as those points have $0$ distance and do not contribute to the
+    objective value.
+
+    \subsection{Step 3}
+
+    We now show that there is a feasible solution to the MNILP that maps to a connected optimal solution of DBT where terminals are
+    leaves and branching points have degree 3.
+    For each steiner point $s_i$ in the graph we can set $x^i = s_i$. We then set $y_{ij} = 1$ and re-order the steiner points
+    so that the indices are topologically sorted with respect to the tree structure of the graph.
+    We can then set $f_{ij}$ or $f_{ji}$ $j$ to the appropriate value for each edge $(i,j)$ in the optimal solution of DBT.
+    We are not violating the degree constraints as we are mapping an optimal solution of DBT.
+    By an edge counting argument (crucially using that the solution is a tree) we can show that there are enough Steiner points to connect all the terminals.
+    \begin{equation}
+        |S| + |P| - 1 = \frac{1}{2} \left( 3|S| + \sum_{i \in P} d(i) \right)
+    \end{equation}
+    Which implies that:
+    \begin{equation}
+        \label{eq:edge_counting}
+        \sum_{i \in P} d(i) = 2|P| - 2 - |S|
+    \end{equation}
+
+    because in our case $d(i)=1$ by assumption.
+    In order to satisfy the connectivity constraint~\ref{dbt_form:connectedness} we have to re-order
+    the steiner points in a topological order, which exists as it is a tree.
+
+    \subsection{Step 4}
+    Now we tackle the case where the terminals can have degree higher than $1$ while still assuming that the branching points have
+    degree $3$.
+    We will show that we can add more degenerate steiner points to the graph until we reduce it to the case where all terminals are leaves.
+    During this procedure we need to track how many steiner points we add.
+    From equation~\ref{eq:edge_counting} we know that for every "extra" degree we have one extra Steiner point to work with.
+    Define the following procedure:
+    \begin{enumerate}
+        \item Consider a terminal $p_i$ with degree $d(i)$ connected to points $\{x_1, \dots, x_{d(i)}\}$
+        \item Add $d(i) - 1$ degenerate steiner points $\{s_1, \dots, s_{d(i)-1}\}$ at the same coordinates as $p_i$
+        \item Connect them with edges $\{ (p_i, s_1), (s_1, s_2), \dots, (s_{d(i)-1}, x_{d(i)}) \}$
+        \item Connect also edges $\{ (s_i, x_i) \}$ for $i = 1, \dots, d(i)-1$
+    \end{enumerate}
+    This procedure preserves the connectedness of the graph and its topology. We can repeat this procedure until all terminals
+    have degree $1$.
+    Once the topology is fixed, the flows are uniquely determined by the masses on the terminals. We might just have to
+    re-order the Steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
+
+    \subsection{Step 5}
+
+    We can proceed as in step 4, for each branching point with degree $d(i)$ we can add $d(i) - 3$ degenerate steiner points
+    and connect them in a chain. We can then re-order the steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
+    From~\ref{eq:edge_counting} we get that there are enough steiner points to apply this procedure to every branching point.
+    \qed
 
     \subsection{General methodology and resources}
 
@@ -1104,11 +1263,188 @@
     equivalent solutions, but this is not the focus of this work so those improvements have not been implemented in the main formulation (DBT~\ref{TODO}) and
     will not produce large improvements on those random instances.
 
-    \subsection{Alpha = 0}
 
-    \subsection{Alpha != 0}
+    \begin{remark}
+        This formulation can be easily extended to multiple sources by adding negative masses to the terminals and adding a new
+        constraint~\ref{dbt_form:sum_sources} for each source.
+        We restrict our numerical analysis as the case of multiple sources often presents disconnected solutions (unions of trees)
+        and due to the symmetry of the problem there are many optimal solutions to the formulation, making it very difficult for a sovler to
+        tackle.
+    \end{remark}
 
-    \subsection{Instance specific bounds on angles maybe?? this only for alpha != 0 where we should redo experiments}
+    \subsection{MMX}
+    In the case where $\alpha=0$ we can remove all the flows and we are left with the original formulation for the euclidean
+    Steiner tree due to~\cite[Section 2]{mmx}
+    \begin{align}
+        \text{(MMX)}: \; \min &\sum_{[i,j] \in E_1} \|p_i - s_j\| y_{ij} + \sum_{[i,j] \in E_2} \|s_i - s_j\| y_{ij}, \\
+        & \sum_{j \in S} y_{ij} = 1 \quad \text{for } i \in P^+, \\
+        & \sum_{i \in P} y_{ij} + \sum_{k < j, k \in S} y_{kj} + \sum_{k > j, k \in S} y_{jk} = 3 \quad \text{for } j \in S, \label{MMX:connectivity_steiner} \\
+        & \sum_{k < j, k \in S} y_{kj} = 1 \quad \text{for } j \in S - \{p+1\},  \\
+        & s_i = \sum_{j \in P} c_{ij} p_j \\
+        & y_{ij} \in \{0, 1\}, \quad [i, j] \in E, \quad s^i \in \mathbb{R}^n, \quad i \in S \\
+        & c_{ij} \in \R_+ \quad i \in S, \quad j \in P,
+    \end{align}
+
+    Where:
+    \begin{itemizeb}
+        \leftskip 0.8 cm\labelsep=.3 cm
+        \item [$P$] is the set of terminals $\{p_1, \ldots, p_n\}$,
+        \item [$S$] is the set of Steiner $\{s_1, \ldots\}$ points (indexed as $S = \{|P| + 1, \dots, 2|P|-2\}$),
+        \item [$E_1$] is the set of edges connecting terminals to Steiner points, such that $(i,j) \in E_1$ when $i \in P$ and $j \in S$.,
+        \item [$E_2$] is the set of edges connecting Steiner points, such that $(i,j) \in E_2$ if $i,j \in S$ and $i < j$.
+    \end{itemizeb}
+
+
+    \section{Numerical results}
+
+    \begin{table*}[ht]
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \setlength{\tabcolsep}{4pt}
+        \begin{threeparttable}
+            \begin{tabular}{l c c c c c c c c c r r r}
+                \toprule
+                \textbf{Termination} & \textbf{DoLocal} & \textbf{TDo} & \textbf{MDo} & \textbf{LBTTDo} & \textbf{OBTTDo} & \textbf{PDo} & \textbf{BO} & \textbf{CH} & \textbf{Avg LB} & \textbf{Avg UB} & \textbf{Time (s)} \\
+                \midrule
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no         & \no         & 0.88373         & 2.64849         & 5.11650           \\
+                MaxIter=1            & \no              & \no          & \no          & \yes            & \no             & \no          & \no         & \no         & 0.88373         & 2.64849         & 4.53950           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \no             & \yes            & \yes         & \no         & \no         & 0.20039         & 2.25245         & 0.53300           \\
+                Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \no         & \no         & 1.45655         & 1.45655         & 42.46600          \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes        & \no         & 0.54355         & 2.48274         & 6.99500           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \no         & \yes        & 0.77710         & 1.72245         & 4.80400           \\
+                MaxIter=1            & \yes             & \yes         & \yes         & \yes            & \yes            & \yes         & \yes        & \yes        & 0.46670         & 2.82511         & 5.95500           \\
+                Time-based           & \na              & \na          & \na          & \na             & \na             & \na          & \yes        & \no         & 1.45655         & 1.45655         & 37.80450          \\
+                \bottomrule
+            \end{tabular}
+            \begin{tablenotes}[flushleft,para]
+                \footnotesize
+                % You can add additional inline notes here if needed.
+            \end{tablenotes}
+        \end{threeparttable}
+        \caption{Ablation study results showing solver configuration options (ticks indicate enabled features) and performance metrics for $n=5$.
+        DoLocal, TDo, MDo, LBTTDo, OBTTDo, PDo are Baron options. BO stands for "Better objective" and CH for "Convex hull".}
+        \label{tab:ablation_configs}
+    \end{table*}
+
+    TODO: aggiungere un grafico con l-andamento in N della performance magari runnato sulla VM
+
+    TODO: genera un po' di grafi per esempi
+
+    \subsection{Alternative formulation}
+
+    TODO: Compare this with the other formulations 
+    
+
+    We now aim to write an equivalent formulation where we move the complexity from the objective function to the constraints.
+    To achieve this we introduce additional bilinear terms $w_{ij}$ in order to make the objective function convex.
+
+    \begin{align}
+        \textbf{y-polytope:} \quad & \sum_{t \in T \setminus \{1\}} y_{s,s'} + \sum_{s' \in S, s < s'} y_{s,s'} = 2 \quad \forall s \in S \quad \text{(each Steiner has two kids)} \\
+        & \sum_{s' \in S, s' < s} y_{s',s} = 1 \quad \forall s \in S \setminus \{1\} \quad \text{(each Steiner has a Steiner parent)} \\
+        & \sum_{s \in S} y_{s,t} = 1 \quad \forall t \in T \quad \text{(each terminal is a leaf)} \\
+        & y_{1,1} = 1 \\
+        & y_{s,t} \geq 0 \quad \forall s \in S, t \in T \\
+        & y_{s,s'} \geq 0 \quad \forall s, s' \in S \\
+        \\
+        \textbf{x-polytope:} \quad & x_s = \sum_{t \in T} \lambda_{s,t} p_t \quad \forall s \in S \\
+        & \sum_{t \in T} \lambda_{s,t} = 1 \quad \forall s \in S \\
+        & \lambda_{s,t} \geq 0 \quad \forall s \in S, t \in T \\
+        \\
+        \textbf{Bilinear terms:} \quad & w_{s,t} = s_s \cdot y_{s,t} \quad \forall s \in S, t \in T \\
+        & w_{s,s'} = x_s \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        & w_{s',s} = x_{s'} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        \textbf{Objective:} \quad & \sum_{s \in S, t \in T} \| w_{s,t} - p_t y_{s,t} \| + \sum_{s, s' \in S, s < s'} \| w_{s,s'} - w_{s',s} \| \\
+    \end{align}
+
+    \subsection{Convex Hull Approximation TODO fix the naming}
+
+    We can now use the convex hull condition in a different way by exploiting disjunctive programming~\cite[2.11]{Conforti2014}.
+    We have the following:
+    \begin{equation}
+        x = (x_1, \ldots, x_{|S|}) \in \text{conv}(P \times \ldots \times P)
+    \end{equation}
+
+    If we fix each $x$ to be a point in $P$ we can write:
+    \begin{align}
+        x_i &= P_{a(i)} \\
+        w &= b_a y
+    \end{align}
+    Where $a: S \rightarrow P$ is a function that maps each Steiner point to a terminal and $b_a$ is the matrix of the bilinear
+    constraints once $x$ is fixed to an assignment $a$.
+    Calling the set of all possible $a$ as $\mathcal{A}$ we can write the problem as:
+    \begin{align}
+        x &= \sum_{a \in \mathcal{A}} x_a \\
+        w &= \sum_{a \in \mathcal{A}} w_a \\
+        x_s &= \lambda_a P_{a(s)} \\
+        w_a &= \lambda_a b_a y \\
+        \sum_{a \in \mathcal{A}} \lambda_a &= 1 \\
+        \lambda_a &\geq 0
+    \end{align}
+
+    We now need to explicitely state $w_a$
+    \begin{align}
+        w_{a, s,t} &= \lambda_a \cdot s_s \cdot y_{s,t} \quad \forall s \in S, t \in T \\
+        w_{a, s,s'} &= \lambda_a \cdot P_{a(s)} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+        w_{a, s',s} &= \lambda_a \cdot P_{a(s')} \cdot y_{s,s'} \quad \forall s, s' \in S, s < s' \\
+    \end{align}
+
+    We can observe that the first equation does not depend on $x$.
+
+
+    \subsection{Single iterations results}
+
+    TODO: literature review on the methods that perform well maybe with a small explaination.
+
+    \begin{table*}[ht]
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \setlength{\tabcolsep}{6pt}
+        \begin{threeparttable}
+            \begin{tabular}{l cc|cc|cc}
+                \toprule
+                \textbf{Formulation} & \multicolumn{2}{c|}{\(\mathbf{N=4}\)} & \multicolumn{2}{c|}{\(\mathbf{N=5}\)} & \multicolumn{2}{c}{\(\mathbf{N=6}\)} \\
+                \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+                & Avg LB  & Avg Time & Avg LB                     & Avg Time                   & Avg LB                     & Avg Time                    \\
+                \midrule
+                DBT (exact solutions)            & 1.08721 & 0.47950  & 1.31719\textsuperscript{a} & 2.07564\textsuperscript{a} & 1.52883\textsuperscript{a} & 19.87462\textsuperscript{a} \\
+                DBT + cuts (exact solutions)     & 1.08721 & 0.20500  & 1.32985\textsuperscript{a} & 1.35615\textsuperscript{a} & 1.53823                    & 6.88175                     \\
+                DBT convex relaxation            & 0.36753 & 0.90600  & 0.05242\textsuperscript{a} & 0.26872\textsuperscript{a} & 0.00469           & 0.08875           \\
+                DBT convex relaxation \(w\) only & 1.08721 & 0.28725  & 1.33244\textsuperscript{b} & 2.02711\textsuperscript{b} & 1.54766\textsuperscript{c} & 23.06500\textsuperscript{c} \\
+                DBT pre-processing only          & 0.92279 & 0.36025  & 0.92912                    & 0.67375                    & 0.90109                    & 2.41075                     \\
+                DBT + cuts preprocessing only    & 1.01456 & 0.14950  & 1.01968                    & 0.57225                    & 0.97563                    & 1.62675                     \\
+                \bottomrule
+            \end{tabular}
+            \begin{tablenotes}[flushleft,para]
+                \footnotesize
+                \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
+            \end{tablenotes}
+        \end{threeparttable}
+        \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
+        \label{tab:experiment_results_grouped_2}
+    \end{table*}
+
+    TODO: specify somewhere what "better objective" means
+
+
+    \subsection{Closest point improvement from Ouzia Pablo e Maculan}
+
+    TODO: add the paper in the literature review and write the new constraints
+
+    
+    TODO: preambolo su perchè guardiamo quasi solo alpha != 0
+    TODO: remark the difference between difficult feasible regions and difficult (non convex) objective function
+    
+    \subsection{Implementing flows}
+
+    In order to solve the problem with alpha != 0 we need to implement the flow constraints as in the \ref{todo}.
+
+    todo: graph with performance of this method
+
+    \subsection{Instance specific bounds on angles with the new formulation}
+
+    todo: experiment a bit and show that it is a thrash idea
 
 
     \section{Conclusioni e future development}
