@@ -1,0 +1,59 @@
+%! Author = dario
+%! Date = 2/7/25
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+
+
+
+\title{Msc thesis}
+\date{2025}
+
+\usepackage{biblatex}
+\usepackage{hyperref}
+\addbibresource{bib.bib}
+
+%\author{Dario Filatrella}
+% write authors and supervisors
+\title{M.Sc. Thesis Draft}
+\author{Dario Filatrella \\ Supervisors: Aida Khajavirand and Antonio De Rosa}
+\date{2025}
+
+% Document
+\begin{document}
+
+    \maketitle
+
+
+
+    \section*{Preface}
+    This document presents preliminary research on branched transportation, conducted under the supervision of Professors
+    De Rosa and Khajavirad. It is currently structed as a draft publication and I will later adapt it to the thesis format.
+    On GitHub, at the link \url{https://github.com/DarioFi/optimal_transport} you can find the repository containing all the work done.
+    It includes source code for result generation, raw experimental data, and Jupyter notebooks containing
+    experimental results and visualizations not featured in the main text.
+
+
+    \section*{Abstract}
+    This work investigates the discrete
+    branched transportation problem as described in~\cite[Bernot, Caselles, Morales]{1}.
+    Our research is divided into two main parts.
+    First, we establish a sharper bound on the angles between edges in optimal solutions, leading to an improved
+    bound on the degree of the nodes in the optimal configuration for a given mass distribution and cost parameter $\alpha$.
+
+    Second, we analyze a mixed-integer nonlinear programming (MINLP) formulation of the problem.
+    While demonstrating that this MINLP approach successfully yields globally optimal solutions, we show that there are significant
+    performance limitations and opportunities for improvement.
+
+    We provide a detailed analysis of the key factors affecting the performance of the BARON solver in this context,
+    offering insights for future algorithmic developments.
+
+    Our work on finding globally optimal solutions addresses an underexplored aspect of branched transportation.
+    This approach yields valuable insights into both the structural properties of optimal solutions and
+    the fundamental behavior of the problem, contributing to both theoretical understanding and computational methodology.
+
+
+\end{document}

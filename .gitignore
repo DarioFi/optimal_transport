@@ -3,3 +3,5 @@ __pycache__/
 formulations/__pycache__/
 problems/__pycache__/
 garbage/
+.idea/
+hpc_ssh/config.txt
