@@ -83,8 +83,8 @@ def enumerate_assignments(A, B):
     # return [pyomo_wrapper(x) for x in itertools.product(range(P), repeat=S)]
 
 
-def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
-                       use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
+def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
+         use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
     """
 
     :param terminals:
@@ -434,19 +434,18 @@ def dbt_relaxed_alpha0(terminals, alpha, masses, relax_y: bool, relax_w: bool, d
 
 
 if __name__ == '__main__':
-
     sp = {
         'x': {
-            (4,0): 0.5,
-            (4,1): 0.5,
-            (5,0): 0.5,
-            (5,1): 0.5,
+            (4, 0): 0.5,
+            (4, 1): 0.5,
+            (5, 0): 0.5,
+            (5, 1): 0.5,
 
         },
         # 'palle': None
     }
 
-    m = dbt_relaxed_alpha0(
+    m = dbtq(
         [[0, 1], [0, 0], [1, 0], [1, 1]],
         masses=[0, 0, 0, 0],
         alpha=0,

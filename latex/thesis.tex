@@ -1340,6 +1340,7 @@
     To achieve this we introduce additional bilinear terms $w_{ij}$ in order to make the objective function convex.
 
     \begin{align}
+        \text{(DBTQ)}: \; & \\
         \textbf{y-polytope:} \quad & \sum_{t \in T \setminus \{1\}} y_{s,s'} + \sum_{s' \in S, s < s'} y_{s,s'} = 2 \quad \forall s \in S \quad \text{(each Steiner has two kids)} \\
         & \sum_{s' \in S, s' < s} y_{s',s} = 1 \quad \forall s \in S \setminus \{1\} \quad \text{(each Steiner has a Steiner parent)} \\
         & \sum_{s \in S} y_{s,t} = 1 \quad \forall t \in T \quad \text{(each terminal is a leaf)} \\

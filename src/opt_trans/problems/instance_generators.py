@@ -1,5 +1,5 @@
 import math
-from problems.utils import norm
+from opt_trans.problems.utils import norm
 from random import random, randint
 from .utils import points_normalization
 import sympy as sp

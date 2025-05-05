@@ -1,8 +1,8 @@
 import sys
 
-from experiment_manager import ExperimentManager
-from problems.closest_counterexample import random_points_unit_square_with_masses
-from formulations.dbt import dbt, dbt_alpha_0
+from opt_trans.experiment_manager import ExperimentManager
+from opt_trans.problems.instance_generators import random_points_unit_square_with_masses
+from opt_trans.formulations.dbt import dbt, dbt_alpha_0
 
 import itertools as it
 

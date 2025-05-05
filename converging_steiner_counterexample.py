@@ -1,10 +1,10 @@
 # we aim to find a sequence of converging steiner points, fixing alpha
 from pyomo.opt import SolverFactory
 
-from data_handling.experiment_data import ExperimentData
-from formulations.dbt import dbt
-from experiment import Experiment
-from data_handling.visualize_graph import visualize
+from opt_trans.data_handling.experiment_data import ExperimentData
+from opt_trans.formulations.dbt import dbt
+from opt_trans.experiment import Experiment
+from opt_trans.data_handling.visualize_graph import visualize
 
 
 def gen_instance(height):

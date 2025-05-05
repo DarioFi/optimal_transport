@@ -14,6 +14,9 @@ def norm_y(p1, p2, edge):
 
 
 def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj):
+
+    # this corresponds to the first DBT formulation, without quadratic constraints
+
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     assert masses[0] < 0
@@ -134,6 +137,9 @@ def dbt(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_con
 
 def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb, use_convex_hull, use_better_obj,
                 use_gurobi=False):
+
+    # this corresponds to the first DBT formulation, without quadratic constraints
+
     assert len(terminals) == len(masses)
     assert abs(sum(masses)) < 1e-7
     assert masses[0] < 0
@@ -218,7 +224,7 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
                 model.x[i, d].fix(terminals[i][d])
 
         # model.x[3, 0].fix(.5)
-        # model.x[3, 1].fix(.7)
+        # model.x[3, 1].fix(.7)z
 
         if use_better_obj:
 
@@ -278,7 +284,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
 
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
-    # ouzia maculan (2966.pdf) geometric cut
 
     model.pprint()
 

@@ -1,6 +1,6 @@
-from experiment import Experiment
-from formulations.dbt import dbt_alpha_0, dbt
-from problems.closest_counterexample import random_points_unit_square_with_masses
+from opt_trans.experiment import Experiment
+from opt_trans.formulations.dbt import dbt_alpha_0, dbt
+from opt_trans.problems.instance_generators import random_points_unit_square_with_masses
 
 n_runs = 20
 n = 5

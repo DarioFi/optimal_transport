@@ -9,7 +9,7 @@ import tqdm
 import formulations.dbt
 import formulations.gmmx
 from experiment import Experiment
-from problems.closest_counterexample import random_points_unit_square_with_masses
+from problems.instance_generators import random_points_unit_square_with_masses
 
 
 # this class is a builder for the Experiment class

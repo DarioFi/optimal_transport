@@ -8,11 +8,6 @@ from pyomo.environ import Var
 import pyomo.environ as pyo
 from pyomo.opt import SolverFactory, UndefinedData
 
-from formulations.dbt import dbt
-from formulations.mmx import mmx_model
-from formulations.gmmx import gmmx
-from problems.closest_counterexample import random_points_unit_square, random_points_unit_square_with_masses, \
-    fixed_points
 
 
 def extract_results(model, result) -> Dict:
