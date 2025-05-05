@@ -6,10 +6,7 @@ import random
 
 import tqdm
 
-import formulations.dbt
-import formulations.gmmx
-from experiment import Experiment
-from problems.instance_generators import random_points_unit_square_with_masses
+from opt_trans.experiment import Experiment
 
 
 # this class is a builder for the Experiment class

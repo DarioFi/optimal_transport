@@ -9,7 +9,6 @@ import pyomo.environ as pyo
 from pyomo.opt import SolverFactory, UndefinedData
 
 
-
 def extract_results(model, result) -> Dict:
     """
     Extract the results from a pyomo model and a solver result
@@ -47,9 +46,15 @@ def extract_results(model, result) -> Dict:
             results_dict['time'] = None
 
         results_dict['wallclock_time'] = result.solver[0]["Wallclock time"]
+
+        if isinstance(results_dict['wallclock_time'], UndefinedData):
+            results_dict['wallclock_time'] = None
     else:
         results_dict['time'] = result.Problem[0]["cpu time"]
         results_dict['wallclock_time'] = result.Problem[0]["Wall time"]
+
+        if isinstance(results_dict['wallclock_time'], UndefinedData):
+            results_dict['wallclock_time'] = None
 
     vars_dict = {}
     for x in model.component_objects(Var):

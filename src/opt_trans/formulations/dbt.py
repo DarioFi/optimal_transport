@@ -285,7 +285,6 @@ def dbt_alpha_0(terminals, masses, alpha, *, use_bind_first_steiner, use_obj_lb,
         model.obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 
 
-    model.pprint()
 
     return model
 

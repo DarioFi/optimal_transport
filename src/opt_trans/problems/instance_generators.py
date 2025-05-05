@@ -109,7 +109,7 @@ def random_points_unit_square(n):
     return {"terminals": points}
 
 
-def random_points_unit_square_with_masses(n, alpha):
+def random_points_unit_square_with_masses(n, alpha=0):
     points = [[random(), random()] for _ in range(n)]
     # M = max(norm(x, y, range(len(points[0]))) for x in points for y in points if x != y)
     # points = [[x[j] / M for j in range(len(x))] for x in points]
