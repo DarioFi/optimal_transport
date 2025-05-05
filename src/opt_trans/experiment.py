@@ -9,7 +9,7 @@ import pyomo.environ as pyo
 from pyomo.opt import SolverFactory, UndefinedData
 
 
-def extract_results(model, result) -> Dict:
+def extract_results(model, result, solver) -> Dict:
     """
     Extract the results from a pyomo model and a solver result
     """
@@ -33,12 +33,8 @@ def extract_results(model, result) -> Dict:
 
     }
 
-    try:
-        name = result.solver.name.lower()
-    except:
-        name = "unknown"
-    # if solver is gurobi
-    if 'gurobi' in name or 'baron' not in name:
+        # if solver is gurobi
+    if 'gurobi' in solver or 'baron' not in solver:
         time = result.solver[0]["System time"]
         if not isinstance(time, UndefinedData):
             results_dict['time'] = time
@@ -115,7 +111,7 @@ class Experiment:
         else:
             results = solver.solve(formulation, tee=self.tee, options_string=self.solver_options)
 
-        results_serializable = extract_results(formulation, results)
+        results_serializable = extract_results(formulation, results, self.solver)
 
         return instance, results_serializable
 
