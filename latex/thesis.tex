@@ -343,10 +343,11 @@
 
     \section{Preliminaries theorems}
 
-    Here we define the theorems that we will use. We start from a series of definitions necessary to specify why we can
-    treat solutions to the branched transport problem as graphs.
-
-        {\color{red} Before giving each theorem, you should briefly say (in a couple of sentences) where/how each result is used.}
+    In this section a series of theorems and definitions are given that are fundamental for the understanding of the
+    problem and for the results presented in the next sections.
+    There are two core ideas. The first is that the solutions are locally finite graphs with a tree (or forest) structure, in other wors any loop or circuit
+    is suboptimal. The second is that each subset of the optiaml solution is itself optimal for its boundary conditions, a property
+    that is very useful to build counterexamples for structural results. 
 
     \begin{definition}
         \textbf{Loop-free}
@@ -419,35 +420,26 @@
             {\color{red} For example the following should be the key result for us; please put the theorem in and say a sentence about its importance for us.}
     \end{theorem}
 
+
     \begin{theorem}
         \textbf{Graph structure theorem \cite[Lemma 8.14]{Bernot}}
-        \cite[Theorem ?]{well_posedness}
-        The finite graph structure of optimal traffic plans holds for all $\alpha$.
-        todo: properly understand the assumptions
-
+    
         Let $\alpha \in \left( 1-\frac{1}{N}, 1 \right)$ and let $\chi$ be an optimal and normal traffic
         plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
         of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
         of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
 
-            {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
+        {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
 
+        \cite[Theorem ?]{well_posedness}
+        The finite graph structure of optimal traffic plans holds for all $\alpha$.
+        todo: properly understand the assumptions and extend this result
     \end{theorem}
 
-    \subsubsection{Eulerian formulation}
-
-    \begin{definition}
-        \textbf{Currents and graphs definition}
-        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
-        measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
-        $\theta$ is a scalar field.
-        We define the energy of a current as:
-        \begin{equation}
-            \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
-        \end{equation}
-
-        Here $E$ is contained in a countable union of curves of class $C^1$.
-    \end{definition}
+    Now that a finite graph structure is established, it is possible to ask questions about the topology of this graph.
+    One of the first question that can be asked, and extremely interesting for the computational aspect, regards the degree of the branching points, which is number of branches that can be connected to a vertex.
+    The degree problem has to be tackled with care, as it depends on the dimension of the space. The simplest case is the planar Euclidean Steiner tree, and a proof 
+    that for $\alpha > \frac{1}{2}$ the degree of a vertex is at most 3 is given~\cite{Bernot} but there is now the stronger following theorem:
 
     \begin{theorem}
         \textbf{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
@@ -455,27 +447,15 @@
         function $C$ is admissible (in our case $C(x) = |x|^\alpha$, which is admissible for $\alpha \in (0,1)$).
         If a traffic plan $P$ has a branching point of degree at least 4, then there exists
         a traffic plan $P'$ with strictly smaller value of Gilbert functional.
-
-
     \end{theorem}
 
-    \begin{remark}
-        TODO: check that this flows
-
-        Those bounds are tightly related to the dimensionality of the space. In particular, in dimension 2 a sharper result is obtained
-        in~\cite{TODO COSO CHE DIMOSTRA CHE E' 3}. That result is not expandible to higher dimensions as it uses ad hoc space properties.
-    \end{remark}
-
-    \begin{figure}[h]
-        \includegraphics[scale=0.5]{angle_bound_example}
-        \centering
-        \caption{Picture of the bound of lemma 12.2}
-        \label{fig:angle_bound_example}
-    \end{figure}
-
-    {\color{red} Are you going to use the results to improve the upper bound on the number of branch points in dimension $N \geq 3$. If so, then before stating the above lemma mention that it is tight, and that such a bound is not available in higher dimensions and that you will be using the next results to obtain such upper bounds.}
-
-
+    The proof of the above theorem uses a geometric argument on the angles between the branches that only works in dimension 2 and it seems
+    that it cannot be extended to higher dimensions without changing the core strategy. In the paper there is also a section dedicated
+    to showing an example of a traffic plan in dimension 3 with a branching point of degree 4.
+    The following theorems instead provide a bound on the angles between breanches that depends on the flows and on $\alpha$. It 
+    is not a sharp result as the problem of how many branches can be connected to a vertex with a minimum angle is still open, but it will
+    be analyzed in the results section and a sharper bound will be given (todo: verificare che poi flowi con la section dopo).
+    
     \begin{theorem}
         \textbf{Angles bound \cite[Lemma 12.2]{Bernot}}
         Consider a vertex $s$ and two vertices $p_1, p_2$ connected to it. Let $m_1, m_2$ be the masses of the two edges leaving
@@ -510,12 +490,23 @@
 
     \end{theorem}
 
-    {\color{red} Again you need to motivate the following, otherwise, it seems completely irrelevant. DONE}
+    The bounds on the degree are fundamental to solve the problem computationally, as they heavily restrict the number
+    of possible topologies of the optimal graph. This will be explained more deeply in the dedicated section, but briefly speaking
+    the runtime of the algorithm depends mainly on how many graph topologies it is able to prune based on properties of the
+    optimal solution or other algorithmic bounds (todo: flowa male).
+    
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{angle_bound_example}
+        \centering
+        \caption{Picture of the bound of lemma 12.2}
+        \label{fig:angle_bound_example}
+    \end{figure}
 
     \begin{theorem}
         \textbf{Spherical cap results \cite[Theorem 1 and 2]{Rankin}}
         \label{definition:spherical_cap_results} \\
-        The following result provides an upper bound on the number of branches in the optimal transport problem described
+        The following result is instrumental in order to provide an upper bound on the number of branches in the optimal transport problem described
         in~\ref{lemma:degree_definition}, once a minimum angle between branches is determined.\\
         Let $S_N$ denote the "surface" of an $N$-dimensional unit sphere in Euclidean space of
         $N$ dimensions. We may suppose that the sphere is centred at the origin of coordinates $O$
@@ -549,6 +540,22 @@
         \end{figure}
     \end{theorem}
 
+    \subsubsection{Eulerian formulation}
+
+    \begin{definition}
+        \textbf{Currents and graphs definition}
+        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
+        measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
+        $\theta$ is a scalar field.
+        We define the energy of a current as:
+        \begin{equation}
+            \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
+        \end{equation}
+
+        Here $E$ is contained in a countable union of curves of class $C^1$.
+    \end{definition}
+
+    TODO: equivalence of the formulations and of the energies
 
     \section{Literature review}
 
@@ -567,6 +574,7 @@
     Sota is Geosteiner.
     Insert papers on formulations and possible improvements. In particular add cuts
 
+    TODO: dici che NP hard non significa troppo su istanze random e fai esempio di SAT o magari cerca direttamente
 
     Currently the state-of-the-art is GeoSteiner~\cite[TODO]{TODO}.
     It works with a two stage optimization procedure, explained in details in~\cite{warme1998spanning} and~\cite{winter1997euclidean}, briefly it enumerates
@@ -1427,6 +1435,12 @@
     \end{table*}
 
     TODO: specify somewhere what "better objective" means
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{../experiments_scripts/baseline_runtime_performance.png}
+        \centering
+        \caption{TODO}
+    \end{figure}
 
 
     \subsection{Closest point improvement from Ouzia Pablo e Maculan}

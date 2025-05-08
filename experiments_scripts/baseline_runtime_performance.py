@@ -8,7 +8,7 @@ from opt_trans.formulations.relaxed_formulations import dbtq
 
 nm = ExperimentManager()
 
-N_THREADS = 12
+N_THREADS = 6
 MULTITHREADED = True
 
 nm.fixed_params['instance_generator'] = random_points_unit_square_with_masses
@@ -16,8 +16,8 @@ nm.grid_params['instance_arguments'] = [{'n': 4}, {'n': 5}, {'n': 6}, {'n': 7}]
 
 nm.baron_solver(300)
 
-nm.fixed_params['n_runs'] = 4
-nm.fixed_params['save_folder'] = 'run_logs/baseline_runtime_performance/'
+nm.fixed_params['n_runs'] = 20
+nm.fixed_params['save_folder'] = '../run_logs/baseline_runtime_performance/'
 
 nm.fixed_params['seed'] = 53267
 nm.fixed_params['tee'] = True
