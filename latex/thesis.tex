@@ -133,7 +133,7 @@
     \thispagestyle{empty}
 
 
-    \section{Note burocratiche per la Bocconi}
+    \section*{Note burocratiche per la Bocconi}
 
     un lavoro (tesi di ricerca) atto a produrre nuova conoscenza o nuove metodologie
     scientifiche, o finalizzato ad analizzare un problema e a fornirne adeguata soluzione.
@@ -171,6 +171,7 @@
     Corpo 12
     Pagine numerate
 
+    TODO: pensa a dove metterlo 
     \subsection{General notation}
 
     \begin{itemizeb}
@@ -242,7 +243,8 @@
         \item obbiettivo del lavoro (stabilità dei risultati e lato computazionale)
     \end{itemize}
 
-    \subsection{Historical part}
+    \subsection{Historical background}
+    
     TODO: FA DAVVERO PENA
 
     The aim of this work is to study the \textit{branched optimal transport} problem, a variation of the optimal transport problem.
@@ -264,7 +266,6 @@
     Nevertheless, all of the above choices lead to interesting paths that will be briefly explored in the literature review (todo: ha senso dirlo?)
     and this work will also juggle between different assumptions, particularly in the computational study where the problem is restricted to atomic measures.
 
-    TODO: la bibliografia ogni tanto non compila correttamente
 
     \subsection{Branched optimal transport}
 
@@ -279,10 +280,14 @@
 
     The first formulation of this idea is due to Gilbert~\cite[TODO]{TODO} which proposed it in TODO.
     Originally the problem was formulated as a variation of the minimum cost flow problem, so it was defined on a finite graph in a context of operational research.
+    
+    In the beginning of the 1900s complexity theory was born etc. 
     TODO: add 21 NP hard problems Karp reference and maybe write that you will expand on this in the section about computation
 
     A more abstract formulation will be presented here, as it is both useful and possible to derive most structural results in this general setting, up to some assumptions.
-    TODO: non so se aggiungere controllare a fine stesura. Later, for computational purposes, the analysis will be restricted to the discrete setting.
+    TODO: non so se aggiungere controllare a fine stesura. 
+    It is easy to recover the computational formulation of the Euclidean Steiner Tree by restricting to the discrete case, and it will be shown and discussed in~\ref{sec:DBT}.
+
     There are two ways to formulate the problem, called \textit{Lagrangian} and \textit{Eulerian} formulations, which are equivalent in the sense that they yield the same optimal transport plan
     when it exists. The Lagrangian formulation uses more basic mathematical machinery and is more intuitive, while the Eulerian formulation can leverage more advanced tools from geometric measure theory.
     Below both formulations with their many properties will be stated, together with the equivalence theorem. The notation and naming conventions used, together with the main lemmas are taken from~\cite[Chapter 1 - TODO]{Bernot}.
@@ -318,6 +323,7 @@
     With this formulation we can define the \textbf{energy} (or cost) of a parameterized traffic plan as:
     \begin{equation}
         E^{\alpha}(\mathbf{P}) = \int_{\mathbb{R}^N} |x|_\mathbf{P}^{\alpha} d \mathcal{H}^1(x)
+        \label{eq:energy}
     \end{equation}
 
     where $|x|_\mathbf{P}$ is the multiplicity of the point defined as:
@@ -340,8 +346,33 @@
         Also why do we care about this equality? Is there one formulation that we always use? do we need to define both?}
     \end{remark}
 
+    The key point is the supports of the paths taken by particles in optimal traffic plans exhibit a graph structure. This property is crucial for
+    the energy in~\ref{eq:energy} to be finite and suggests the use of 1-rectifiable sets and geometric measure theory to investigate the problem.
+    This leads to the Eulerian formulation of the problem.
 
-    \section{Preliminaries theorems}
+    \subsubsection{Eulerian formulation}
+
+    An equivalent formulation of the problem has been proposed by~\cite{paolini2006optimal}, using the language of 
+    geometric measure theory~\cite{simon2014introduction} \cite{federer2014geometric}.
+    \begin{definition}
+        \textbf{Currents and graphs definition}
+        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
+        measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
+        $\theta$ is a scalar field.
+        We define the energy of a current as:
+        \begin{equation}
+            \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
+        \end{equation}
+
+        Here $E$ is contained in a countable union of curves of class $C^1$.
+    \end{definition}
+
+    The equivalence of this formulation is summarized in \cite[Chapter 9]{Bernot} and first proved in \cite{paolini2006optimal}.
+    In particular any normal one-dimensional current with compact support can be represented as a traffic plan and vice versa.
+    This implies that both minimization problems attain the same minimum value and that there is a one-to-one correspondence between the minimizers. 
+
+    \section{Literature review}
+    \subsection{Preliminaries theorems}
 
     In this section a series of theorems and definitions are given that are fundamental for the understanding of the
     problem and for the results presented in the next sections.
@@ -428,8 +459,6 @@
         plan in $TP(\mu^+, \mu^-)$ such that $E^\alpha(\chi) < \infty$. Assume that the supports
         of $\mu^+$ and $\mu^-$ are at positive distance. Then,in any closed ball $B(x, r)$ outside
         of the support of $\mu^+$ and $\mu^-$ the traffic plan has the structure of a finite graph.
-
-        {\color{red} Why dont you say at every optimal traffic plan, a branching point has degree at most three?}
 
         \cite[Theorem ?]{well_posedness}
         The finite graph structure of optimal traffic plans holds for all $\alpha$.
@@ -540,132 +569,30 @@
         \end{figure}
     \end{theorem}
 
-    \subsubsection{Eulerian formulation}
+    
 
-    \begin{definition}
-        \textbf{Currents and graphs definition}
-        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
-        measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
-        $\theta$ is a scalar field.
-        We define the energy of a current as:
+    \subsection{More advanced results}
+    TODO: does it make sense? is there more literature review?
+
+    Using this formalism one of the most important open questions \cite[Chapter 15, question 1]{Bernot} has been solved in \cite{well_posedness} leading to the following theorem:
+
+    \begin{theorem}
+        \textbf{Stability of optimal transport paths} 
+        Let $\alpha \in (0,1)$ and let $\mu^+$ and $\mu^-$ be mutually singular positive measures on $\overline{B(0,R)}$ with same mass.
+        Let $\{ \mu^+_n \}$ and $\{ \mu^-_n \}$ be two sequences of positive measures with same mass for each $n$ satisfying:
         \begin{equation}
-            \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
+            \mu_n^\pm \overset{*}{\rightharpoonup} \mu^\pm
         \end{equation}
+        And assume that there exists $T_n$ minimizer for transporting $(\mu_n^+, \mu_n^-)$ such that:
+        \begin{equation}
+            \sup_n \mathcal{M}^\alpha(T_n) < +\infty
+        \end{equation}
+        Then, the non-empty family of subsequential weak-* limits of $T_n$ is contained in the set of minimizers of the problem 
+        of transporting $(\mu^+, \mu^-)$.
+    \end{theorem}
 
-        Here $E$ is contained in a countable union of curves of class $C^1$.
-    \end{definition}
-
-    TODO: equivalence of the formulations and of the energies
-
-    \section{Literature review}
-
-    On the theoretical side there are not that many useful papers for our results, obviously cite bernot de rosa and the other in the bernot references
-
-    TODO: probably it makes way more sense to put some of the results above in this section and move here only the most advanced
-
-    \subsection{Main known results}
-
-    \subsection{More advanced results (stability)}
-
-
-    \section{Literature review computazionale e numerica}
-
-    TODO: preambolo su come l'ottimizzazione avvenga in 2 step volendo e su come funziona geosteiner
-    Sota is Geosteiner.
-    Insert papers on formulations and possible improvements. In particular add cuts
-
-    TODO: dici che NP hard non significa troppo su istanze random e fai esempio di SAT o magari cerca direttamente
-
-    Currently the state-of-the-art is GeoSteiner~\cite[TODO]{TODO}.
-    It works with a two stage optimization procedure, explained in details in~\cite{warme1998spanning} and~\cite{winter1997euclidean}, briefly it enumerates
-    possible topologies, called FST (full steiner trees) for subsets of the graph and then concatenates them to form a full solution.
-    As noted in the paper this approach is computationally exponential but on random instances it seems to scale well (todo: add graph of performance).
-
-    \cite{warme2000exact} provides a follow-up on the algorithm with better heuristcs and manages to solve up to 2000 terminals.
-
-    \cite{wang2008exact} presents a complexity theory analysis of the problem, improving the running time to $O(2.684^n)$ for the Euclidean Steiner tree problem.
-    It is useful to note that better asymptotic bounds are not translated into better performance, for instance the best polynomial approximation algorithm
-    for the ESTP is due to~\cite{byrka2010improved} with an approximation factor of $1.39$. In practice this factor is quite high and for practical
-    application it is possible to achieve good approximations in a very short time (although without a guarantee on the approximation factor).
-
-    It is also worth noting approximating within a factor of $96/95$ is NP-hard, as proved in~\cite{chlebik2008steiner}.
-
-
-    \cite{warme2000exact} provides a follow-up on the algorithm with better heuristcs and manages to solve up to 2000 terminals.
-
-    \cite{wang2008exact} gives an overview of
-
-    \subsection{Discrete branched transport}
-
-    The Discrete Branched Transport (DBT) is a special case of branched transport
-    where the measures $\mu^+$ and $\mu^-$ are finite and atomic.
-
-    Formally, we can define the DBT as follows: \\
-    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
-    corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
-    \begin{itemize}
-        \item $\sum_{i=1}^{n} m_i = 0$
-        \item $P^+$ is the set of terminals with positive mass (sources) and $P^-$ is the set of terminals with negative mass (sinks)
-    \end{itemize}
-
-    the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
-    consists of Steiner points
-        {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?
-    This terminology is used in the euclidean steiner tree problem and in the other formulation (MMX). Should I sttle for one and just say that they are synonim?
-    }
-
-    $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
-    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
-    The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
-    such that the following cost function is minimized:
-    \[
-        \sum_{(x,y) \in E} f_{xy}^\alpha \|x - y\|
-    \]
-    \begin{remark}
-        It follows from~\ref{lemma:loop_free} that the optimal solution of a DBT problem is a union of trees.
-        In the special case where there is only one source then the optimal solution is a tree becuase of the connectivity
-        of the solution.
-    \end{remark}
-    \begin{remark}
-
-        The problem remains unchanged if the signs of the masses are inverted, meaning that sources and sinks can be swapped.
-        Therefore, it is sufficient to analyze either the case of a single source or a single sink, as they are the same problem.
-
-    \end{remark}
-
-    TODO: remark difficulties for multiple sources
-
-    \subsection{Euclidean Steiner Tree problem}
-
-    The ESTP is a special case of DBT, where  $\alpha=0$ and only a single source is present.
-    This implies that the cost function is the sum of the lengths of the edges, and it does not take into account the flow on the edges.
-    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
-    The objective function is then:
-    \begin{equation}
-        \sum_{(x,y) \in E} \|x - y\|
-    \end{equation}
-    {\color{red} Please fix the notation.}
-    This special case has been extensively studied, especially computationally,
-    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}.
-
-    \subsection{Solver choice}
-
-    TODO Explain the current landscape of solvers and why we chose the one we did.
-    TODO Maybe talk about how they work and do some literature review on this. We will need it later to explain the results
-    TODO: should this be in this section??
-
-    In order to evaluate the performance of a specific formulation it is necessary to fix both a solver and possibly a specific hardware.
-    There are many numerical solvers available, both commercial and open-source, each of them with different features and performance. The latter is
-    inherently tied to how much the heuristics of the solver are well suited for the problem: a general MNLIP problem is NP-hard, thus, as far as currently
-    known, there is no polynomial time algorithm to solve it but many heuristics and approximation can yield very good performances.
-    For the experiments BARON~\cite[TODO: ]{khajavirad2018hybrid}~\cite[TODO]{sahinidis1996baron} has been chosen as a solver. The main reason is the capability of handling
-    non-convex and non-differentiable constraints and objective functions without numerical problems. This allows for handling nth-roots and
-    other non-linear function easily and permits to focus on the substance of the problem rather than on the numerical stability and
-    on making the formulation respect precise rules.
-    For certain experiments GUROBI~\cite[TODO: ]{gurobi} was also used, but it yield a worse overall performance and it is more restrictive
-    on the type of constraints permitted. In particular, GUROBI has allowed non-convex constraints only since version 11 (todo: insert date) and
-    it is still a somewhat experimental feature (todo: check this).
-    The main drawback of BARON is that it is a commercial solver and thus it is not possible to share the code used for the experiments.
+    TODO: per il brodo si può aggiungere le definizioni di convergenza e correnti
+    
 
 
     \section{Miei risultati teorici (con anche controesempi per spiegare le difficoltà numeriche)}
@@ -898,7 +825,7 @@
 
         todo: first/second bound is an awful name
 
-        \subsubsection{Optimizing the first bound}
+        \subsubsection*{Optimizing the first bound}
         We aim to maximize:
         \begin{equation}
             f(m_i, m_j) = \frac{(m_i + m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
@@ -920,7 +847,7 @@
             \item If $\alpha > 1/2$ we have that the function is increasing in $m \in [0,1]$. The maximum is achieved when $m = 1$.
         \end{itemize}
 
-        \subsubsection{Case $\alpha \le 1/2$}
+        \subsubsection*{Case $\alpha \le 1/2$}
         In the first case, it is sufficient to take
         \begin{align}
             & m_i = \min_{k \in M} |m_k| \\
@@ -934,13 +861,13 @@
             \label{fig:first_bound_a_le_1-2}
         \end{figure}
 
-        \subsubsection{Case $\alpha \ge 1/2$}
+        \subsubsection*{Case $\alpha \ge 1/2$}
 
         The definition~\ref{eq:ratio_definition} is just a more compact way to write the solution to the optimization problem
         of finding the maximum ratio of two masses.
 %
 
-        \subsubsection{Optimizing the second bound}
+        \subsubsection*{Optimizing the second bound}
         We are aiming at maximizing the function (see figure~\ref{fig:second_bound}):
         \begin{equation}
             f(m_i, m_j) = \frac{(m_i - m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
@@ -1082,7 +1009,132 @@
     TODO: maybe add the new way to propose a contradiction as the set with existence that i have saved as a picture of a whiteboard
 
 
-    \section{Risultati numerici}
+    \section{Computational problem}
+
+    \subsection{Problem definition}
+
+
+
+    \subsection{Discrete branched transport}
+    \label{sec:DBT}
+
+    The Discrete Branched Transport (DBT) is a special case of branched transport
+    where the measures $\mu^+$ and $\mu^-$ are finite and atomic.
+
+    Formally, we can define the DBT as follows: \\
+    Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
+    corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
+    \begin{itemize}
+        \item $\sum_{i=1}^{n} m_i = 0$
+        \item $P^+$ is the set of terminals with positive mass (sources) and $P^-$ is the set of terminals with negative mass (sinks)
+    \end{itemize}
+
+    the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
+    consists of Steiner points
+        {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?
+    This terminology is used in the euclidean steiner tree problem and in the other formulation (MMX). Should I sttle for one and just say that they are synonim?
+    }
+
+    $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
+    $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
+    The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
+    such that the following cost function is minimized:
+    \[
+        \sum_{(x,y) \in E} f_{xy}^\alpha \|x - y\|
+    \]
+    \begin{remark}
+        It follows from~\ref{lemma:loop_free} that the optimal solution of a DBT problem is a union of trees.
+        In the special case where there is only one source then the optimal solution is a tree becuase of the connectivity
+        of the solution.
+    \end{remark}
+    \begin{remark}
+        The problem remains unchanged if the signs of the masses are inverted, meaning that sources and sinks can be swapped.
+        Therefore, it is sufficient to analyze either the case of a single source or a single sink, as they are the same problem.
+    \end{remark}
+
+    TODO: remark difficulties for multiple sources
+
+    \subsection{Euclidean Steiner Tree problem}
+
+    The ESTP is a special case of DBT, where  $\alpha=0$ and only a single source is present.
+    This implies that the cost function is the sum of the lengths of the edges, and it does not take into account the flow on the edges.
+    In this case, masses are irrelevant and the optimal solution is a tree connecting all the terminals.
+    The objective function is then:
+    \begin{equation}
+        \sum_{(x,y) \in E} \|x - y\|
+    \end{equation}
+    {\color{red} Please fix the notation.}
+    This special case has been extensively studied, especially computationally,
+    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}.
+
+
+    \subsection{Literature review}
+
+    TODO: preambolo su come l'ottimizzazione avvenga in 2 step volendo e su come funziona geosteiner
+    Sota is Geosteiner.
+    Insert papers on formulations and possible improvements. In particular add cuts
+
+    Currently the state-of-the-art is GeoSteiner~\cite[TODO]{TODO}.
+    It works with a two stage optimization procedure, explained in details in~\cite{warme1998spanning} and~\cite{winter1997euclidean}, briefly it enumerates
+    possible topologies, called FST (full steiner trees) for subsets of the graph and then concatenates them to form a full solution.
+    As noted in the paper this approach is computationally exponential but on random instances it seems to scale well (todo: add graph of performance).
+
+    \cite{warme2000exact} provides a follow-up on the algorithm with better heuristcs and manages to solve up to 2000 terminals.
+
+    \cite{wang2008exact} presents a complexity theory analysis of the problem, improving the running time to $O(2.684^n)$ for the Euclidean Steiner tree problem.
+    It is useful to note that better asymptotic bounds are not translated into better performance, for instance the best polynomial approximation algorithm
+    for the ESTP is due to~\cite{byrka2010improved} with an approximation factor of $1.39$. In practice this factor is quite high and for practical
+    application it is possible to achieve good approximations in a very short time (although without a guarantee on the approximation factor).
+
+    It is also worth noting that even approximating within a factor of $96/95$ is NP-hard, as proved in~\cite{chlebik2008steiner}.
+    
+
+    In general the NP-hardness of the problem regards only worst-case instances, in practice there are plenty of examples of NP-hard problems
+    that can become easy on random instances (even when sampled in very reasonable ways), see for example the SAT in some regimes is trivial to solve~\cite{zecchinaparisi}.
+    Another famous case and even more fitting is the Linear Programming case: many software package run a simplex algorithm, despite the fact that
+    there are pathological instances with exponentially many vertices on which the simplex algorithm takes exponential time~\cite{bertsimas1997introduction}.
+
+    For what concerns the Mixed Integer Non Linear Programming (MINLP) formulations, \cite{mmx} proposes a formulation which will be further analyzed in \ref{sec:MMX}.
+    The authors propose a series of techniques to get around the point of non-differentiability of the eucllidean distance around $0$, but modern solvers, in particular BARON,
+    are able to handle this case without any problem. 
+    They also propose the same geometric cut as in~\cite{}
+
+    In~\cite{pinto2020new} a series of different formulations are proposed and compared on both random instances and highly symmetric instances. The simplest formulation
+    presented has the same core structure as the one presented in \ref{sec:MMX} and will serve as a basis for this work. The authors also propose three improvements
+    that are formulation-agnostic which are: geometric cuts (implemented in \ref{TODO}), tree isomorphism elimination and a symmetry elimination technique which is more 
+    aimed at non-random instances. TODO: commenta in base anche ai risultati degli esperimenti.
+
+    
+
+
+    \subsection{Solver choice}
+
+    TODO Maybe talk about how they work and do some literature review on this. We will need it later to explain the results
+
+    In order to evaluate the performance of a specific formulation it is necessary to fix both a solver and possibly a specific hardware.
+    There are many numerical solvers available, both commercial and open-source, each of them with different features and performance. The latter is
+    inherently tied to how much the heuristics of the solver are well suited for the problem: a general MNLIP problem is NP-hard, thus, as far as currently
+    known, there is no polynomial time algorithm to solve it but many heuristics and approximation can yield very good performances.
+    For the experiments BARON~\cite[TODO: ]{khajavirad2018hybrid}~\cite[TODO]{sahinidis1996baron} has been chosen as a solver. The main reason is the capability of handling
+    non-convex and non-differentiable constraints and objective functions without numerical problems. This allows for handling nth-roots and
+    other non-linear function easily and permits to focus on the substance of the problem rather than on the numerical stability and
+    on making the formulation respect precise rules.
+    For certain experiments GUROBI~\cite[TODO: ]{gurobi} was also used, but it yield a worse overall performance and it is more restrictive
+    on the type of constraints permitted. In particular, GUROBI has allowed non-convex constraints only since version 11 (todo: insert date) and
+    it is still a somewhat experimental feature (todo: check this).
+    The main drawback of BARON is that it is a commercial solver and thus it is not possible to share the code used for the experiments.
+
+    The techniques used by BARON (and similarly by other solvers) are based on the branch-and-bound algorithm~\cite{conforti2014integer}.
+    Crucially, in order to reduce the search space local searches and range reductions are performed. todo: cite and explain
+
+    For local searches, an overview with the most popular methods is given in the OR-tools manual~\cite{or-tools-user-manual}. The list
+    contains the most common methods along with more complex algorithms, such as simualted annealing and genetic algorithms. The latter are
+    not usually implemented in solvers as they are more complex to tune and may require a lot of time to converge. For the specific problem of
+    Steiner trees, they have been used as standalone algorithms for the Euclidean Steiner Tree (\cite{grimwood1994euclidean}, \cite{kapsalis1993solving}) with good results, but
+    it is not possible to extract optimality guarantees from them. 
+
+
+    \section{Mathematical formulations}
 
     \subsection{Defining the mathematical formulations}
 
@@ -1149,7 +1201,7 @@
         \item general proof
     \end{enumerate}
 
-    \subsection{Step 1}
+    \subsection*{Step 1}
     We define a function $\phi$ that maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|} \times \R^{|E|}$ to a oriented weighted graph in $\mathbb{R}^N$ as follows:
 
     \begin{enumerate}
@@ -1185,7 +1237,7 @@
     This means that to prove the equivalence we only need to show that for any optimal solution in DBT
     there is a corresponding optimal solution of the formulation that maps to it.
 
-    \subsection{Step 2}
+    \subsection*{Step 2}
     By calling $Formulations$ and $Graphs$ the feasible regions of the MINLP formulation and DBT problem respectively, we show that the following diagram commutes:
     \[
         \begin{tikzcd}
@@ -1200,7 +1252,7 @@
     The fact that there could be a degeneracy is not important as those points have $0$ distance and do not contribute to the
     objective value.
 
-    \subsection{Step 3}
+    \subsection*{Step 3}
 
     We now show that there is a feasible solution to the MNILP that maps to a connected optimal solution of DBT where terminals are
     leaves and branching points have degree 3.
@@ -1222,7 +1274,7 @@
     In order to satisfy the connectivity constraint~\ref{dbt_form:connectedness} we have to re-order
     the steiner points in a topological order, which exists as it is a tree.
 
-    \subsection{Step 4}
+    \subsection*{Step 4}
     Now we tackle the case where the terminals can have degree higher than $1$ while still assuming that the branching points have
     degree $3$.
     We will show that we can add more degenerate steiner points to the graph until we reduce it to the case where all terminals are leaves.
@@ -1240,7 +1292,7 @@
     Once the topology is fixed, the flows are uniquely determined by the masses on the terminals. We might just have to
     re-order the Steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
 
-    \subsection{Step 5}
+    \subsection*{Step 5}
 
     We can proceed as in step 4, for each branching point with degree $d(i)$ we can add $d(i) - 3$ degenerate steiner points
     and connect them in a chain. We can then re-order the steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
@@ -1281,6 +1333,7 @@
     \end{remark}
 
     \subsection{MMX}
+    \label{sec:MMX}
     In the case where $\alpha=0$ we can remove all the flows and we are left with the original formulation for the euclidean
     Steiner tree due to~\cite[Section 2]{mmx}
     \begin{align}

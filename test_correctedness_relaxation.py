@@ -1,7 +1,7 @@
-from formulations.relaxed_formulations import dbt_relaxed_alpha0
-from formulations.dbt import dbt_alpha_0
-from experiment import Experiment
-from problems.closest_counterexample import random_points_unit_square_with_masses
+from opt_trans.formulations.relaxed_formulations import dbtq
+from opt_trans.formulations.dbt import dbt_alpha_0
+from opt_trans.experiment import Experiment
+from opt_trans.problems.instance_generators import random_points_unit_square_with_masses
 
 n_runs = 10
 n_threads = 6
@@ -13,7 +13,7 @@ solver_opt = "maxtime=60 EpsA=1e-5"
 
 print("Running full solutions no cut")
 exp = Experiment(
-    formulation=dbt_relaxed_alpha0,
+    formulation=dbtq,
     solver="baron",
     solver_options=solver_opt,
     instance_generator=random_points_unit_square_with_masses,
@@ -33,10 +33,9 @@ exp = Experiment(
 
 data_no_cut = exp.run(multithreaded=True, n_threads=n_threads)
 
-
 print("Running full solutions cut")
 exp = Experiment(
-    formulation=dbt_relaxed_alpha0,
+    formulation=dbtq,
     solver="baron",
     solver_options=solver_opt,
     instance_generator=random_points_unit_square_with_masses,
@@ -56,7 +55,6 @@ exp = Experiment(
 
 data_cut = exp.run(multithreaded=True, n_threads=n_threads)
 
-
 # assert that the solutions are the same
 
 for i in range(n_runs):
@@ -72,9 +70,8 @@ for i in range(n_runs):
     else:
         print(f"{data_no_cut[i]['results']['lower_bound']} == {data_cut[i]['results']['lower_bound']}")
         if abs(data_no_cut[i]['results']['lower_bound'] - data_cut[i]['results']['lower_bound']) > 1e-5 or \
-            abs(data_no_cut[i]['results']['upper_bound'] - data_cut[i]['results']['upper_bound']) > 1e-5:
+                abs(data_no_cut[i]['results']['upper_bound'] - data_cut[i]['results']['upper_bound']) > 1e-5:
             print("Wrong!")
-
 
 print(f"Average time no cut: {sum([x['results']['time'] for x in data_no_cut]) / n_runs}")
 print(f"Average time cut: {sum([x['results']['time'] for x in data_cut]) / n_runs}")

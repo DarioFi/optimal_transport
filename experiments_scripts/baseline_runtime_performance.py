@@ -23,6 +23,36 @@ nm.fixed_params['seed'] = 53267
 nm.fixed_params['tee'] = True
 
 # add other too
+#
+# nm.fixed_params['experiment_name'] = 'baseline_runtime_performance_dbt'
+# nm.fixed_params['formulation'] = dbt_alpha_0
+# nm.fixed_params['formulation_arguments'] = {
+#     'use_bind_first_steiner': False,
+#     'use_convex_hull': False,
+#     'use_obj_lb': False,
+#     'use_better_obj': True
+# }
+#
+# nm.build_experiments()
+# nm.run_save(MULTITHREADED, N_THREADS, exp_tee=True)
+#
+# nm.fixed_params['experiment_name'] = 'baseline_runtime_performance_dbtq'
+# nm.fixed_params['formulation'] = dbtq
+#
+# nm.fixed_params['formulation_arguments'] = {
+#     'relax_y': False,
+#     'relax_w': False,
+#     'disjunctive_w': False,
+#     'use_geometric_cut_50': False,
+#     'angles_constraint': False,
+#     'starting_position': None
+# }
+#
+# nm.build_experiments()
+# nm.run_save(MULTITHREADED, N_THREADS, exp_tee=True)
+
+
+dbt_alpha_0.__name__ = 'dbt_alpha_0_NO_BO'
 
 nm.fixed_params['experiment_name'] = 'baseline_runtime_performance_dbt'
 nm.fixed_params['formulation'] = dbt_alpha_0
@@ -30,22 +60,7 @@ nm.fixed_params['formulation_arguments'] = {
     'use_bind_first_steiner': False,
     'use_convex_hull': False,
     'use_obj_lb': False,
-    'use_better_obj': True
-}
-
-nm.build_experiments()
-nm.run_save(MULTITHREADED, N_THREADS, exp_tee=True)
-
-nm.fixed_params['experiment_name'] = 'baseline_runtime_performance_dbtq'
-nm.fixed_params['formulation'] = dbtq
-
-nm.fixed_params['formulation_arguments'] = {
-    'relax_y': False,
-    'relax_w': False,
-    'disjunctive_w': False,
-    'use_geometric_cut_50': False,
-    'angles_constraint': False,
-    'starting_position': None
+    'use_better_obj': False
 }
 
 nm.build_experiments()

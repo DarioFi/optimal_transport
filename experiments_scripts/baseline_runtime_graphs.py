@@ -38,6 +38,17 @@ def plot_data(data, formulation_name, ax, x_shift):
             else:
                 xytext = (x_shift, 10)
 
+            if formulation_name == 'dbt_alpha_0_NO_BO' and n == 7:
+                xytext = (x_shift, -10)
+
+
+            match formulation_name:
+                case 'dbt_alpha_0':
+                    color = 'C0'
+                case 'dbtq':
+                    color = 'C1'
+                case 'dbt_alpha_0_NO_BO':
+                    color = 'C2'
             ax.annotate(f"{succ}/{tot} converged",
                         (n, mean_t),
                         textcoords="offset points",
@@ -45,17 +56,18 @@ def plot_data(data, formulation_name, ax, x_shift):
                         ha='center',
                         va='bottom',
                         fontsize=12,
-                        color=('C0' if formulation_name == 'dbt_alpha_0' else 'C1'),
+                        color=color,
                         bbox=dict(boxstyle="round,pad=0.3",
                                   fc="white", alpha=0.7,
-                                  ec=('C0' if formulation_name == 'dbt_alpha_0' else 'C1'))
+                                  ec=color)
                         )
 
     # sort by n
 
     goodnames = {
-        'dbt_alpha_0': 'DBT',
-        'dbtq': 'DBTQ'
+        'dbt_alpha_0': 'DBT with BO',
+        'dbtq': 'DBTQ',
+        'dbt_alpha_0_NO_BO': 'DBT'
     }
 
     xs, ys, es = zip(*sorted(zip(n_values, times, stds)))
@@ -69,6 +81,7 @@ def plot_all_data(data):
     # for alpha=0, shift left by -10 points; for dbtq, shift right +10
     plot_data(data, 'dbt_alpha_0', ax, x_shift=-10)
     plot_data(data, 'dbtq', ax, x_shift=+10)
+    plot_data(data, 'dbt_alpha_0_NO_BO', ax, x_shift=0)
 
     ax.set_xlabel('n', fontsize=14)
     ax.set_ylabel('time (s)', fontsize=14)
@@ -78,7 +91,7 @@ def plot_all_data(data):
     ax.legend(fontsize=12)
     fig.tight_layout()
     plt.show()
-    fig.savefig('baseline_runtime_performance_pretty.png', dpi=300)
+    fig.savefig('baseline_runtime_performance.png', dpi=300)
 
 
 plot_all_data(data)
