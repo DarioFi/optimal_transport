@@ -1,0 +1,1502 @@
+[
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.7742960066714916,
+                    0.4817031615729843
+                ],
+                [
+                    0.5098808070020264,
+                    0.13761864558157666
+                ],
+                [
+                    0.03438120417670043,
+                    0.9702178827482376
+                ],
+                [
+                    0.9381908004313767,
+                    0.49135301810056087
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.009334824360452468,
+                0.5001412680119187,
+                0.4905239076276289
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.433656637872471,
+            "lower_bound": 1.4336566378724709,
+            "upper_bound": 1.4336566378724709,
+            "iterations": "13",
+            "time": 0.66,
+            "wallclock_time": 0.66,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.5852265736181383,
+                    "(4, 1)": 0.42915463309643925,
+                    "(5, 0)": 0.7742960066714916,
+                    "(5, 1)": 0.4817031615729843
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305901",
+        "seed": 44968,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.9603188667741193,
+                    0.03972447186932937
+                ],
+                [
+                    0.4057411011177565,
+                    0.2573160439082651
+                ],
+                [
+                    0.8296943661430306,
+                    0.5664818358789839
+                ],
+                [
+                    0.4065090308474061,
+                    0.06439209132846746
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.8108553711915152,
+                0.10768536520384386,
+                0.0814592636046409
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.14123604878406,
+            "lower_bound": 1.14123604878406,
+            "upper_bound": 1.14123604878406,
+            "iterations": "34",
+            "time": 0.74,
+            "wallclock_time": 0.75,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.45069210128033194,
+                    "(4, 1)": 0.20898258655959367,
+                    "(5, 0)": 0.7406022919665561,
+                    "(5, 1)": 0.2756309870179902
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305919",
+        "seed": 99874,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.6634496769330157,
+                    0.15287009439988775
+                ],
+                [
+                    0.42029267084949806,
+                    0.7742337806672761
+                ],
+                [
+                    0.8751701837294282,
+                    0.4208313369802035
+                ],
+                [
+                    0.18897402625880588,
+                    0.9068189372815265
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.42900399223196595,
+                0.4688072142908182,
+                0.10218879347721584
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.1540574827478904,
+            "lower_bound": 1.1540574827478904,
+            "upper_bound": 1.1540574827478904,
+            "iterations": "15",
+            "time": 0.44,
+            "wallclock_time": 0.45,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.7477238013724608,
+                    "(4, 1)": 0.3963183396489344,
+                    "(5, 0)": 0.42029267084949806,
+                    "(5, 1)": 0.7742337806672761
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305923",
+        "seed": 32442,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.031012782861508992,
+                    0.13310356645631138
+                ],
+                [
+                    0.9814173177263757,
+                    0.21571782773407722
+                ],
+                [
+                    0.6589001914369584,
+                    0.8968102048022021
+                ],
+                [
+                    0.580024936052611,
+                    0.8851517155165012
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.13500870774056892,
+                0.5083641261921472,
+                0.3566271660672839
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.6082632928620162,
+            "lower_bound": 1.608263292862016,
+            "upper_bound": 1.608263292862016,
+            "iterations": "19",
+            "time": 0.63,
+            "wallclock_time": 0.63,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.5993138246214837,
+                    "(4, 1)": 0.44645059980305196,
+                    "(5, 0)": 0.6076010909542535,
+                    "(5, 1)": 0.8685284408302025
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305925",
+        "seed": 67454,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.4314847574513001,
+                    0.15794609287537043
+                ],
+                [
+                    0.6992010062793096,
+                    0.6633134509336325
+                ],
+                [
+                    0.5793981592465091,
+                    0.7658215878844563
+                ],
+                [
+                    0.7192384763406711,
+                    0.27088654212590146
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.448854388657846,
+                0.042993376814734065,
+                0.50815223452742
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.85625689528107,
+            "lower_bound": 0.8562568952810701,
+            "upper_bound": 0.8562568952810701,
+            "iterations": "58",
+            "time": 0.45,
+            "wallclock_time": 0.45,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.6992010062793096,
+                    "(4, 1)": 0.6633134509336324,
+                    "(5, 0)": 0.6853254206793141,
+                    "(5, 1)": 0.2921301514877643
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305928",
+        "seed": 55086,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.8530251234438256,
+                    0.8667925260160967
+                ],
+                [
+                    0.6894787504179506,
+                    0.2642440771410295
+                ],
+                [
+                    0.35630536078565556,
+                    0.03776987597492287
+                ],
+                [
+                    0.088927425455406,
+                    0.6503576850171554
+                ]
+            ],
+            "masses": [
+                -0.9999999999999999,
+                0.5074625500788064,
+                0.26815576725773016,
+                0.2243816826634634
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.6175574947107167,
+            "lower_bound": 1.617557494710717,
+            "upper_bound": 1.617557494710717,
+            "iterations": "31",
+            "time": 0.69,
+            "wallclock_time": 0.69,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.6002133793684694,
+                    "(4, 1)": 0.2871470271414577,
+                    "(5, 0)": 0.5299963038876113,
+                    "(5, 1)": 0.5371792489632928
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305930",
+        "seed": 53894,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.1257205771133525,
+                    0.7010480035537361
+                ],
+                [
+                    0.4862018339122979,
+                    0.4227387343241249
+                ],
+                [
+                    0.9351420856061484,
+                    0.08392747338444062
+                ],
+                [
+                    0.18020100868979427,
+                    0.044693212278815064
+                ]
+            ],
+            "masses": [
+                -0.9999999999999999,
+                0.4757973507160781,
+                0.32654813102908536,
+                0.19765451825483646
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.4693104293847012,
+            "lower_bound": 1.4693104293847012,
+            "upper_bound": 1.4693104293847012,
+            "iterations": "23",
+            "time": 0.83,
+            "wallclock_time": 0.9,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.34055223608191193,
+                    "(4, 1)": 0.4071917229228424,
+                    "(5, 0)": 0.48620183391229793,
+                    "(5, 1)": 0.4227387343241249
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305932",
+        "seed": 12059,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.02769795500424599,
+                    0.8845744305668993
+                ],
+                [
+                    0.20155184819636995,
+                    0.1983116154137715
+                ],
+                [
+                    0.878693299330451,
+                    0.10232760851109424
+                ],
+                [
+                    0.30877541057275404,
+                    0.5264099585508527
+                ]
+            ],
+            "masses": [
+                -0.9999999999999999,
+                0.40050478104682635,
+                0.07601895996984119,
+                0.5234762589833324
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.4291450706778495,
+            "lower_bound": 1.4291450706778495,
+            "upper_bound": 1.4291450706778495,
+            "iterations": "11",
+            "time": 0.79,
+            "wallclock_time": 0.81,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.34189722295269914,
+                    "(4, 1)": 0.31097253139935077,
+                    "(5, 0)": 0.30877541057275404,
+                    "(5, 1)": 0.5264099585508527
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305933",
+        "seed": 86419,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.8774296053533213,
+                    0.831959391585872
+                ],
+                [
+                    0.08960351920048248,
+                    0.41032132787534104
+                ],
+                [
+                    0.5893660094795863,
+                    0.5060173430922879
+                ],
+                [
+                    0.193085479669452,
+                    0.560067616757871
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.26099811047224236,
+                0.2559319622830978,
+                0.48306992724465986
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.0167803013830752,
+            "lower_bound": 1.0167803013830752,
+            "upper_bound": 1.0167803013830752,
+            "iterations": "17",
+            "time": 0.82,
+            "wallclock_time": 0.83,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.5893660094795863,
+                    "(4, 1)": 0.5060173430922879,
+                    "(5, 0)": 0.1962037858349037,
+                    "(5, 1)": 0.5528125473522351
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305935",
+        "seed": 34204,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.8621471920903848,
+                    0.38157229702179984
+                ],
+                [
+                    0.6560913489952493,
+                    0.26652185513313786
+                ],
+                [
+                    0.878447794124407,
+                    0.801667749786957
+                ],
+                [
+                    0.2878285879001907,
+                    0.29451916863155225
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.3554732945800439,
+                0.3752064308522964,
+                0.2693202745676598
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.0257362473188198,
+            "lower_bound": 1.0257362473188198,
+            "upper_bound": 1.0257362473188198,
+            "iterations": "19",
+            "time": 0.67,
+            "wallclock_time": 0.7,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.6560913489952493,
+                    "(4, 1)": 0.26652185513313786,
+                    "(5, 0)": 0.8621471920903848,
+                    "(5, 1)": 0.3815722970217999
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305941",
+        "seed": 91172,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.9348019665408028,
+                    0.1806043121271277
+                ],
+                [
+                    0.959670047338154,
+                    0.590817157659615
+                ],
+                [
+                    0.730874701783394,
+                    0.14097367355409396
+                ],
+                [
+                    0.9205901105487495,
+                    0.32905404241879666
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.12521150733642303,
+                0.5555467529156133,
+                0.31924173974796366
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.6136499721092659,
+            "lower_bound": 0.6136499721092659,
+            "upper_bound": 0.6136499721092659,
+            "iterations": "37",
+            "time": 0.92,
+            "wallclock_time": 0.93,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.9017499046943026,
+                    "(4, 1)": 0.2071506603091107,
+                    "(5, 0)": 0.9205901105487494,
+                    "(5, 1)": 0.3290540424187967
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305943",
+        "seed": 26034,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.012572771483518763,
+                    0.3004596948462642
+                ],
+                [
+                    0.5806354169199044,
+                    0.3939042987196888
+                ],
+                [
+                    0.2508792153105892,
+                    0.3558838995329503
+                ],
+                [
+                    0.7375887588161808,
+                    0.4195026150715696
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.757266740625972,
+                0.059736065385241746,
+                0.18299719398878628
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.7356346537595885,
+            "lower_bound": 0.7356346537595885,
+            "upper_bound": 0.7356346537595885,
+            "iterations": "11",
+            "time": 0.35,
+            "wallclock_time": 0.36,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.5806354169199044,
+                    "(4, 1)": 0.3939042987196888,
+                    "(5, 0)": 0.2508792153105892,
+                    "(5, 1)": 0.35588389953295035
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305945",
+        "seed": 43902,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.06724892951000783,
+                    0.03478392137240838
+                ],
+                [
+                    0.02084708274545999,
+                    0.8440176790352969
+                ],
+                [
+                    0.3047470554059716,
+                    0.06778922189905778
+                ],
+                [
+                    0.40109373826720385,
+                    0.08577275368983295
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.29326523395233994,
+                0.6402993968154314,
+                0.06643536923222872
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.1150441176117762,
+            "lower_bound": 1.1150441176117762,
+            "upper_bound": 1.1150441176117762,
+            "iterations": "21",
+            "time": 0.54,
+            "wallclock_time": 0.56,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.3047470554059716,
+                    "(4, 1)": 0.06778922189905778,
+                    "(5, 0)": 0.1617163592553246,
+                    "(5, 1)": 0.11682970383349162
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305946",
+        "seed": 18364,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.8149016479579616,
+                    0.8499452936505201
+                ],
+                [
+                    0.5401194378327313,
+                    0.7688405332362787
+                ],
+                [
+                    0.9169272096960422,
+                    0.6347695032398214
+                ],
+                [
+                    0.015800432642271267,
+                    0.358896732764138
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.14174818478005796,
+                0.44279261771615636,
+                0.4154591975037857
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.1814224440809828,
+            "lower_bound": 1.1814224440809828,
+            "upper_bound": 1.1814224440809828,
+            "iterations": "15",
+            "time": 0.35,
+            "wallclock_time": 0.36,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.7933753374870642,
+                    "(4, 1)": 0.7993419329754036,
+                    "(5, 0)": 0.5401194378327312,
+                    "(5, 1)": 0.7688405332362788
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305948",
+        "seed": 516,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.9323354173051285,
+                    0.3304802098890314
+                ],
+                [
+                    0.8947388203142352,
+                    0.21442189277330959
+                ],
+                [
+                    0.5123915173681799,
+                    0.42238184275654156
+                ],
+                [
+                    0.12156406847985457,
+                    0.31130548492837384
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.021774338419753195,
+                0.8208898257415848,
+                0.157335835838662
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.9401224015346206,
+            "lower_bound": 0.9401224015346207,
+            "upper_bound": 0.9401224015346207,
+            "iterations": "17",
+            "time": 0.48,
+            "wallclock_time": 0.49,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.8818332402982173,
+                    "(4, 1)": 0.28799359989069795,
+                    "(5, 0)": 0.5123915173681799,
+                    "(5, 1)": 0.42238184275654156
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305950",
+        "seed": 56265,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.36026952535861034,
+                    0.653398727978745
+                ],
+                [
+                    0.30440884642173816,
+                    0.46562399043069547
+                ],
+                [
+                    0.27538305550933995,
+                    0.8923034406932441
+                ],
+                [
+                    0.7563356153843418,
+                    0.17028745996756212
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.25253162549894054,
+                0.43296086079907786,
+                0.3145075137019816
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.9853914669135324,
+            "lower_bound": 0.9853914669135324,
+            "upper_bound": 0.9853914669135324,
+            "iterations": "49",
+            "time": 1.14,
+            "wallclock_time": 1.14,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.3602695253586104,
+                    "(4, 1)": 0.653398727978745,
+                    "(5, 0)": 0.3398898490694051,
+                    "(5, 1)": 0.48087667879838597
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305951",
+        "seed": 20265,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.6772735301854551,
+                    0.25931041586146697
+                ],
+                [
+                    0.7986293188254092,
+                    0.5875217858359416
+                ],
+                [
+                    0.5468692783902276,
+                    0.22387759215660197
+                ],
+                [
+                    0.8806521499155667,
+                    0.06586901480283436
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.5225762128164205,
+                0.12205655501326287,
+                0.3553672321703166
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.7646700468706028,
+            "lower_bound": 0.7646700468706028,
+            "upper_bound": 0.7646700468706028,
+            "iterations": "15",
+            "time": 0.64,
+            "wallclock_time": 0.64,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.6979722244262242,
+                    "(4, 1)": 0.264021404794991,
+                    "(5, 0)": 0.6772735301854552,
+                    "(5, 1)": 0.25931041586146697
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 1.0,
+                    "(1, 5)": 0.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305953",
+        "seed": 78447,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.9994840303418279,
+                    0.7004286181623681
+                ],
+                [
+                    0.5122040951039617,
+                    0.3840734821624884
+                ],
+                [
+                    0.8042738223333551,
+                    0.9430706540650641
+                ],
+                [
+                    0.44474123827451073,
+                    0.43743622375426816
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.2826876239980905,
+                0.5412170302452065,
+                0.176095345756703
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 0.9325864095902113,
+            "lower_bound": 0.9325864095902112,
+            "upper_bound": 0.9325864095902112,
+            "iterations": "89",
+            "time": 0.69,
+            "wallclock_time": 0.7,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.8506751646945053,
+                    "(4, 1)": 0.7453382715151121,
+                    "(5, 0)": 0.5038691100747703,
+                    "(5, 1)": 0.4195917746610379
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 0.0,
+                    "(3, 5)": 1.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305955",
+        "seed": 39442,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.18179422837935855,
+                    0.5638526932846111
+                ],
+                [
+                    0.3805251416107762,
+                    0.7392940286516222
+                ],
+                [
+                    0.4370978481380554,
+                    0.15578593403783192
+                ],
+                [
+                    0.9156146291951115,
+                    0.5730351878208918
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.35350230578119307,
+                0.5092124325373314,
+                0.13728526168147556
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.2604164263963038,
+            "lower_bound": 1.2604164263963038,
+            "upper_bound": 1.2604164263963038,
+            "iterations": "171",
+            "time": 1.44,
+            "wallclock_time": 1.45,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.5113387782979677,
+                    "(4, 1)": 0.45620300117665646,
+                    "(5, 0)": 0.3491188660032831,
+                    "(5, 1)": 0.6122080507695694
+                },
+                "y": {
+                    "(0, 4)": 0.0,
+                    "(0, 5)": 1.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 1.0,
+                    "(2, 5)": 0.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305956",
+        "seed": 23069,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    },
+    {
+        "experiment_name": "baseline_runtime_performance_dbt",
+        "instance": {
+            "terminals": [
+                [
+                    0.8782417260039851,
+                    0.17617847139663
+                ],
+                [
+                    0.3745558772138676,
+                    0.34689888898426635
+                ],
+                [
+                    0.03917299583385836,
+                    0.5265445770907106
+                ],
+                [
+                    0.7507527759376112,
+                    0.9318029186530715
+                ]
+            ],
+            "masses": [
+                -1.0,
+                0.36231547525030394,
+                0.15382639600473458,
+                0.4838581287449614
+            ],
+            "alpha": 0
+        },
+        "results": {
+            "status": "ok",
+            "termination_condition": "optimal",
+            "objective": 1.5199252626131179,
+            "lower_bound": 1.5199252626131177,
+            "upper_bound": 1.5199252626131177,
+            "iterations": "15",
+            "time": 0.5,
+            "wallclock_time": 0.52,
+            "variables": {
+                "x": {
+                    "(4, 0)": 0.6245752072586656,
+                    "(4, 1)": 0.4193618293515496,
+                    "(5, 0)": 0.37455587721386757,
+                    "(5, 1)": 0.3468988889842663
+                },
+                "y": {
+                    "(0, 4)": 1.0,
+                    "(0, 5)": 0.0,
+                    "(1, 4)": 0.0,
+                    "(1, 5)": 1.0,
+                    "(2, 4)": 0.0,
+                    "(2, 5)": 1.0,
+                    "(3, 4)": 1.0,
+                    "(3, 5)": 0.0,
+                    "(4, 5)": 1.0
+                }
+            }
+        },
+        "instance_generator": "random_points_unit_square_with_masses",
+        "instance_arguments": {
+            "n": 4
+        },
+        "solver": "baron",
+        "solver_options": "maxtime=300",
+        "formulation": "dbt_alpha_0_NO_BO",
+        "formulation_arguments": {
+            "use_bind_first_steiner": false,
+            "use_convex_hull": false,
+            "use_obj_lb": false,
+            "use_better_obj": false
+        },
+        "date": "2025-05-08T10:35:10.305959",
+        "seed": 91282,
+        "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz"
+    }
+]

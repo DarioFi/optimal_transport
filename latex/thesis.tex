@@ -740,24 +740,17 @@
         holds also for points in their support.
     \end{corollary}
 
-    \subsection{Degree of a vertex}
-
-    \subsection{Angles bound}
 
     \subsection{Instance specific bounds}
 
-    We now have a bound on the cosine of the angle between two edges given their flows. In~\ref{lemma:bound_general_direction} we have
-    taken the supremum over all possible masses to obtain an instance independent bound.
-    We now focus on looking for a bound that holds at every branching point of a specific instance of the problem,
-    so we assume that we already know the set $M$.
+    In the usual computational setting, the set $M$ is known in advance and the formulation can therefore include 
+    precomputed information (as done also in \ref{geometric_cuts}). In this specific case, it is possible to improve the bound on the angle by 
+    computing the supremum in equation~\ref{lemma:bound_general_direction} only over the possible flows that can be achieved with the masses in $M$.
 
-        {\color{red} You have a couple of results already depending on $m_1, m_2$. What you do mean we now focus on an instance specific bound?
-    I think you mean you can find better bounds since you made additional assumptions on $\mu^-, \mu^+$, right? (as you describe below). If so, please revise this sentence.}
-
-    We also focus on the case where there is only one source and therefore the optimal solution is a tree.
-    In this case, thanks to the loop-free property of the optimal solution, we know that the masses on the edges are
-    combinations of masses in $M$. We can then maximize the bound of the cosine under this constraint to find the smallest
-    angle that can be achieved in a specific instance of the problem.
+    The analysis is further restrited to the case where there is only one source and therefore the optimal solution is a tree.
+    In this case, thanks to the loop-free property of the optimal solution, it is known that the masses on the edges are
+    combinations of masses in $M$. Thus, the bound can be maximized under this constraint to find the smallest
+    angle that can be achieved in a specific instance of the problem. TODO: ugly
 
     \begin{lemma}
         \label{lemma:degree_definition}
@@ -935,7 +928,14 @@
 
     \subsection{Uniform bound on length of fibers}
 
-    TODO: this is somewhat garbage we need to introduce the problem first (citing bernot).
+    As mentioned in the open problems section of~\cite[Chapter 15, question 13]{Bernot}, one of the open questions is whether the length of the fibers
+    $\chi(\omega, \cdot)$ is uniformly bounded. The first step is to prove this result for fixed $\mu^\pm$ and then extend to a uniform bound over all the possible measures.
+    This section is dedicated to an attempt to prove this result: the only conclusion drawn is that the length of the fibers is uniformly bounded if along any 
+    trajectory the density of the fiber decreases at most polynomially. This is quite informative as it shows that the hard part of the problem regards only the instances
+    where the density decays faster than polynomially, which also imply that fibers over some length $L$ do not contribute much to the cost of the optimal solution.
+
+    The proof is based on a contradiction argument: we assume that there exists a fiber with arbitrarily large length and show the existence of a better competitor.
+    TODO: include picture of the taglio and cucito technique.
 
     What we want to show is that, for fixed $\alpha$, $\mu^+$ and $\mu^-$, the optimal transport parametrization $\chi$
     is equibounded in the sense that there is no path $\gamma$ that is non self-intersecting and such that $|\gamma(t)|_\chi$ is decreasing and positive
@@ -1005,7 +1005,6 @@
     Obviously, this cut would not be optimal either as if we zoom close enough this path should look like a Lebesgue segment
     and its optimal transport parametrization is more complex than a straight line but I wouldn't know how to use this.
 
-    TODO: generate figure to explain this
     TODO: maybe add the new way to propose a contradiction as the set with existence that i have saved as a picture of a whiteboard
 
 
@@ -1030,13 +1029,12 @@
     \end{itemize}
 
     the goal is to find a weighted graph $(S \cup P, E, f)$, where $S = \{s_1, \ldots, s_m\}$
-    consists of Steiner points
-        {\color{red} why are we calling these Steiner points? Is this terminology used in bracned transport? if yes, why didn't we use this name before?
-    This terminology is used in the euclidean steiner tree problem and in the other formulation (MMX). Should I sttle for one and just say that they are synonim?
-    }
-
+    is the set of additional points
     $s_i \in \R^N$, $E \subseteq S \cup P \times S \cup P$ is the set of edges and
     $f : E \rightarrow \mathbb{R}$ is the flow on each edge.
+
+    Borrowing the therminology of Euclidean Steiner trees, we call $S$ the Steiner points and $P$ the terminals.
+
     The graph must form a network flow with sources ($P^-$) and sinks ($P^+$) at the terminal points in accordance with their masses,
     such that the following cost function is minimized:
     \[
@@ -1054,6 +1052,11 @@
 
     TODO: remark difficulties for multiple sources
 
+    \begin{remark}
+        The problem phenomenology remains almost unchanged if there are multiple sources present. The main difference is that there is no guarantee that the optimal solution
+        is connected but it can be a union of trees. This introduces even more symmetries in the solution and makes the problem even harder for a solver as discussed in~\ref{TODO: discuti sta cosa}.
+    \end{remark}
+
     \subsection{Euclidean Steiner Tree problem}
 
     The ESTP is a special case of DBT, where  $\alpha=0$ and only a single source is present.
@@ -1064,8 +1067,7 @@
         \sum_{(x,y) \in E} \|x - y\|
     \end{equation}
     {\color{red} Please fix the notation.}
-    This special case has been extensively studied, especially computationally,
-    and it is known that its decision version is NP-complete~\cite{karp2010reducibility}.
+
 
 
     \subsection{Literature review}
@@ -1323,13 +1325,18 @@
     equivalent solutions, but this is not the focus of this work so those improvements have not been implemented in the main formulation (DBT~\ref{TODO}) and
     will not produce large improvements on those random instances.
 
+    The experiments were run on the university cluster on a \texttt{Intel(R) Xeon(R) Gold 5317 CPU @ 3.00GHz} and on a consumer laptop with a
+    \texttt{11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz} CPU. For each experiment the same hardware was used to avoid discrepancies and every experiment was run
+    on a single core. The BARON solver supports parallelization but in order to reduce the variables of the problem it has been disabled. Nevertheless, usually the runtime
+    is linear in the number of cores used and quite stable (todo: ugly).
+
 
     \begin{remark}
         This formulation can be easily extended to multiple sources by adding negative masses to the terminals and adding a new
         constraint~\ref{dbt_form:sum_sources} for each source.
         We restrict our numerical analysis as the case of multiple sources often presents disconnected solutions (unions of trees)
         and due to the symmetry of the problem there are many optimal solutions to the formulation, making it very difficult for a sovler to
-        tackle.
+        tackle. TODO: frase ripetuta
     \end{remark}
 
     \subsection{MMX}
