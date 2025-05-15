@@ -355,8 +355,8 @@
     An equivalent formulation of the problem has been proposed by~\cite{paolini2006optimal}, using the language of 
     geometric measure theory~\cite{simon2014introduction} \cite{federer2014geometric}.
     \begin{definition}
-        \textbf{Currents and graphs definition}
-        An transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
+        \textbf{Currents and graphs definition} 
+        A transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
         measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
         $\theta$ is a scalar field.
         We define the energy of a current as:
@@ -1020,7 +1020,7 @@
     The Discrete Branched Transport (DBT) is a special case of branched transport
     where the measures $\mu^+$ and $\mu^-$ are finite and atomic.
 
-    Formally, we can define the DBT as follows: \\
+    Formally, we can define the DBT as follows: 
     Given a dimension $N$, a cost parameter $\alpha$, and a set of terminal points $P = \{p_1, \ldots, p_n\}$ in $\mathbb{R}^N$ with
     corresponding masses $M = \{m_1, \ldots, m_n\}$, such that:
     \begin{itemize}
@@ -1330,6 +1330,7 @@
     on a single core. The BARON solver supports parallelization but in order to reduce the variables of the problem it has been disabled. Nevertheless, usually the runtime
     is linear in the number of cores used and quite stable (todo: ugly).
 
+    The code to run the experiments and all the results presented in the thesis are available in the repository (TODO: add link somewhere) as python and json files respectively. 
 
     \begin{remark}
         This formulation can be easily extended to multiple sources by adding negative masses to the terminals and adding a new
@@ -1395,6 +1396,7 @@
         \label{tab:ablation_configs}
     \end{table*}
 
+    TODO: graph of performance along a single trajectory
     TODO: aggiungere un grafico con l-andamento in N della performance magari runnato sulla VM
 
     TODO: genera un po' di grafi per esempi

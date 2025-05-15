@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from opt_trans.data_handling.experiment_data import Database
-from collections import defaultdict
 
 folder = '../run_logs/baseline_runtime_performance/'
 db = Database.populate_from_folder(folder)

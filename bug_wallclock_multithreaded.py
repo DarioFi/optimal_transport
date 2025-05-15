@@ -1,6 +1,6 @@
-from problems.closest_counterexample import random_points_unit_square_with_masses
-from experiment import Experiment
-from formulations.dbt import dbt
+from opt_trans.problems.closest_counterexample import random_points_unit_square_with_masses
+from opt_trans.experiment import Experiment
+from opt_trans.formulations.dbt import dbt
 import time
 
 timelimit = 10

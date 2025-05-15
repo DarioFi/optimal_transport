@@ -433,6 +433,72 @@ def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: 
     return model
 
 
+def dbtq_with_flows(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
+                    use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
+    assert use_geometric_cut_50 is False, "Geometric cut 50 is not supported in this version as it is not guaranteed to be optimal"
+
+    model = dbtq(terminals, 0, masses, relax_y, relax_w, disjunctive_w,
+                 use_geometric_cut_50, angles_constraint, starting_position)
+
+    # Add flow variables
+    first_edge = (0, min(model.S))
+    model.f = pyo.Var(model.E, domain=pyo.NonNegativeReals, bounds=(0, 1))
+
+    model.f[first_edge].fix(-masses[0])  # check that it is consistent
+
+    E_wfe = [(i, j) for (i, j) in model.E if (i, j) != first_edge]
+
+    # Add flow constraints
+
+    def flow_conservation_steiner(model, i):
+        inc = [(j, i) for j in model.S if j < i]
+        out = [(i, j) for j in model.S if i < j] + [(j, i) for j in model.P if j != 0]
+        if i in first_edge:
+            inc += [first_edge]
+        return sum(model.f[e] for e in inc) - sum(model.f[e] for e in out) == 0
+
+    model.flow_conservation_steiner = pyo.Constraint(model.S, rule=flow_conservation_steiner)
+
+    def flow_conservation_terminal(model, i):
+        assert masses[i] > 0
+        assert i != 0
+        inc = [e for e in model.E if e[1] == i]
+        out = [e for e in model.E if e[0] == i]
+        assert len(inc) == 0 or len(out) == 0, "Terminal should not have both incoming and outgoing edges"
+        return - sum(model.f[e] for e in inc) + sum(model.f[e] for e in out) == masses[i]
+
+    # run over P without the first index
+    P_w0 = [i for i in model.P if i != 0]
+    model.flow_conservation_terminal = pyo.Constraint(P_w0, rule=flow_conservation_terminal)
+
+    # y = 0 => f = 0
+    def y_zero_f_zero(model, i, j):
+        return model.f[i, j] <= model.y[i, j]
+
+    model.y_zero_f_zero = pyo.Constraint(model.E, rule=y_zero_f_zero)
+
+    # change objective function
+
+    del model.obj
+
+    def objective_rule_alpha(model):
+        return sum(
+            model.f[(i, j)] ** alpha * norm([model.w[(i, j), d] for d in model.D],
+                                            [model.w[(j, i), d] for d in model.D]) for i in model.S for
+            j in
+            model.S if i < j
+        ) + sum(
+            model.f[(i, j)] ** alpha * norm([model.w[(i, j), d] for d in model.D],
+                                            [model.w[(j, i), d] for d in model.D]) for i in model.P for
+            j in
+            model.S
+        )
+
+    model.obj = pyo.Objective(rule=objective_rule_alpha, sense=pyo.minimize)
+
+    return model
+
+
 if __name__ == '__main__':
     sp = {
         'x': {
@@ -445,16 +511,35 @@ if __name__ == '__main__':
         # 'palle': None
     }
 
-    m = dbtq(
-        [[0, 1], [0, 0], [1, 0], [1, 1]],
-        masses=[0, 0, 0, 0],
-        alpha=0,
+    # m = dbtq(
+    #     [[0, 1], [0, 0], [1, 0], [1, 1]],
+    #     masses=[-1, .5, .25, .25],
+    #     alpha=0,
+    #     relax_w=False,
+    #     relax_y=False,
+    #     disjunctive_w=2,
+    #     use_geometric_cut_50=False,
+    #     angles_constraint=False,
+    #     starting_position=sp
+    # )
+
+    m = dbtq_with_flows(
+        [[0, 1], [0, 0], [1, 0], [1, 1], [0.5, 0.5], [0.4, 0.8]],
+        masses=[-1, .25, .25, .125, .125, .25],
+        alpha=0.95,
         relax_w=False,
         relax_y=False,
-        disjunctive_w=2,
+        disjunctive_w=0,
         use_geometric_cut_50=False,
         angles_constraint=False,
-        starting_position=sp
+        starting_position=None
     )
 
     m.pprint()
+
+    solver = pyo.SolverFactory('baron')
+
+    results = solver.solve(m, tee=True, options={"epsR": 0.001})
+    # results = solver.solve(m, tee=True)
+
+    # m.display()

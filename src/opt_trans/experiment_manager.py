@@ -48,7 +48,7 @@ class ExperimentManager:
         """
         self.fixed_params['solver'] = 'baron'
         self.fixed_params['tee'] = False
-        self.fixed_params['solver_options'] = f'maxtime={maxtime}'
+        self.fixed_params['solver_options'] = f'maxtime={maxtime} EpsR=0.001'
 
     def random_seed(self):
         # todo: this seed handling is pretty bad

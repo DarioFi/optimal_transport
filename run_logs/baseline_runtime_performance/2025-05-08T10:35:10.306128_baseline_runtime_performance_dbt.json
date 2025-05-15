@@ -62,7 +62,7 @@
             "n": 4
         },
         "solver": "baron",
-        "solver_options": "maxtime=300",
+        "solver_options": "Limit=300",
         "formulation": "dbt_alpha_0_NO_BO",
         "formulation_arguments": {
             "use_bind_first_steiner": false,
