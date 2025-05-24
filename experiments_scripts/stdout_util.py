@@ -1,3 +1,5 @@
+import os
+
 example_out = """===========================================================================
  BARON version 24.5.8. Built: LNX-64 Wed May 8 10:06:40 EDT 2024 
  Running on machine RedmiDario
@@ -44,6 +46,8 @@ example_out = """===============================================================
  All done
 ===========================================================================
  """
+from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -103,8 +107,7 @@ def create_graph(results, title):
     ax2 = ax1.twinx()
     color_nodes = 'tab:red'
 
-    from scipy.interpolate import interp1d
-    from scipy.signal import savgol_filter
+
 
     # Prepare and sort data
     x = np.array(times)
@@ -146,15 +149,121 @@ def create_graph(results, title):
     plt.title(title)
     plt.grid(True)
     plt.tight_layout()
+    plt.savefig(title + '.png', dpi=300)
     plt.show()
+
+def create_subplot(ax, results, title):
+    """
+    Draws on `ax` and its twin, but does NOT call legend().
+    Returns (ax, ax2) so we can grab handles later.
+    """
+    times, lower_bounds, upper_bounds, open_nodes = parse(results)
+
+    # primary axis
+    ax.step(times, lower_bounds, label='Lower Bound',
+            color='tab:green', linewidth=1, marker="^", linestyle="-", where="post")
+    ub_plot = [u if u <= 100 else np.inf for u in upper_bounds]
+    ax.step(times, ub_plot, label='Upper Bound',
+            color='tab:blue', linewidth=1, marker="^", linestyle="-", where="post")
+    ax.set_xlabel('Time (s)')
+    ax.set_ylabel('Bound Value')
+    ax.grid(True)
+
+    # secondary axis
+    ax2 = ax.twinx()
+    x = np.array(times); y = np.array(open_nodes)
+    idx = np.argsort(x); x_s, y_s = x[idx], y[idx]
+    fn = interp1d(x_s, y_s, kind='linear', fill_value="extrapolate")
+    x_fine = np.linspace(x_s.min(), x_s.max(), 200)
+    y_i = fn(x_fine)
+    y_sm = savgol_filter(y_i, window_length=21, polyorder=3)
+
+    ax2.plot(x_fine, y_sm, label='Open Nodes (smoothed)',
+             linestyle="--", linewidth=1, color='tab:orange')
+    ax2.plot(x_s, y_s, label='Open Nodes (raw)',
+             linestyle="", marker="o", color='tab:orange')
+    ax2.set_ylabel('Open Nodes')
+
+    return ax, ax2
 
 
 if __name__ == "__main__":
-    n = 7
-    with open(f"result_string_{n=}.txt") as f:
-        res = "".join(f.readlines())
+    folder = "starting_point_strings/"
+    patterns = [
+        ("nostartingpoint", "no_starting_point_experiment_iter={}.txt"),
+        ("startingpoint",    "starting_point_experiment_iter={}.txt"),
+    ]
 
-    print(res)
+    nrows = 3
+    ncols = 3
+    # Precompute shared axis limits per iter (0–2)
+    axis_ranges = {}
+    for i in range(nrows*ncols):
+        all_t, all_b, all_n = [], [], []
+        for _, pat in patterns:
+            fn = os.path.join(folder, pat.format(i))
+            with open(fn) as f:
+                t, lb, ub, nodes = parse(f.read())
+            all_t += t
+            all_b += lb + [u for u in ub if u <= 100]
+            all_n += nodes
+        axis_ranges[i] = {
+            'xlim':  (0, max(all_t)),
+            'ylim':  (0, max(all_b) + 1),
+            'y2lim': (min(all_n), max(all_n)),
+        }
 
+    for group_name, pattern in patterns:
+        fig, axes = plt.subplots(nrows, ncols, figsize=(12, 12))
+        subplot_axes = []  # to collect (ax, ax2)
+        axes_flat = axes.flatten()  # <-- flatten here
 
-    create_graph(res, f"Solution trajectory {n=}")
+        for i, ax in enumerate(axes_flat):
+            fn = os.path.join(folder, pattern.format(i))
+            with open(fn) as f:
+                content = f.read()
+
+            ax, ax2 = create_subplot(ax, content, title=f"{group_name} iter={i}")
+            # sync limits
+            xr = axis_ranges[i]['xlim']
+            yr = axis_ranges[i]['ylim']
+            y2r = axis_ranges[i]['y2lim']
+            ax.set_xlim(*xr)
+            ax.set_ylim(*yr)
+            ax2.set_ylim(*y2r)
+
+            subplot_axes.append((ax, ax2))
+
+            if i == 0:
+                # plot legend
+                # Add second legend manually
+                ax1_lines, ax1_labels = ax.get_legend_handles_labels()
+                ax2_lines, ax2_labels = ax2.get_legend_handles_labels()
+                ax2.legend(ax1_lines + ax2_lines,
+                           ax1_labels + ax2_labels,
+                           loc='upper left')
+
+        # now pull handles & labels once from the first subplot pair
+        h1, l1 = subplot_axes[0][0].get_legend_handles_labels()
+        h2, l2 = subplot_axes[0][1].get_legend_handles_labels()
+        handles, labels = h1 + h2, l1 + l2
+
+        # place a single legend for the whole figure
+        fig.legend(handles, labels,
+                   loc='upper center',
+                   ncol=len(labels),
+                   frameon=False,
+                   bbox_to_anchor=(0.5, 1.05))
+
+        # set title
+        if group_name == "nostartingpoint":
+            fig.suptitle(f"No initialization")
+        else:
+            fig.suptitle(f"Optimal starting point")
+
+        plt.tight_layout()
+        out_png = f"{group_name}_3x3.png"
+        fig.savefig(out_png, dpi=600, bbox_inches="tight")
+        print(f"Saved {out_png}")
+        plt.show()
+        plt.close(fig)

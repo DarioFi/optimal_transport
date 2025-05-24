@@ -1,6 +1,6 @@
 import pyomo.environ as pyo
 
-from problems.utils import norm
+from opt_trans.problems.utils import norm
 
 
 def create_p6_model(terminals, steiner_points):

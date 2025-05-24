@@ -171,8 +171,7 @@
     Corpo 12
     Pagine numerate
 
-    TODO: pensa a dove metterlo 
-    \subsection{General notation}
+    \subsection*{General notation}
 
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
@@ -184,7 +183,7 @@
         \item[$\R_+^N$] Vectors in $\R^N$ where all components are non-negative
     \end{itemizeb}
 
-    \subsection{Optimal transport notation}
+    \subsection*{Optimal transport notation}
     The following notation will be defined more extensively in the next section but it is summarized here:
 
     \begin{itemizeb}
@@ -201,7 +200,7 @@
         \item[$C(\beta, N)$] Maximum number of non-overlapping caps on a sphere of dimension $N$ (\ref{definition:spherical_cap_results})
     \end{itemizeb}
 
-    \subsection{Discrete branched transport notation}
+    \subsection*{Discrete branched transport notation}
     The following notation is specific to the discrete branched transport problem (DBT) and its mixed integer non-linear programming formulation (MINLP).
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
@@ -296,12 +295,12 @@
 
     The Lagrangian formulation, intuitively, works as follows: it first considers all the possible 1-Lipschitz paths which are eventually constant with domain in $X \subset \mathbb{R}^N$ and assigns
     a measure of probability on those paths. The idea is that each of those paths is a possible way to transport a unit of mass and assigning a mass $\lambda$ to a path $\gamma$
-    means that we are transporting $\lambda$ units of mass along that path. In the case of non-atomic starting and ending measures, no single path will
-    have a positive mass, but we will have a density (a measure) on the space of paths. Then saying that a measure on the space of paths is a transport plan
-    for given $\mu^+$ and $\mu^-$ is equivalent to giving a condition on the push-forward of the starting and stopping time of the paths. This push-forward operation
+    means that $\lambda$ units of mass are transported along that path. In the case of non-atomic starting and ending measures, no single path
+    has a positive mass, but rather a density (a measure) on the space of paths is defined. A measure on the space of paths is said to be a transport plan
+    for given $\mu^+$ and $\mu^-$ if a condition on the push-forward of the starting and stopping time of the paths is satisfied. This push-forward operation
     can be seen as measuring how much mass ends in a certain point $x$ of the space $X$ after the transport.
 
-    Formally, given $X \subset \mathbb{R}^N$ compact, $K$ space of 1-Lipschitz path which are eventually constant on $X$ and
+    Formally, given $X \subset \mathbb{R}^N$ compact, $K$ the space of 1-Lipschitz paths which are eventually constant on $X$, and
     two measures of equal mass $\mu^+$ and $\mu^-$ on $X$, a traffic plan is a measure $\mathbf{P}$ on $K$ that transports $\mu^+$ to $\mu^-$.
 
     In order to define what "transport" means, consider the maps $\pi_0, \pi_\infty : K \rightarrow X$ given by $\pi_0(\gamma) = \gamma(0)$ and $\pi_\infty(\gamma) = \gamma(T(\gamma))$, where $T(\gamma)$
@@ -314,13 +313,13 @@
     \subsubsection*{Parameterized Traffic Plans}
     The next paragraph is copied from~\cite{Bernot} TODO: magari togli sta scritta :
 
-    According to Skorokhod theorem~\cite[Theorem A.3]{Bernot}, we can parameterize any traffic plan $\mathbf{P}$ by a measurable function
-    $\chi : \Omega = [0, |\Omega|] \rightarrow K$, where $\Omega$ is a measure space which we identify with an interval, such that
+    According to Skorokhod theorem~\cite[Theorem A.3]{Bernot}, any traffic plan $\mathbf{P}$ can be parameterized by a measurable function
+    $\chi : \Omega = [0, |\Omega|] \rightarrow K$, where $\Omega$ is a measure space which is identified with an interval, such that
     $\mathbf{P}= \chi_{\#} \lambda$, where $\lambda$ is the Lebesgue measure on $[0, |\Omega|]$.
-    We shall set $\chi(\omega, t) \coloneqq \chi(\omega)(t)$ and consider it as a function of the variable pair
+    Set $\chi(\omega, t) \coloneqq \chi(\omega)(t)$ and consider it as a function of the variable pair
     $(\omega, t)$.
 
-    With this formulation we can define the \textbf{energy} (or cost) of a parameterized traffic plan as:
+    With this formulation, the \textbf{energy} (or cost) of a parameterized traffic plan is defined as:
     \begin{equation}
         E^{\alpha}(\mathbf{P}) = \int_{\mathbb{R}^N} |x|_\mathbf{P}^{\alpha} d \mathcal{H}^1(x)
         \label{eq:energy}
@@ -331,24 +330,24 @@
         |x|_\mathbf{P} = | \{\omega: x \in \chi(\omega, \mathbb{R}) \} |
     \end{equation}
 
-
-    We call \emph{Gilbert energy} of a traffic plan $P$ parameterized by $\chi$ the quantity:
+    The \emph{Gilbert energy} of a traffic plan $\mathbf{P}$ parameterized by $\chi$ is the quantity:
     \begin{equation}
         \mathcal{E}^{\alpha}(\mathbf{P}) = \int_{\Omega} \int_{\mathbb{R}^N} |\chi(\omega, t)|^{\alpha-1}_\chi |\dot{\chi} (\omega, t)| dtd\omega
     \end{equation}
 
     \begin{remark}
-        From~\cite[Proposition 4.8]{Bernot} we know that for traffic plans with finite energy, it holds that $\mathcal{E} ^\alpha(\mathbf{P}) \ge E^\alpha (\mathbf{P})$.
-        Furthermore, under regularity assumption~\cite[definition 4.7]{Bernot} we have that they are equal.
-        The relationship is further discussed in~\ref{lemma:loop_free}.
+    From~\cite[Proposition 4.8]{Bernot} it is known that for traffic plans with finite energy, it holds that $\mathcal{E} ^\alpha(\mathbf{P}) \ge E^\alpha (\mathbf{P})$.
+    Furthermore, under regularity assumptions~\cite[definition 4.7]{Bernot}, equality holds.
+    The relationship is further discussed in~\ref{lemma:loop_free}.
 
-            {\color{red} Are you saying we have regularity and hence we can assume they are equal?
-        Also why do we care about this equality? Is there one formulation that we always use? do we need to define both?}
+    {\color{red} Is regularity assumed, and hence this equality can be taken as valid?
+    Also, why is this equality relevant? Is one formulation always used? Is it necessary to define both?}
     \end{remark}
 
-    The key point is the supports of the paths taken by particles in optimal traffic plans exhibit a graph structure. This property is crucial for
+    The key point is that the supports of the paths taken by particles in optimal traffic plans exhibit a graph structure. This property is crucial for
     the energy in~\ref{eq:energy} to be finite and suggests the use of 1-rectifiable sets and geometric measure theory to investigate the problem.
     This leads to the Eulerian formulation of the problem.
+
 
     \subsubsection{Eulerian formulation}
 
@@ -359,7 +358,7 @@
         A transport path is a 1-rectifiable current T whose boundary $\partial T = \mu^+ - \mu^-$. This can be identified with a vector valued
         measure $T = \vec{T}(\theta \mathcal{H}^1 \llcorner E)$ where $\vec{T}$ is a vector field with norm 1, $E$ is a set of finite $\mathcal{H}^1$ measure and
         $\theta$ is a scalar field.
-        We define the energy of a current as:
+        The energy of a current is defined as:
         \begin{equation}
             \mathcal{M}^{\alpha}(T) \coloneqq \int_{E} \theta(x)^\alpha \, d\mathcal{H}^1(x)
         \end{equation}
@@ -402,8 +401,9 @@
         \textbf{Strictly single path}
         A \textit{traffic plan} $\chi$ has the \textit{single path property} if for every pair $x, y$ such that
         $\lvert \Omega_{\overset{\rightarrow}{x}y} \rvert > 0$, almost all fibers in $\Omega_{\overset{\rightarrow}{x}y}$
-        coincide between $x$ and $y$ with an arc $\Gamma^{xy}$ joining $x$ to $y$. We say that the traffic plan has
-        the \textit{strict single path property} if for every $x, y$, either there is no fiber joining $x$ to $y$
+        coincide between $x$ and $y$ with an arc $\Gamma^{xy}$ joining $x$ to $y$. 
+        The traffic plan $\chi$ is said to have the \textit{single path property} 
+        if for every $x, y$, either there is no fiber joining $x$ to $y$
         or $\lvert \Omega_{\overset{\rightarrow}{x}y} \rvert > 0$ and all fibers in $\Gamma^{xy}$ coincide between $x$ and $y$.
     \end{definition}
 
@@ -411,8 +411,8 @@
 
     \begin{definition}
         \textbf{Normal}
-        A traffic plan $\chi$ is normal if it is loop-free, strictly single path and for every fiber $\omega$
-        we have that $| \chi(\omega, t)|_\chi$ is bounded away from zero on any compact set contained in $[0, T(\chi(\omega))]$.
+        A traffic plan $\chi$ is normal if it is loop-free, strictly single path and every fiber $\omega$
+        has the property that $| \chi(\omega, t)|_\chi$ is bounded away from zero on any compact set contained in $[0, T(\chi(\omega))]$.
             {\color{teal} What are we doing here exactly? Does it make sense to define it like this?}
     \end{definition}
 
@@ -593,14 +593,12 @@
 
     TODO: per il brodo si può aggiungere le definizioni di convergenza e correnti
     
+    \section{Novel theoretical results}
 
-
-    \section{Miei risultati teorici (con anche controesempi per spiegare le difficoltà numeriche)}
-
-    In this section, we present the main results, which provide lower bounds on the angles between edges.
+    In this section, the main results are presented, which provide lower bounds on the angles between edges.
     These bounds depend either on the specific instance of the problem $(\mu^{\pm}, N, \alpha)$ or only on the pair $(N, \alpha)$.
-    Once we have these bounds, we can use the results for spherical cap packing~\ref{definition:spherical_cap_results}
-    to obtain upper bounds on the number of branches in the optimal transport problem.
+    Once these bounds are obtained, the results for spherical cap packing~\ref{definition:spherical_cap_results}
+    can be used to derive upper bounds on the number of branches in the optimal transport problem.
 
     The following lemma offers an improvement over~\cite[Lemma 12.16]{Bernot},
     where the competitor is considered along the edge instead of the span defined by the three vertices.
@@ -616,9 +614,9 @@
         \end{equation}
 
         \begin{proof}
-            We can assume $p_1$ and $p_2$ lie on the unit circle by zooming enough and then rescaling, using the property that every restriction of an optimal
-            solution is optimal~\cite[Chapter 8]{Bernot}. Calling the candidate new branching point $x$ and setting $s=(0,0)$.
-            We can write the cost $f$ of this configuration of the tree as:
+            It can be assumed that $p_1$ and $p_2$ lie on the unit circle by zooming in and then rescaling, using the property that every restriction of an optimal
+            solution is optimal~\cite[Chapter 8]{Bernot}. Denote the candidate new branching point by $x$ and set $s=(0,0)$.
+            The cost $f$ of this configuration of the tree can be written as:
             \begin{equation}
                 f(x) = m_1^{\alpha}\|p_1 - x \| + m_2^{\alpha} \|p_2 - x\| + (m_1-m_2)^{\alpha} \|x\|
             \end{equation}
@@ -627,7 +625,7 @@
                 f(\epsilon v) = f(0) - \epsilon m_1^{\alpha} v \cdot p_1 - \epsilon m_2^{\alpha} v \cdot p_2 + (m_1-m_2)^{\alpha} \epsilon + o(\epsilon)
             \end{equation}
 
-            Given that we only want to check when $f(0)$ is not a maximum we can restrain our search around $\epsilon$ close to $0$.
+            Since the interest is in checking whether $f(0)$ is not a maximum, it suffices to consider values of $\epsilon$ close to $0$.
 
             \begin{figure}[h]
                 \includegraphics[scale=0.5]{circle}
@@ -635,25 +633,24 @@
                 \caption{Diagram of $p_1$, $p_2$ and $s$ for edges flowing in opposite directions}
             \end{figure}
 
-            We can parametrize $v$ with the angle $\beta$ from $p_1$ (going toward $p_2$) and get to the following equation:
+            The vector $v$ can be parametrized with the angle $\beta$ from $p_1$ (going toward $p_2$), leading to the following equation:
             \begin{equation}
                 f(\epsilon) - f(0) = \epsilon \left[ (m_1-m_2)^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta) \right] + o(\epsilon)
             \end{equation}
 
-            To prove that $\theta$ is not optimal we have two options:
+            To prove that $\theta$ is not optimal, there are two options:
             \begin{itemize}
-                \item prove that there exists $\beta$ such that the first order coefficient is negative
-                \item prove that the first order coefficient is bigger than $0$ for all $\beta$
+                \item prove that there exists $\beta$ such that the first-order coefficient is negative
+                \item prove that the first-order coefficient is greater than $0$ for all $\beta$
             \end{itemize}
 
-
-            To do this we want to fix $\theta, m_1, m_2$ and study the minimum of this function:
+            To this end, fix $\theta, m_1, m_2$ and study the minimum of the function:
             \begin{equation}
-            (m_1-m_2)
+                (m_1-m_2)
                 ^\alpha - m_2^\alpha \cos\beta - m_1^\alpha (\cos\theta\cos\beta - \sin\theta\sin\beta)
             \end{equation}
 
-            Calling $t = \cos(\beta)$ we get that the following equations needs to have a solution for $\beta$:
+            Letting $t = \cos(\beta)$, the following equation must have a solution for $\beta$:
             \begin{equation}
                 \label{eq:optimality_condition_proof}
                 (m_1-m_2)
@@ -661,25 +658,24 @@
             \end{equation}
 
             Finding a value of $\beta$ such that this equation evaluates to 0 is not sufficient.
-            We also need to verify whether this point corresponds to a local minimum.
+            It is also necessary to verify whether this point corresponds to a local minimum.
 
-            We know that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
+            It is known that there exists some $\beta$ for which this expression becomes negative (by choosing $\beta$ outside the
             span of $p_1$ and $p_2$, which contradicts the convex hull property of the optimal solution). Therefore, if $\theta$
             is not optimal, this function must cross zero.
 
-
-            By solving equation \ref{eq:optimality_condition_proof}, using that $c^2 \le a^2 + b^2$ is a necessary and
-            sufficient condition for an equation of the form $a\cos\beta + b\cos\beta = c$ to have a solution, we get:
+            By solving equation~\ref{eq:optimality_condition_proof}, using that $c^2 \le a^2 + b^2$ is a necessary and
+            sufficient condition for an equation of the form $a\cos\beta + b\sin\beta = c$ to have a solution, the following condition is obtained:
             \begin{equation}
                 \label{eq:optimality_condition_proof_2}
                 t \ge \frac{(m_1-m_2)^{2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
             \end{equation}
         \end{proof}
-
     \end{lemma}
-    We notice that~\ref{eq:optimality_condition_proof_2} is almost the same as~\cite[lemma 12.2]{Bernot}.
-    In fact the only difference is that along the edge conencting $s$ to the branching point here we have the difference
-    of the masses instead of the sum.
+    
+        It is observed that~\ref{eq:optimality_condition_proof_2} is almost the same as~\cite[Lemma 12.2]{Bernot}.
+    In fact, the only difference is that along the edge connecting $s$ to the branching point, the difference
+    of the masses appears instead of the sum.
 
     \begin{lemma}
         \label{lemma:difference_bound_decreasing}
@@ -687,27 +683,31 @@
         \begin{equation}
             f(m_1, m_2) = \frac{(m_1 - m_2) ^ {2\alpha} - m_1^{2\alpha} - m_2^{2\alpha}}{2m_2^\alpha m_1^\alpha}
         \end{equation}
-        is decreasing in the ratio $\frac{m_2}{m_1}$ and that $\frac{m_2}{m_1} \rightarrow 0$ is $0$.
+        is decreasing in the ratio $\frac{m_2}{m_1}$ and tends to $0$ as $\frac{m_2}{m_1} \rightarrow 0$.
 
         \begin{proof}
-            We notice $f$ is homogeneous and can therefore be reparametrized in terms of the ratio of the masses. Calling $m= \frac{m_2}{m_1}$
-            we get:
+            The function $f$ is homogeneous and can therefore be reparametrized in terms of the ratio of the masses. Letting $m = \frac{m_2}{m_1}$,
+            one obtains:
             \begin{equation}
-                f(m_1, m_2) = g(m_1/m_2) \coloneqq \frac{(1 - m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
+                f(m_1, m_2) = g(m) \coloneqq \frac{(1 - m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
             \end{equation}
-            We can then verify that this function is indeed decreasing in $m$ as $(1-m)^ {2\alpha}$, $-m^{2\alpha}$
+            It can then be verified that this function is decreasing in $m$, since $(1-m)^{2\alpha}$, $-m^{2\alpha}$,
             and $1/ m^\alpha$ are all decreasing functions.
-            Therefore
+
+            Therefore,
             \begin{equation}
                 \sup_{m_1, m_2} f(m_1,m_2) = \lim_{m \rightarrow 0} g(m) = 0
             \end{equation}
-            To compute the limit we apply de l'Hopital's rule and get:
+
+            To compute the limit, de l'Hôpital's rule is applied:
             \begin{equation}
                 \lim_{m \rightarrow 0} g(m) = \lim_{m \rightarrow 0} \frac{-2\alpha (1-m)^{2\alpha-1} - 2\alpha m^{2\alpha-1}}{2\alpha m^{\alpha-1}} = 0
             \end{equation}
         \end{proof}
 
     \end{lemma}
+
+
 
     \begin{lemma}
         \label{lemma:bound_general_direction}
@@ -725,9 +725,9 @@
         is the angle that realizes the maximum in equation~\ref{eq:bound_general_direction}.
 
         \begin{proof}
-            By combining lemmas~\ref{lemma:bound_opposite_direction} and~\ref{lemma:difference_bound_decreasing}, along with~\cite[Lemma 12.5]{Bernot}, we obtain a bound on $\cos \theta$ that applies to all masses and depends only on $\alpha$.
+            By combining lemmas~\ref{lemma:bound_opposite_direction} and~\ref{lemma:difference_bound_decreasing}, along with~\cite[Lemma 12.5]{Bernot}, one can obtain a bound on $\cos \theta$ that applies to all masses and depends only on $\alpha$.
 
-            Taking the supremum over all masses, we conclude that for a three-point system, there is no branching point if
+            Taking the supremum over all masses, the conclusion is that for a three-point system, there is no branching point if
             \begin{equation}
                 \cos(\theta) \le \max \left( \max\left( 2^{2\alpha - 1} - 1, 0 \right), 0 \right).
             \end{equation}
@@ -736,7 +736,7 @@
     \end{lemma}
 
     \begin{corollary}
-        In the case where $\mu^+$ and $\mu^-$ are two measures with finite support we know that lemma~\ref{lemma:bound_general_direction}
+        In the case where $\mu^+$ and $\mu^-$ are two measures with finite support it is known that lemma~\ref{lemma:bound_general_direction}
         holds also for points in their support.
     \end{corollary}
 
@@ -758,7 +758,7 @@
             {\color{red} why did you add $-1$ to the set of masses?}
         such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
         a cost parameter $\alpha \in (0,1)$, consider a branching point $s$ with two branches attached to it,
-        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ we have:
+        calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ it holds that:
 
         If $\alpha \le 1/2$:
         \begin{equation}
@@ -774,7 +774,7 @@
             r = \max \left\{ \frac{m_i}{m_j} \text{  s.t.  } A_i, A_j \subseteq M, A_i \cap A_j = \emptyset, m_i = \sum_{k \in A_i} m_k, m_j = \sum_{k \in A_j} m_k, m_i \le m_j \right\}
         \end{equation}
 
-        Then we have:
+        Then the following bound holds:
         \begin{equation}
             \cos(\theta) \le \max\left(
                                      \frac{ (1+r)^{2\alpha} - 1 - r^{2\alpha}}{2r^\alpha},
@@ -783,7 +783,7 @@
         \end{equation}
 
 
-        Defining $\theta_{\max}(M, \alpha)$ as the angle that achieves the maximum above, we can find an upper bound on the number of branches
+        Defining $\theta_{\max}(M, \alpha)$ as the angle that achieves the maximum above, it is possible to find an upper bound on the number of branches
         at any point of an optimal solution and define it as:
         \begin{equation}
             \deg(M, N, \alpha) = C\left( \frac{ \theta_{\max}(M, \alpha) }{2}, N\right)
@@ -793,89 +793,88 @@
     \end{lemma}
 
     \begin{corollary}
-        At a branching point outside of the support of $P$ we know that the conservation of flow holds, therefore there is
-        at least one incoming edge and one outgoing edge. Given this we can slightly improve the bound with a strategy
-        similar to~\cite[Section 11]{Bernot}.
-            {\color{red} I dont understand. I am not sure that this is a useful remark/corollary}
+        At a branching point outside of the support of $P$, conservation of flow holds. Therefore, there is
+        at least one incoming edge and one outgoing edge. Given this, the bound can be slightly improved using a strategy
+        similar to that in~\cite[Section 11]{Bernot}.
     \end{corollary}
+    
     \begin{remark}
-        Finding $r$ as in~\ref{eq:ratio_definition} is probably computationally a difficult problem, so we could try some heuristic to find a good approximation.
-        However, we need an upper bound on the ratio (rather than a lower bound) so it could be more difficult to obtain one (a feasible solution is
-        not enough, we need a relaxation guarantee or a dual solution). We can empirically observe from
-        (todo: include experiments from the notebooks) and~\ref{fig:first_bound_a_ge_1-2} that for most mass distributions there are subset with a ratio
-        close to 1 and that we do not gain much by finding anything even with a $30\%$ error.
-        So computationally it can make sense to just use $2^{2\alpha - 1} - 1$ as the bound.
+        Finding $r$ as in~\ref{eq:ratio_definition} is likely a computationally difficult problem, so a heuristic approach could be used to find a good approximation.
+        However, since an upper bound on the ratio (rather than a lower bound) is required, the problem becomes more challenging—
+        a feasible solution is not sufficient, and a relaxation guarantee or a dual solution is needed. Empirical observations
+        from (TODO: include experiments from the notebooks) and~\ref{fig:first_bound_a_ge_1-2} indicate that for most mass distributions,
+        there exist subsets with a ratio close to 1, and that even with a $30\%$ error, little is gained in terms of improvement.
+        Therefore, from a computational standpoint, it may be reasonable to use $2^{2\alpha - 1} - 1$ as the bound.
     \end{remark}
-
+    
 
     \begin{proof}
 
-        We proceed in a similar way to~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
-        over $m_1, m_2 \in [0,1]$ we maximize over the constraint that the masses on the branches $m_i,m_j$ are combinations of masses $M$.
-
-        We have two bounds to consider: the first applies to the case where both edges flow outward,
-        while the second applies to the case where one edge flows outward and the other flows inward.
-
-        todo: first/second bound is an awful name
-
+        The proof proceeds in a manner similar to~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
+        over $m_1, m_2 \in [0,1]$, the maximization is performed under the constraint that the masses on the branches $m_i, m_j$ are combinations of masses in $M$.
+    
+        Two bounds must be considered: the first applies to the case where both edges flow outward,
+        while the second applies to the case where one edge flows outward and the other inward.
+    
+        % TODO: consider renaming "first/second bound" to more descriptive labels
+    
         \subsubsection*{Optimizing the first bound}
-        We aim to maximize:
+        The goal is to maximize:
         \begin{equation}
             f(m_i, m_j) = \frac{(m_i + m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
         \end{equation}
-
-        Formally for the first bound, we know both edges are flowing out so the masses are "disjoint" (as a consequence of~\ref{lemma:loop_free}) in the sense that there
-        exist sets $A_i, A_j \subseteq M$ such that $A_i, A_j \neq \emptyset$, $m_i = \sum_{k \in A_i} m_k$ and $m_j = \sum_{k \in A_j} m_k$ and $A_i \cap A_j = \emptyset$.
-
-        Similarly to~\ref{lemma:difference_bound_decreasing} we can see that the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting it we get:
-
+    
+        Formally, for the first bound, both edges are assumed to be flowing outward, so the masses are "disjoint" (as a consequence of~\ref{lemma:loop_free}) in the sense that there
+        exist sets $A_i, A_j \subseteq M$ such that $A_i, A_j \neq \emptyset$, $m_i = \sum_{k \in A_i} m_k$, $m_j = \sum_{k \in A_j} m_k$, and $A_i \cap A_j = \emptyset$.
+    
+        As in~\ref{lemma:difference_bound_decreasing}, the function depends only on the ratio of the masses $m = \frac{m_i}{m_j}$. Rewriting gives:
+    
         \begin{equation}
             f(m) = \frac{(1 + m) ^ {2\alpha} - 1 - m^{2\alpha}}{2m^\alpha}
         \end{equation}
-
-        We can also observe that $f(m) = f(1/m)$ so it is enough to consider $m \in [0,1]$.
-        From~\ref{lemma:bernot_angles_sum_bound} we know that there is a different behaviour depending on $\alpha$ (figures~\ref{fig:first_bound_a_le_1-2} and~\ref{fig:first_bound_a_ge_1-2}).:
+    
+        Noting that $f(m) = f(1/m)$, it is sufficient to consider $m \in [0,1]$.
+        From~\ref{lemma:bernot_angles_sum_bound}, it is known that the behavior depends on the value of $\alpha$ (see figures~\ref{fig:first_bound_a_le_1-2} and~\ref{fig:first_bound_a_ge_1-2}):
         \begin{itemize}
-            \item If $\alpha \le 1/2$ we have that the function is decreasing in $m$. Therefore the maximum is achieved when $m$ is the smallest.
-            \item If $\alpha > 1/2$ we have that the function is increasing in $m \in [0,1]$. The maximum is achieved when $m = 1$.
+            \item If $\alpha \le 1/2$, the function is decreasing in $m$, so the maximum is achieved at the smallest $m$.
+            \item If $\alpha > 1/2$, the function is increasing in $m \in [0,1]$, and the maximum is achieved at $m = 1$.
         \end{itemize}
-
+    
         \subsubsection*{Case $\alpha \le 1/2$}
-        In the first case, it is sufficient to take
+        In this case, it is sufficient to take:
         \begin{align}
             & m_i = \min_{k \in M} |m_k| \\
             & m_j = \sum_{k \in M} m_k - m_i = 1 - m_i
         \end{align}
-
+    
         \begin{figure}[h]
             \includegraphics[scale=0.5]{f_sum_m1_m2_alpha_le_1-2}
             \centering
             \caption{Plot of the first bound for $\alpha \le 1/2$}
             \label{fig:first_bound_a_le_1-2}
         \end{figure}
-
+    
         \subsubsection*{Case $\alpha \ge 1/2$}
-
-        The definition~\ref{eq:ratio_definition} is just a more compact way to write the solution to the optimization problem
-        of finding the maximum ratio of two masses.
-%
-
+    
+        The definition~\ref{eq:ratio_definition} provides a compact formulation for the solution to the optimization problem
+        of finding the maximum ratio between two masses.
+    
         \subsubsection*{Optimizing the second bound}
-        We are aiming at maximizing the function (see figure~\ref{fig:second_bound}):
+        The objective is to maximize the function (see figure~\ref{fig:second_bound}):
         \begin{equation}
             f(m_i, m_j) = \frac{(m_i - m_j) ^ {2\alpha} - m_i^{2\alpha} - m_j^{2\alpha}}{2m_i^\alpha m_j^\alpha}
         \end{equation}
-        We know from~\ref{lemma:difference_bound_decreasing} that this function only depends on $m = \frac{m_j}{m_i}$ and that the following:
+        From~\ref{lemma:difference_bound_decreasing}, it is known that this function depends only on $m = \frac{m_j}{m_i}$ and can be rewritten as:
         \begin{equation}
             f(m) = \frac{(1 - m)^{2\alpha} - m^{2\alpha} - 1}{2m^\alpha}
         \end{equation}
-        is decreasing.
-
-        We can now optimize the function over combinations of masses. Our objective is to minimize the ratio
-        $m$. The two masses are independent so we conclude that the minimum is achieved when
+        which is decreasing.
+    
+        The optimization is performed over combinations of masses. Since the two masses are independent, the minimum of $m$ is achieved when
         $m_i = \min_{k \in P^+} |m_k|$ and $m_j = \sum_{k \in P^+} m_k = 1$.
-
+    
     \end{proof}
+    
 
     \begin{figure}[h]
         \includegraphics[scale=0.5]{f_diff_m1_m2}
@@ -895,20 +894,15 @@
 
     \subsection{Minimum distance proof todo da finire}
 
-    In this section we aim to find a bound on the minimum distance between branching points. This result can then be added
+    The aim of this section is to find a bound on the minimum distance between branching points. This result can then be added
     to the MINLP formulation to improve speed.
 
-    \begin{lemma}
-        Fix $\alpha \in (0,1)$ and $N$. For any $\delta > 0$ there exists $\mu^+ = \delta_{x_0}$ and $\mu^- = \sum_{i=1}^{4} m_i \delta_{x_i}$
-        where $x_i \in \R^N$ and $m_i$ are the masses of the terminals such that in the optimal solution of the DBT problem the distance between
-        the branching points smaller than $\delta$.
-    \end{lemma}
-    { \color{teal} I added this "lemma" to show that there is no good bound. There is a simple counterexample in
-    the github repo in "converging\_steiner\_counterexample.py" }
+    TODO: controlla numerazione equazioni    
 
     \begin{lemma}
-        Fix $\alpha \in (0,1)$, $N$ and a compact subset $K \subseteq \R^N$. For any $\epsilon > 0$ there exists $\delta(\epsilon)$ such that for any $\mu^+ = \delta_{x_0}$ and $\mu^-$
-        with support in $K$ and $\|\mu^-\| = 1$ we have that any optimal solution of the DBT has the following property:
+        Fix $\alpha \in (0,1)$, $N$ and a compact subset $K \subseteq \R^N$. For any $\epsilon > 0$ there exists $\delta(\epsilon)$ 
+        such that for any $\mu^+ = \delta_{x_0}$ and $\mu^-$ with support in $K$ and $\|\mu^-\| = 1$ 
+        any optimal solution of the DBT has the following property:
 
         If two branching points $x_i, x_j$ are at $\epsilon$-distance from $supp(\mu^-)$ then the distance between them is at least $\delta(\epsilon)$.
     \end{lemma}
@@ -916,7 +910,7 @@
     \begin{proof}
         By contradiction, assume that there exists a $\epsilon > 0$ and a sequence of $\chi_n$ optimal solutions for $\mu^\pm_n$ such that
         there are two branching points for each $\chi_n$ called $x_i^n, x_j^n$ such that $\|x_i^n - x_j^n\| \rightarrow 0$ and $d(x_i^n, supp(\mu^-_n)) \ge \epsilon$.
-        Up to passing to a subsequence we may assume that $x_i^n \rightarrow x$ and $x_j^n \rightarrow x$.
+        Up to passing to a subsequence it can be assume that $x_i^n \rightarrow x$ and $x_j^n \rightarrow x$.
 
             {\color{teal}
         What to do now? Can I do a diagonalization argument to claim that I can do everything on finite graphs that converge to $\mu_+$?
@@ -1007,6 +1001,52 @@
 
     TODO: maybe add the new way to propose a contradiction as the set with existence that i have saved as a picture of a whiteboard
 
+    \subsection{Conterexamples (todo: find a more evocative name)}
+
+    A series of natural geometric questions regarding the optimal solution can arise. One of the simplest is whether if two terminals are very close
+    then they must be either connected or have the same parent, or just be close in the tree structure. Such questions often seem like a good direction
+    to restrict the search space of the problem but the answer is often negative. It is presented here a sharp counterexample which formally states:
+    \begin{lemma}
+        Fix $\alpha \in (0,1)$ and $N$. For any $\delta > 0$ there exists $\mu^+ = \delta_{x_0}$ and $\mu^- = \sum_{i=1}^{4} m_i \delta_{x_i}$
+        where $x_i \in \R^N$ and $m_i$ are the masses of the terminals such that in the optimal solution of the DBT problem the distance between
+        the branching points smaller than $\delta$.
+    \end{lemma}
+    
+    \begin{proof}
+        
+    The proof is by counteraxmple, and it is technically a computer assisted proof, in the sense that the counteraxmple
+    has been verified by a solver. The script that generates the counterexample is available in the repository
+    and is called \texttt{experiments\_scripts/closest\_terminals\_counterexample.py}.
+    Referring to the figure~\ref{fig:closest_terminals_counterexample} the counterexample is made of two equilateral traingles
+    (vertices $T_0$, $T_1$, $T_2$ and $T_1$, $T_3$, $T_4$) with side length $0.5007$ and rotated in such a way that 
+    the distance between $T_0$ and $T_3$ is $0.4552$, as shown in the distance matrix below. But as it is possible
+    to observe from the figure, the optimal solution connects $T_0$ to $T_3$ trhough the root of the tree, which is the furthest
+    possible path.
+    
+    \[
+    D =
+        \begin{bmatrix}
+        0        & 0.5007 & 0.5007 & 0.4552 & 0.8401 \\
+        0.5007   & 0      & 0.5007 & 0.5007 & 0.5007 \\
+        0.5007   & 0.5007 & 0      & 0.8401 & 1.0000 \\
+        0.4552   & 0.5007 & 0.8401 & 0      & 0.5007 \\
+        0.8401   & 0.5007 & 1.0000 & 0.5007 & 0
+        \end{bmatrix}
+    \]
+    
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.5]{../experiments_scripts/counterexample_steiner_tree.png}
+        \caption{Counterexample for the closest terminals problem}
+        \label{fig:closest_terminals_counterexample}
+    \end{figure}
+        
+    \end{proof}
+
+    Note that it is possible to check by hand all the topologies and then optimize, as they are very few, but TODO: finisci.
+
+    The moral of the above lemma is to show that such situation create a complex solution space that cannot be easy to prune, and
+    are probably one of the main source of hardness of the problem. (todo: maybe add a source??)
 
     \section{Computational problem}
 
@@ -1140,16 +1180,11 @@
 
     \subsection{Defining the mathematical formulations}
 
-    {\color{red} Put the general case first and then say in a remark by letting $\alpha = 0$ and the source to be a single Dirac delta
-        , we obtain the Euclidean Steiner tree problem, and then give the formulation as well.}
-
-
-    {\color{red} Get rid of MMX, give the optimization problems better names related to the problem name.}
-
     \subsection{DBT Formulation}
 
-    In this section we present a formulation for the DBT problem with a cost parameter $\alpha$ and a
-    single source $p^-=\{p_0\}$ based on~\cite[MMX]{mmx}.
+    In this section a formulation for the DBT problem with a cost parameter $\alpha$ and a
+    single source $p^-=\{p_0\}$ based on~\cite[MMX]{mmx} is presented.
+    The formulation is a MINLP problem with both binary variables and continuous variables.
 
     \begin{align}
         \text{(DBT)}: \; \min &\sum_{[i,j] \in E_1} f_{ij}^{\alpha}\|p_i - x^j\| + \sum_{[i,j] \in E_2} f_{ji}^{\alpha}\|x^i - x^j\| \\
@@ -1165,10 +1200,7 @@
         & f_{ij} \in [0,1] \quad \text{for } [i,j] \in E\\
         & c_{ij} \in \R_+ \quad i \in S, \quad j \in P
     \end{align}
-    {\color{red} Also constrain $x^i$ to be in the convex hull of terminals DONE} \\
-    {\color{red} Get rid of duplicates like $y_{ij}$ and $y_{ji}$. DONE} \\
-    {\color{red} why $f_{ij}$ and $y_{ij}$ are defined over different index sets? The index set over which $f_{ij}$ as defined does not seem correct. It should either be between two Steiners $i,j$ or a Steiner $i$  and a terminal $j$ (similar to what you did in MMX for Steiner). DONE} \\
-    where we define the followings:
+    where the following notation is used:
 
     \begin{itemizeb}
         \leftskip 0.8 cm\labelsep=.3 cm
@@ -1182,17 +1214,16 @@
         \leftskip 0.8 cm\labelsep=.3 cm
         \item[$\alpha \in (0,1)$] is the cost parameter
         \item [$M$] is the set of masses $\{m_1, \ldots, m_n\}$ of the terminals
-        \item [$f_{ij}$] flow on the edge $(i, j) \in E$ going from $j$ to $i$  {\color{red} I end up with opposite flows but it makes sense to have the first indices
-        reserved for the terminals so I am unsure whether to change this}
+        \item [$f_{ij}$] flow on the edge $(i, j) \in E$ going from $j$ to $i$  {TODO: controlla che sia corretta la direzione}
         \item [$y_{ij}$] binary variable indicating the presence of an un-oriented edge connecting $i$ to $j$.
     \end{itemizeb}
 
+
     \subsection{Proof of correctness}
 
-    When we say correctness we mean that, given an optimal solution of the DBT formulation we can reconstruct one of the optimal solutions
-    to the DBT problem.
-    Therefore we need to construct a function $\phi$ that maps feasible solutions of the formulation into feasible solutions of DBT (which are graphs)
-    and prove that the optimality is preserved.
+    Correctness here refers to the ability to reconstruct one of the optimal solutions to the DBT problem from an optimal solution of the DBT formulation. 
+    Accordingly, a function $\phi$ is constructed to map feasible solutions of the formulation into feasible solutions of DBT (i.e., graphs), 
+    and it must be proven that optimality is preserved.
 
     Outline of the proof:
     \begin{enumerate}
@@ -1204,43 +1235,39 @@
     \end{enumerate}
 
     \subsection*{Step 1}
-    We define a function $\phi$ that maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|} \times \R^{|E|}$ to a oriented weighted graph in $\mathbb{R}^N$ as follows:
+    A function $\phi$ is defined that maps $\mathbb{R}^{N (|P|-2)} \times \{0,1\}^{|E|} \times \R^{|E|}$ to an oriented weighted graph in $\mathbb{R}^N$ as follows:
 
     \begin{enumerate}
-        \item For each $i \in P$, add a terminal at $p_i$.
-        \item For each $j \in S$, add a vertex $s_j \in \R^N$ with coordinates $x^j$.
-        \item If there are multiple vertices with the same coordinates, collapse them into one and identify them with any of the indices.
-        \item For each $[i,j] \in E$ with $y_{ij} = 1$, add an edge between $v_i$ and $v_j$.
-        \item Assign the flow $f_{ij}$ to the edge connecting $v_i$ to $v_j$. Note that either $(i,j) \in E$ or $(j,i) \in E$ but not both so flows
-        cannot cancel.
+        \item For each $i \in P$, a terminal is added at $p_i$.
+        \item For each $j \in S$, a vertex $s_j \in \R^N$ with coordinates $x^j$ is added.
+        \item Multiple vertices with the same coordinates are collapsed into one and identified with any of the indices.
+        \item For each $[i,j] \in E$ with $y_{ij} = 1$, an edge is added between $v_i$ and $v_j$.
+        \item The flow $f_{ij}$ is assigned to the edge connecting $v_i$ to $v_j$. Note that either $(i,j) \in E$ or $(j,i) \in E$, but not both, so flows cannot cancel.
     \end{enumerate}
 
-    Note that this function is not injective, as we can permute the indices of the Steiner points and still get the same graph.
-    We first show that $\phi(\cdot)$ is a feasible solution of DBT. Clearly, it is a graph so we are left to prove that the flow
-    constraints work.
+    This function is not injective, as permuting the indices of the Steiner points yields the same graph.
+    It is first shown that $\phi(\cdot)$ is a feasible solution of DBT. Since it is a graph, it remains to verify that the flow constraints hold.
 
-    The (only) source is a special terminal, and here we constraint it to be connected
-    to the first Steiner point (which has index $|P|+1$) because of~\ref{dbt_form:sum_sources}.
+    The (only) source is a special terminal, constrained to be connected to the first Steiner point (index $|P|+1$) due to~\ref{dbt_form:sum_sources}.
 
-    We observe that the constraints form a tree were leaves are sink terminals, so in any optimal solutions the flows all go "downstream".
-    This is not a problem as the indices of the tree are topologically sorted due to~\ref{dbt_form:connectedness}.
-    For any terminal $p$, in $\phi(GMMX)$ we could have a (possibly empty) set of degenerate steiner points, indexed by $S_p = \{s_1, \dots, s_m\}$,
-    at the same coordinates.
+    The constraints form a tree with leaves as sink terminals, leading to all flows going "downstream" in any optimal solution. 
+    This is consistent with the topological sorting of the tree indices imposed by~\ref{dbt_form:connectedness}.
+    For any terminal $p$, in $\phi(GMMX)$ a (possibly empty) set of degenerate Steiner points indexed by $S_p = \{s_1, \dots, s_m\}$ 
+    may exist at the same coordinates.
     The total flow of the collapsed vertex is:
     \begin{equation}
         \sum_{i \in S_p} \left[ \sum_{j<i}^{f_{ji}} - \sum_{j>i}^{f_{ij}}   \right] + \sum_{j \in S} f_{pj} = m_p
     \end{equation}
-    By constraint~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_sinks} we get that the final flow is exactly $m_p$.
+    By constraints~\ref{dbt_form:sum_steiner_0} and~\ref{dbt_form:sum_sinks}, the final flow is exactly $m_p$.
 
-    We can apply the same construction also for coinciding Steiner points that do not coincide with any terminal and get
-    that the flow is conserved.
+    The same construction applies for coinciding Steiner points that do not coincide with any terminal, ensuring flow conservation.
 
-    We have also proved now that the set of feasible solutions of the formulation is a subset of the set of feasible solutions of DBT through $\phi$.
-    This means that to prove the equivalence we only need to show that for any optimal solution in DBT
-    there is a corresponding optimal solution of the formulation that maps to it.
+    It has thus been shown that the set of feasible solutions of the formulation is a subset of the set of feasible solutions of DBT via $\phi$.
+    Therefore, to establish equivalence, it remains to show that for any optimal solution in DBT, a corresponding optimal solution of the formulation exists that maps to it.
 
     \subsection*{Step 2}
-    By calling $Formulations$ and $Graphs$ the feasible regions of the MINLP formulation and DBT problem respectively, we show that the following diagram commutes:
+    Denote the feasible regions of the MINLP formulation and DBT problem by $Formulations$ and $Graphs$ respectively. 
+    The following diagram is shown to commute:
     \[
         \begin{tikzcd}
             & \mathbb{R}  \\
@@ -1248,57 +1275,53 @@
         \end{tikzcd}
     \]
 
-    The objective function in the formulation is the sum of $(f_{ij} + f_{ji})^\alpha$ which is, after passing through $\phi$, the flow
-    along the edge $(i,j)$, weighted by $\| p_i - x^j \|$ or $\|x^i-x^j \|$ which are the euclidean distances between
-    Steiner points and terminals.
+    The objective function in the formulation is the sum of $(f_{ij} + f_{ji})^\alpha$, which, after applying $\phi$, becomes the flow 
+    along the edge $(i,j)$, weighted by $\| p_i - x^j \|$ or $\|x^i-x^j \|$, representing Euclidean distances between Steiner points and terminals.
     The fact that there could be a degeneracy is not important as those points have $0$ distance and do not contribute to the
     objective value.
 
     \subsection*{Step 3}
 
-    We now show that there is a feasible solution to the MNILP that maps to a connected optimal solution of DBT where terminals are
+    It is now shown that a feasible solution to the MNILP exists that maps to a connected optimal solution of DBT where terminals are 
     leaves and branching points have degree 3.
-    For each steiner point $s_i$ in the graph we can set $x^i = s_i$. We then set $y_{ij} = 1$ and re-order the steiner points
-    so that the indices are topologically sorted with respect to the tree structure of the graph.
-    We can then set $f_{ij}$ or $f_{ji}$ $j$ to the appropriate value for each edge $(i,j)$ in the optimal solution of DBT.
-    We are not violating the degree constraints as we are mapping an optimal solution of DBT.
-    By an edge counting argument (crucially using that the solution is a tree) we can show that there are enough Steiner points to connect all the terminals.
+    For each Steiner point $s_i$ in the graph, set $x^i = s_i$. Set $y_{ij} = 1$ and re-order the Steiner points 
+    such that their indices are topologically sorted with respect to the tree structure of the graph.
+    Then set $f_{ij}$ or $f_{ji}$ to the appropriate value for each edge $(i,j)$ in the optimal DBT solution.
+    The degree constraints are not violated since the mapping originates from an optimal DBT solution.
+    An edge counting argument, leveraging the tree structure, shows that there are enough Steiner points to connect all terminals:
     \begin{equation}
         |S| + |P| - 1 = \frac{1}{2} \left( 3|S| + \sum_{i \in P} d(i) \right)
     \end{equation}
-    Which implies that:
+    Which implies:
     \begin{equation}
         \label{eq:edge_counting}
         \sum_{i \in P} d(i) = 2|P| - 2 - |S|
     \end{equation}
 
-    because in our case $d(i)=1$ by assumption.
-    In order to satisfy the connectivity constraint~\ref{dbt_form:connectedness} we have to re-order
-    the steiner points in a topological order, which exists as it is a tree.
+    Given the assumption $d(i)=1$, this holds.
+    To satisfy the connectivity constraint~\ref{dbt_form:connectedness}, Steiner points must be re-ordered in a topological order, which exists since the graph is a tree.
 
     \subsection*{Step 4}
-    Now we tackle the case where the terminals can have degree higher than $1$ while still assuming that the branching points have
-    degree $3$.
-    We will show that we can add more degenerate steiner points to the graph until we reduce it to the case where all terminals are leaves.
-    During this procedure we need to track how many steiner points we add.
-    From equation~\ref{eq:edge_counting} we know that for every "extra" degree we have one extra Steiner point to work with.
-    Define the following procedure:
+    The case where terminals can have degree greater than $1$, while assuming branching points have degree $3$, is now addressed.
+    The strategy is to add degenerate Steiner points to the graph until all terminals become leaves.
+    During this process, the number of added Steiner points must be tracked.
+    From equation~\ref{eq:edge_counting}, it follows that for each "extra" degree, one additional Steiner point is available.
+    The procedure is as follows:
     \begin{enumerate}
         \item Consider a terminal $p_i$ with degree $d(i)$ connected to points $\{x_1, \dots, x_{d(i)}\}$
-        \item Add $d(i) - 1$ degenerate steiner points $\{s_1, \dots, s_{d(i)-1}\}$ at the same coordinates as $p_i$
+        \item Add $d(i) - 1$ degenerate Steiner points $\{s_1, \dots, s_{d(i)-1}\}$ at the same coordinates as $p_i$
         \item Connect them with edges $\{ (p_i, s_1), (s_1, s_2), \dots, (s_{d(i)-1}, x_{d(i)}) \}$
-        \item Connect also edges $\{ (s_i, x_i) \}$ for $i = 1, \dots, d(i)-1$
+        \item Also connect edges $\{ (s_i, x_i) \}$ for $i = 1, \dots, d(i)-1$
     \end{enumerate}
-    This procedure preserves the connectedness of the graph and its topology. We can repeat this procedure until all terminals
-    have degree $1$.
-    Once the topology is fixed, the flows are uniquely determined by the masses on the terminals. We might just have to
-    re-order the Steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
+    This preserves the connectedness and topology of the graph. The procedure can be repeated until all terminals have degree $1$.
+    Once the topology is fixed, flows are uniquely determined by the masses on the terminals. 
+    Re-ordering the Steiner points may be necessary to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
 
     \subsection*{Step 5}
 
-    We can proceed as in step 4, for each branching point with degree $d(i)$ we can add $d(i) - 3$ degenerate steiner points
-    and connect them in a chain. We can then re-order the steiner points to satisfy the connectivity constraint~\ref{dbt_form:connectedness}.
-    From~\ref{eq:edge_counting} we get that there are enough steiner points to apply this procedure to every branching point.
+    As in step 4, for each branching point with degree $d(i)$, $d(i) - 3$ degenerate Steiner points can be added and connected in a chain. 
+    Re-ordering the Steiner points ensures compliance with the connectivity constraint~\ref{dbt_form:connectedness}.
+    According to~\ref{eq:edge_counting}, a sufficient number of Steiner points is available to apply this procedure to every branching point.
     \qed
 
     \subsection{General methodology and resources}
@@ -1428,6 +1451,114 @@
         \textbf{Objective:} \quad & \sum_{s \in S, t \in T} \| w_{s,t} - p_t y_{s,t} \| + \sum_{s, s' \in S, s < s'} \| w_{s,s'} - w_{s',s} \| \\
     \end{align}
 
+    
+
+    \subsection{Single iterations results}
+
+    TODO: literature review on the methods that perform well maybe with a small explaination.
+
+    In \ref{tab:ablation_configs} an analysis of the results found by the BARON solver during preprocessing (using parameter \texttt{MaxIter=1}) has been reported.
+    It is clear that LBTTDo is the main responsible for finding good lower bounds before exploring the tree. 
+    LBTTDo stands for Linear-feasibility-based range reduction option (poor man’s LPs)
+
+    \subsection{Convex relaxation}
+
+    TODO: talk about why the convex relaxation is useful
+
+    Broadly speaking, the solver has two main tasks: finding a feasible solution with a low objective value and proving that the solution is optimal.
+    In order to investigate which subproblem is harder, the trajectories of the solver have been analyzed.
+
+    TODO: in formattazione finale vanno affiancati
+    \begin{figure}[h]
+        \includegraphics[scale=0.3]{../experiments_scripts/nostartingpoint_3x3.png}
+        \centering
+        \caption{Log of the BARON solver's trajectory without a specified starting point using the DBTQ formulation and $n=7$ terminals.}
+        \label{fig:trajectory_analysis_no_sp}
+    \end{figure}
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.3]{../experiments_scripts/startingpoint_3x3.png}
+        \centering
+        \caption{Log of the BARON solver's trajectory with starting point set equal to the optimal solution as found in figure \ref{fig:trajectory_analysis_no_sp}}
+        \label{fig:trajectory_analysis_sp}
+    \end{figure}
+
+    As it is possible to see in figure \ref{fig:trajectory_analysis_no_sp}, the solver is able to find the optimal solution within the first few seconds (consider some extra seconds of preprocessing),
+    and then it spends the rest of the time trying to prove that the solution is optimal. This claim is further supported by figure \ref{fig:trajectory_analysis_sp}, 
+    where the solver is initialized with the optimal solution found in the previous run. In this case the runtime is slightly higher, and in particular the trajectory of
+    lower bounds is very similar, indicating that the convex relaxations lie quite lower than the objective value of the optimal solution.
+    This is a clear indication that formulations that are better suited for convex relaxations are more likely to
+    yield good performance which indicates a possible direction for future research.
+    
+
+    The convex relaxation is the main tool used to find lower bounds for the DBTQ problem. When combined with a branch-and-bound
+    algorithm, it allows to give optimality guarantees for the solutions found by the solver. 
+
+
+    \begin{table*}[ht]
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \setlength{\tabcolsep}{6pt}
+        \begin{threeparttable}
+            \begin{tabular}{l cc|cc|cc}
+                \toprule
+                \textbf{Formulation} & \multicolumn{2}{c|}{\(\mathbf{N=4}\)} & \multicolumn{2}{c|}{\(\mathbf{N=5}\)} & \multicolumn{2}{c}{\(\mathbf{N=6}\)} \\
+                \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+                & Avg LB  & Avg Time & Avg LB                     & Avg Time                   & Avg LB                     & Avg Time                    \\
+                \midrule
+                DBTQ (exact solutions)            & 1.08721 & 0.47950  & 1.31719\textsuperscript{a} & 2.07564\textsuperscript{a} & 1.52883\textsuperscript{a} & 19.87462\textsuperscript{a} \\
+                DBTQ + cuts (exact solutions)     & 1.08721 & 0.20500  & 1.32985\textsuperscript{a} & 1.35615\textsuperscript{a} & 1.53823                    & 6.88175                     \\
+                DBTQ convex relaxation            & 0.36753 & 0.90600  & 0.05242\textsuperscript{a} & 0.26872\textsuperscript{a} & 0.00469           & 0.08875           \\
+                DBTQ convex relaxation \(w\) only & 1.08721 & 0.28725  & 1.33244\textsuperscript{b} & 2.02711\textsuperscript{b} & 1.54766\textsuperscript{c} & 23.06500\textsuperscript{c} \\
+                DBTQ pre-processing only          & 0.92279 & 0.36025  & 0.92912                    & 0.67375                    & 0.90109                    & 2.41075                     \\
+                DBTQ + cuts preprocessing only    & 1.01456 & 0.14950  & 1.01968                    & 0.57225                    & 0.97563                    & 1.62675                     \\
+                \bottomrule
+            \end{tabular}
+            \begin{tablenotes}[flushleft,para]
+                \footnotesize
+                \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
+            \end{tablenotes}
+        \end{threeparttable}
+        \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
+        \label{tab:relaxation_results}
+    \end{table*}
+
+    In \ref{dbtq TODO} there are two non-linear constraints: $w$ is a bilinear term and $y$ is a binary variable. 
+    It is interesting to study the quality of the solution obtained by relaxing such constraints. For the binary constraints,
+    $y$ is relaxed to be a continuous variable in $[0,1]$ and for the bilinear term $w=xy$ the \textit{McCormick envelope} is used:
+    \begin{align}
+        w &\ge 0 \\
+        w &\ge x+y - 1 \\
+        w &\le x \\
+        w &\le y \\
+    \end{align}
+    exploiting the fact that $x, y \in [0,1]$. The results are presented in~\ref{tab:relaxation_results}. In the case of the full
+    relaxation, the solver is not able to find a meaningful lower bound, which suggests that the feasible region is too large
+    to enable reasonable pruning. As already shown in \ref{TODO: trajectories analysis}, the truly hard part of guaranteeing 
+    optimality lies in the lower bound. This is further confirmed by running experiments initializing the solver with the optimal
+    solution for the exact problem. TODO: referenzia questo.
+
+
+    TODO: specify somewhere what "better objective" means
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{../experiments_scripts/baseline_runtime_performance.png}
+        \centering
+        \caption{TODO}
+    \end{figure}
+
+    TODO: higher dimension experiment
+
+    \subsection{Closest point improvement from Ouzia Pablo e Maculan}
+
+    TODO: add the paper in the literature review and write the new constraints
+
+    
+    TODO: preambolo su perchè guardiamo quasi solo alpha != 0
+    TODO: remark the difference between difficult feasible regions and difficult (non convex) objective function
+    
+
     \subsection{Convex Hull Approximation TODO fix the naming}
 
     We can now use the convex hull condition in a different way by exploiting disjunctive programming~\cite[2.11]{Conforti2014}.
@@ -1463,71 +1594,47 @@
     We can observe that the first equation does not depend on $x$.
 
 
-    \subsection{Single iterations results}
-
-    TODO: literature review on the methods that perform well maybe with a small explaination.
-
-    \begin{table*}[ht]
-        \centering
-        \scriptsize
-        \renewcommand{\arraystretch}{1.2}
-        \setlength{\tabcolsep}{6pt}
-        \begin{threeparttable}
-            \begin{tabular}{l cc|cc|cc}
-                \toprule
-                \textbf{Formulation} & \multicolumn{2}{c|}{\(\mathbf{N=4}\)} & \multicolumn{2}{c|}{\(\mathbf{N=5}\)} & \multicolumn{2}{c}{\(\mathbf{N=6}\)} \\
-                \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
-                & Avg LB  & Avg Time & Avg LB                     & Avg Time                   & Avg LB                     & Avg Time                    \\
-                \midrule
-                DBT (exact solutions)            & 1.08721 & 0.47950  & 1.31719\textsuperscript{a} & 2.07564\textsuperscript{a} & 1.52883\textsuperscript{a} & 19.87462\textsuperscript{a} \\
-                DBT + cuts (exact solutions)     & 1.08721 & 0.20500  & 1.32985\textsuperscript{a} & 1.35615\textsuperscript{a} & 1.53823                    & 6.88175                     \\
-                DBT convex relaxation            & 0.36753 & 0.90600  & 0.05242\textsuperscript{a} & 0.26872\textsuperscript{a} & 0.00469           & 0.08875           \\
-                DBT convex relaxation \(w\) only & 1.08721 & 0.28725  & 1.33244\textsuperscript{b} & 2.02711\textsuperscript{b} & 1.54766\textsuperscript{c} & 23.06500\textsuperscript{c} \\
-                DBT pre-processing only          & 0.92279 & 0.36025  & 0.92912                    & 0.67375                    & 0.90109                    & 2.41075                     \\
-                DBT + cuts preprocessing only    & 1.01456 & 0.14950  & 1.01968                    & 0.57225                    & 0.97563                    & 1.62675                     \\
-                \bottomrule
-            \end{tabular}
-            \begin{tablenotes}[flushleft,para]
-                \footnotesize
-                \item[] \textsuperscript{a} 39 out of 40 valid runs; \textsuperscript{b} 38 out of 40 valid runs; \textsuperscript{c} 34 out of 40 valid runs.
-            \end{tablenotes}
-        \end{threeparttable}
-        \caption{Results from the non-linear mixed integer optimization experiments, grouped by instance size \(N\).}
-        \label{tab:experiment_results_grouped_2}
-    \end{table*}
-
-    TODO: specify somewhere what "better objective" means
-
-    \begin{figure}[h]
-        \includegraphics[scale=0.5]{../experiments_scripts/baseline_runtime_performance.png}
-        \centering
-        \caption{TODO}
-    \end{figure}
-
-
-    \subsection{Closest point improvement from Ouzia Pablo e Maculan}
-
-    TODO: add the paper in the literature review and write the new constraints
-
-    
-    TODO: preambolo su perchè guardiamo quasi solo alpha != 0
-    TODO: remark the difference between difficult feasible regions and difficult (non convex) objective function
-    
     \subsection{Implementing flows}
 
     In order to solve the problem with alpha != 0 we need to implement the flow constraints as in the \ref{todo}.
 
     todo: graph with performance of this method
 
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{../experiments_scripts/runtime_alpha.png}
+        \centering
+        \caption{Runtime for DBTQ with flows with $n=6$ terminals. As it can be seen, the performance is quite stable for 
+        $\alpha$ close to $0$, while for the almost linear cost the variance starts to grow. In particular, compared to $\alpha=0$
+        there is an increase from $20$ seconds to around $45$ TODO: magari dici altro}
+        \label{fig:runtime_alpha}
+    \end{figure}
+
     \subsection{Instance specific bounds on angles with the new formulation}
 
     todo: experiment a bit and show that it is a thrash idea
 
 
+    \subsection{Different objective function}
+    In the case of the DBT with flows, the theory has mainly been developed for cost functions of the form $\theta ^ \alpha$, but it is possible,
+    and often useful, to also consider other concave functions. For example in \cite{degree3} the assumption on the cost function is that it is admissible.
+    While the stability results for continuous measures might not hold anymore, in the discrete setting it is quite clear that the optimization problem has a similar
+    structure.
+    One of the biggest advantages of mathematical formulations and solvers is their flexibility: it is rather easy to change cost functional and it is shown here that
+    the performance remains more or less unchanged TODO: aggiungere grafico e parlare del logaritmo
+    For instance, the case of a logarithmic cost function has been studied and results are plotted in TODO: aggiungi immagini
+
+    It is also possible to add in the objective a cost for each junction $x$. This double counts branching points with degeneracy, so one needs to be careful when using it
+    but as a proof of concept, the performance has been plotted in TODO: FAI GRAFICO along with some example solutions TOOD: FAI PURE QUESTO.
+
+    Of course, some of the properties of the solution might change: in the backbone formulation \ref{dbtq} the only assumptions are the tree structure and the
+    convex hull property. Stronger results, such as \ref{geometric 50 cut} are not guaranteed to hold anymore and should be disabled in the solver.
+    Nevertheless, such changes are easier to implement in a formulation than in a software package like GeoSteiner, which is not designed to be flexible.
+
     \section{Conclusioni e future development}
 
+    TODO: possible idea is to add graph structure as in the paper where they do tree isomorphism
 
-    TODO: insert somewhere the connection with Euclidean Steiner Tree
 
     TODO: add images
 
@@ -1551,3 +1658,4 @@
 
 
 \end{document}
+

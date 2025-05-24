@@ -131,6 +131,6 @@ def fixed_points(*args, **kwargs):
         [0, -1]
     ]
 
-    masses = [1, -1 / 3, -1 / 3, -1/3]
+    masses = [1, -1 / 3, -1 / 3, -1 / 3]
 
     return {"terminals": points, "masses": masses}

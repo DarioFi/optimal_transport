@@ -1,7 +1,7 @@
-from formulations.relaxed_formulations import dbt_relaxed_alpha0
-from formulations.dbt import dbt_alpha_0
-from experiment import Experiment
-from problems.closest_counterexample import random_points_unit_square_with_masses
+from opt_trans.formulations.relaxed_formulations import dbt_relaxed_alpha0
+from opt_trans.formulations.dbt import dbt_alpha_0
+from opt_trans.experiment import Experiment
+from opt_trans.problems.closest_counterexample import random_points_unit_square_with_masses
 
 # todo: check baron logs for cuts
 

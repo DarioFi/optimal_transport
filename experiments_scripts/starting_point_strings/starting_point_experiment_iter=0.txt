@@ -1,0 +1,54 @@
+===========================================================================
+ BARON version 24.5.8. Built: LNX-64 Wed May 8 10:06:40 EDT 2024 
+ Running on machine RedmiDario
+
+ BARON is a product of The Optimization Firm.
+ For information on BARON, see https://minlp.com/about-baron
+ Licensee: Aida Khajavirad at TOF, aida.khajavirad@gmail.com.
+
+ If you publish work using this software, please cite publications from
+ https://minlp.com/baron-publications, such as: 
+
+ Khajavirad, A. and N. V. Sahinidis,
+ A hybrid LP/NLP paradigm for global optimization relaxations,
+ Mathematical Programming Computation, 10, 383-421, 2018.
+===========================================================================
+ This BARON run may utilize the following subsolver(s)
+ For LP/MIP/QP: CLP/CBC                                         
+ For NLP: IPOPT, FILTERSQP
+===========================================================================
+ Starting solution is feasible with a value of   1.71977          
+ Doing local search
+ Solving bounding LP
+ Starting multi-start local search
+ Done with local search
+===========================================================================
+  Iteration    Open nodes         Time (s)    Lower bound      Upper bound
+          1             1             2.37     0.914233          1.71977                 
+          5+            3             4.38     0.914233          1.71977                 
+         18+            5             6.38     0.914233          1.71977                 
+         37+            9             8.40     0.914233          1.71977                 
+         65+           12            10.41     0.940441          1.71977                 
+         77+           14            12.50     0.940441          1.71977                 
+         79+           15            14.50     0.973320          1.71977                 
+         99+           17            16.54     0.973320          1.71977                 
+        103+           19            18.58      1.02123          1.71977                 
+        140+           17            20.59      1.06387          1.71977                 
+        162+           14            22.63      1.09611          1.71977                 
+        175+           15            24.64      1.09611          1.71977                 
+        205+           19            26.68      1.11149          1.71977                 
+        228            16            28.69      1.25773          1.71977                 
+        268            10            30.69      1.34634          1.71977                 
+        297             0            32.17      1.71977          1.71977                 
+
+                         *** Normal completion ***            
+
+ Wall clock time:                    32.17
+ Total CPU time used:                39.79
+
+ Total no. of BaR iterations:     297
+ Best solution found at node:      -2
+ Max. no. of nodes in memory:      22
+ 
+ All done
+===========================================================================

@@ -1,4 +1,5 @@
 import itertools
+import math
 from typing import Dict
 
 import pyomo.environ as pyo
@@ -434,7 +435,8 @@ def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: 
 
 
 def dbtq_with_flows(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
-                    use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
+                    use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None,
+                    use_log_obj=False, log_multiplier=None):
     assert use_geometric_cut_50 is False, "Geometric cut 50 is not supported in this version as it is not guaranteed to be optimal"
 
     model = dbtq(terminals, 0, masses, relax_y, relax_w, disjunctive_w,
@@ -494,6 +496,23 @@ def dbtq_with_flows(terminals, alpha, masses, relax_y: bool, relax_w: bool, disj
             model.S
         )
 
+    if use_log_obj:
+        def objective_rule_alpha(model):
+            const = math.log(log_multiplier + 1)
+            return sum(
+                pyo.log(log_multiplier * model.f[(i, j)] + 1) / const * norm([model.w[(i, j), d] for d in model.D],
+                                                                             [model.w[(j, i), d] for d in model.D]) for
+                i in model.S for
+                j in
+                model.S if i < j
+            ) + sum(
+                pyo.log(log_multiplier * model.f[(i, j)] + 1) / const * norm([model.w[(i, j), d] for d in model.D],
+                                                                             [model.w[(j, i), d] for d in model.D]) for
+                i in model.P for
+                j in
+                model.S
+            )
+
     model.obj = pyo.Objective(rule=objective_rule_alpha, sense=pyo.minimize)
 
     return model
@@ -532,7 +551,8 @@ if __name__ == '__main__':
         disjunctive_w=0,
         use_geometric_cut_50=False,
         angles_constraint=False,
-        starting_position=None
+        starting_position=None,
+        use_log_obj=True
     )
 
     m.pprint()

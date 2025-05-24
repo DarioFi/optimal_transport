@@ -1,0 +1,79 @@
+===========================================================================
+ BARON version 24.5.8. Built: LNX-64 Wed May 8 10:06:40 EDT 2024 
+ Running on machine RedmiDario
+
+ BARON is a product of The Optimization Firm.
+ For information on BARON, see https://minlp.com/about-baron
+ Licensee: Aida Khajavirad at TOF, aida.khajavirad@gmail.com.
+
+ If you publish work using this software, please cite publications from
+ https://minlp.com/baron-publications, such as: 
+
+ Khajavirad, A. and N. V. Sahinidis,
+ A hybrid LP/NLP paradigm for global optimization relaxations,
+ Mathematical Programming Computation, 10, 383-421, 2018.
+===========================================================================
+ This BARON run may utilize the following subsolver(s)
+ For LP/MIP/QP: CLP/CBC                                         
+ For NLP: IPOPT, FILTERSQP
+===========================================================================
+ Starting solution is feasible with a value of   1.58815          
+ Doing local search
+ Solving bounding LP
+ Starting multi-start local search
+ Done with local search
+===========================================================================
+  Iteration    Open nodes         Time (s)    Lower bound      Upper bound
+          1             1             2.66     0.604091          1.58815                 
+          3             2             4.73     0.604091          1.58815                 
+         10             5             6.73     0.712141          1.58815                 
+         37+            6             8.73     0.779559          1.58815                 
+         50+           10            10.73     0.779559          1.58815                 
+         56            13            12.75     0.779559          1.58815                 
+         64+           14            14.90     0.779559          1.58815                 
+         67+           15            16.91     0.779559          1.58815                 
+         79+           18            18.92     0.779559          1.58815                 
+         80+           18            20.96     0.779559          1.58815                 
+         93+           20            23.01     0.779559          1.58815                 
+        107+           23            25.02     0.779559          1.58815                 
+        107+           23            27.03     0.779559          1.58815                 
+        121+           27            29.03     0.779559          1.58815                 
+        130+           27            31.04     0.779559          1.58815                 
+        136+           30            33.04     0.779559          1.58815                 
+        152+           34            35.04     0.779559          1.58815                 
+        175+           37            37.04     0.779559          1.58815                 
+        203+           44            39.05     0.779559          1.58815                 
+        239+           51            41.05     0.779559          1.58815                 
+        258+           52            43.06     0.779559          1.58815                 
+        286+           50            45.06     0.938272          1.58815                 
+        315+           52            47.08     0.953308          1.58815                 
+        329+           51            49.08     0.957910          1.58815                 
+        345+           53            51.09      1.04618          1.58815                 
+        367+           54            53.09      1.04618          1.58815                 
+        384+           52            55.09      1.04618          1.58815                 
+        415+           53            57.13      1.15587          1.58815                 
+        449+           51            59.13      1.17814          1.58815                 
+        470+           47            61.13      1.19838          1.58815                 
+        492+           42            63.15      1.21251          1.58815                 
+        515            41            65.15      1.21251          1.58815                 
+        533+           39            67.17      1.23036          1.58815                 
+        563+           31            69.17      1.26701          1.58815                 
+        593+           24            71.17      1.28810          1.58815                 
+        612            21            73.18      1.30965          1.58815                 
+        647+           16            75.20      1.33412          1.58815                 
+        661+           17            77.21      1.33412          1.58815                 
+        710+           21            79.21      1.40049          1.58815                 
+        766+            8            81.22      1.42217          1.58815                 
+        797             0            82.36      1.58815          1.58815                 
+
+                         *** Normal completion ***            
+
+ Wall clock time:                    82.36
+ Total CPU time used:               102.85
+
+ Total no. of BaR iterations:     797
+ Best solution found at node:      -2
+ Max. no. of nodes in memory:      55
+ 
+ All done
+===========================================================================

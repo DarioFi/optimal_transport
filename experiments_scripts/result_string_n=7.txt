@@ -1,0 +1,65 @@
+===========================================================================
+ BARON version 24.5.8. Built: LNX-64 Wed May 8 10:06:40 EDT 2024 
+ Running on machine RedmiDario
+
+ BARON is a product of The Optimization Firm.
+ For information on BARON, see https://minlp.com/about-baron
+ Licensee: Aida Khajavirad at TOF, aida.khajavirad@gmail.com.
+
+ If you publish work using this software, please cite publications from
+ https://minlp.com/baron-publications, such as: 
+
+ Khajavirad, A. and N. V. Sahinidis,
+ A hybrid LP/NLP paradigm for global optimization relaxations,
+ Mathematical Programming Computation, 10, 383-421, 2018.
+===========================================================================
+ This BARON run may utilize the following subsolver(s)
+ For LP/MIP/QP: CLP/CBC                                         
+ For NLP: IPOPT, FILTERSQP
+===========================================================================
+ Doing local search
+ Solving bounding LP
+ Starting multi-start local search
+ Done with local search
+===========================================================================
+  Iteration    Open nodes         Time (s)    Lower bound      Upper bound
+          1             1             4.47      1.15814         0.100000E+52             
+          5             3             9.52      1.15814         0.100000E+52             
+*         7             4             9.91      1.15814          2.24008                 
+*         7+            4             9.92      1.15814          2.23843                 
+*         7+            4             9.93      1.15814          2.23635                 
+*         7+            4             9.94      1.15814          2.23441                 
+*         7+            4             9.96      1.15814          2.23262                 
+*         7+            4             9.97      1.15814          2.23087                 
+*         7+            4             9.99      1.15814          2.22945                 
+*        10             5            10.20      1.15814          2.08937                 
+*        11             5            10.23      1.15814          2.08840                 
+         25+            6            15.22      1.38546          2.08840                 
+*        29             8            16.39      1.38546          2.07464                 
+*        29             7            16.40      1.38546          2.07230                 
+         53+           13            21.45      1.38546          2.07230                 
+         68+           16            26.43      1.38546          2.07230                 
+         86+           20            31.39      1.38546          2.07230                 
+        162+           29            36.38      1.38546          2.07230                 
+        210            32            41.37      1.56194          2.07230                 
+*       228            25            42.13      1.60389          2.06604                 
+*       228+           25            42.14      1.60389          2.06419                 
+*       228+           25            42.15      1.60389          2.06239                 
+*       228+           24            42.17      1.60389          2.06061                 
+*       228+           24            42.18      1.60389          2.05925                 
+*       228+           24            42.19      1.60389          2.05745                 
+        279+           24            47.17      1.63075          2.05745                 
+        328+           19            52.16      1.67853          2.05745                 
+        392             0            56.89      2.05745          2.05745                 
+
+                         *** Normal completion ***            
+
+ Wall clock time:                    57.10
+ Total CPU time used:                56.89
+
+ Total no. of BaR iterations:     392
+ Best solution found at node:     228
+ Max. no. of nodes in memory:      34
+ 
+ All done
+===========================================================================
