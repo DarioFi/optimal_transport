@@ -13,7 +13,7 @@
 
 
 % Packages
-\usepackage{amsmath}
+\usepackage{amsmath}  
 \usepackage{tikz-cd}
 \usepackage{amsfonts}
 \usepackage{amsthm}
@@ -97,6 +97,7 @@
 
 
 \renewcommand\qedsymbol{$\boxempty$}
+
 
 
 \newcommand{\R}{\mathbb{R}}
@@ -1146,6 +1147,8 @@
     that are formulation-agnostic which are: geometric cuts (implemented in \ref{TODO}), tree isomorphism elimination and a symmetry elimination technique which is more 
     aimed at non-random instances. TODO: commenta in base anche ai risultati degli esperimenti.
 
+    TODO: research on range reductions
+    
     
 
 
@@ -1612,7 +1615,68 @@
 
     \subsection{Instance specific bounds on angles with the new formulation}
 
-    todo: experiment a bit and show that it is a thrash idea
+    \begin{align}
+        \delta_{ijd} &\ge x_{id} - p_{jd}, 
+        && \forall\,i\in S,\;j\in P,\;d\in D, 
+        \tag{7.36}\\
+        \delta_{ijd} &\ge -(x_{id} - p_{jd}), 
+        && \forall\,i\in S,\;j\in P,\;d\in D, 
+        \tag{7.37}\\
+        \mathrm{dist}_{ij}
+        &= \sum_{d\in D}\delta_{ijd},
+        && \forall\,i\in S,\;j\in P,
+        \tag{7.38}\\
+        \mathrm{dist}_{ij}
+        &\le \epsilon \;+\; M\,(1 - b_{ij}),
+        && \forall\,i\in S,\;j\in P,
+        \tag{7.39}\\
+        \mathrm{dist}_{ij}
+        &\ge \epsilon\,(1 - b_{ij}),
+        && \forall\,i\in S,\;j\in P,
+        \tag{7.40}\\
+        \sum_{j\in P} b_{ij}
+        &\ge x^{\mathrm{active}}_{i},
+        && \forall\,i\in S,
+        \tag{7.41}\\
+        \sum_{j\in P} b_{ij}
+        &\le |P|\,x^{\mathrm{active}}_{i},
+        && \forall\,i\in S,
+        \tag{7.42}
+    \end{align}
+    \begin{align}
+        x^{\mathrm{active}}_{j}
+        \left<w_{ij}-w_{ji}, w_{kj}-w_{jk}\right>
+        \le
+        x^{\mathrm{active}}_{j}\,\overline{\cos}\,
+        \|w_{ij}-w_{ji}\|\,\|w_{kj}-w_{jk}\|,
+        \forall\,(i,j,k)\in\mathcal I.
+        \tag{7.43} //
+        \label{dbtq:instance_specific_bounds_formulation}
+    \end{align} 
+      
+    TODO: fix the formatting above and check that the equations make sense
+    TODO: check the numbering
+
+    Using the results of \ref{lemma:degree_definition} it is possible to implement extra constraints on the angles between vectors.
+    The core idea is to use the following well known formula for the cosine of the angle between two vectors $w_a$ and $w_b$:
+    \begin{equation}
+        \cos(\theta) = \frac{ \left< w_a , w_b \right>}{\|w_a\| \|w_b\|}
+    \end{equation}
+    An issue arises: given the degeneracy of the formulation (todo: ref) there are steiner points which overlap with terminals, and
+    in that region of space lemma~\ref{lemma:degree_definition} does not hold. In order to avoid this issue, 
+    extra constraints are added to the formulation~\ref{dbtq:instance_specific_bounds_formulation}. 
+    Those constraints are quite heavy, comprising of $O(n^2)$ variables, both integer and continuous and a complicated
+    non linear constraint. (todo: la formulazione riportata qui è mezza sbagliata e non ha i domini delle variabili).
+    It is therefore not surprising that the performance of the solver is quite poor, even when combining with the better bound than the 
+    general one of ~\ref{bound generale TODO:}.
+    In the case where the bound is strong ($\cos(\theta) \approx 0.5$) the runtime is around a factor of $2$ worse than withouth the extra constraints.
+    While this is a significant increase, it suggests that in formulations that are more suitable for those kind of constraints,
+    for instance one that does not use the degeneracy "trick" of the DBTQ formulation, the performance might be better.
+    Often the best instance specific bound found is very close to $0$ (which represents a $90$ degree angle) and in that case
+    the performance takes a hit of around $10$ times(todo: run experiment on this). This further suggests that there is value 
+    in trying to implement those constraints in a more suitable formulation.
+
+    todo: include experiments
 
 
     \subsection{Different objective function}
@@ -1631,6 +1695,7 @@
     convex hull property. Stronger results, such as \ref{geometric 50 cut} are not guaranteed to hold anymore and should be disabled in the solver.
     Nevertheless, such changes are easier to implement in a formulation than in a software package like GeoSteiner, which is not designed to be flexible.
 
+    TODO: there is a script that generates the plots, but it looks ugly so maybe a table is better.
     \section{Conclusioni e future development}
 
     TODO: possible idea is to add graph structure as in the paper where they do tree isomorphism

@@ -1,8 +1,12 @@
 import itertools
 import math
+import random
 from typing import Dict
 
 import pyomo.environ as pyo
+
+from opt_trans.formulations.utils import get_instance_specific_bound
+from opt_trans.problems.instance_generators import random_points_unit_square_with_masses
 
 
 def norm(p1, p2):
@@ -85,7 +89,7 @@ def enumerate_assignments(A, B):
 
 
 def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
-         use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None):
+         use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None, cosine_upper_bound=None):
     """
 
     :param terminals:
@@ -286,8 +290,11 @@ def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: 
     # warning: this holds when the i,j,k are in the correct order and only if they are connected
 
     if angles_constraint:
-        # todo: add min distance from terminals for each steiner point and use that to activate the constraint
-        # it is probably crazy bad
+        # this is crazy bad
+
+        if cosine_upper_bound is None:
+            raise ValueError("For security reasons, cosine_upper_bound must be provided. DBTQ assumes alpha=0 and gets called"
+                             "as a subroutine of dbtq_with_flows, which provides it.")
 
         M_val = 10
 
@@ -370,22 +377,20 @@ def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: 
 
         model.y_link_upper_con = pyo.Constraint(model.S, rule=y_link_upper_rule)
 
-        def non_deg_x_constraint(model, i):
-            # non_deg_x > 1/2 if min(x[i], p[i]) > epsilon
-            return model.non_deg_x[i] >= 1 / 2 * sum(model.x[i, d] for d in model.D) - 1 / 2
-
         def angle_constraint(model, i, j, k):
-            return model.x_active[j] * sum(model.w[(i, j), d] - model.w[(j, i), d] for d in model.D) * sum(
-                model.w[(k, j), d] - model.w[(j, k), d] for d in model.D) == \
-                model.x_active[j] * (-1) / 2 * norm([model.w[(i, j), d] for d in model.D],
-                                                    [model.w[(j, i), d] for d in model.D]) * norm(
+            return model.x_active[j] * sum(
+                (model.w[(i, j), d] - model.w[(j, i), d]) * (model.w[(k, j), d] - model.w[(j, k), d])
+                for d in model.D
+            ) <= \
+                model.x_active[j] * cosine_upper_bound * norm([model.w[(i, j), d] for d in model.D],
+                                                              [model.w[(j, i), d] for d in model.D]) * norm(
                     [model.w[(k, j), d] for d in model.D], [model.w[(j, k), d] for d in model.D])
 
         use = model.S
         index_angles = [
             (i, j, k) for i in use for j in use for k in use if i != j and i != k and j != k and i < k
         ]
-        # model.angle_constraint = pyo.Constraint(index_angles, rule=angle_constraint)
+        model.angle_constraint = pyo.Constraint(index_angles, rule=angle_constraint)
 
     # endregion
 
@@ -436,11 +441,14 @@ def dbtq(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: 
 
 def dbtq_with_flows(terminals, alpha, masses, relax_y: bool, relax_w: bool, disjunctive_w: int | bool,
                     use_geometric_cut_50: bool, angles_constraint: bool, starting_position: Dict = None,
-                    use_log_obj=False, log_multiplier=None):
+                    use_log_obj=False, log_multiplier=None, cosine_upper_bound=None):
     assert use_geometric_cut_50 is False, "Geometric cut 50 is not supported in this version as it is not guaranteed to be optimal"
 
+    if cosine_upper_bound is None:
+        cosine_upper_bound = get_instance_specific_bound(masses, alpha)
+
     model = dbtq(terminals, 0, masses, relax_y, relax_w, disjunctive_w,
-                 use_geometric_cut_50, angles_constraint, starting_position)
+                 use_geometric_cut_50, angles_constraint, starting_position, cosine_upper_bound=cosine_upper_bound)
 
     # Add flow variables
     first_edge = (0, min(model.S))
@@ -542,20 +550,20 @@ if __name__ == '__main__':
     #     starting_position=sp
     # )
 
+    random.seed(20250525)
+    d = random_points_unit_square_with_masses(6, 1)
+
     m = dbtq_with_flows(
-        [[0, 1], [0, 0], [1, 0], [1, 1], [0.5, 0.5], [0.4, 0.8]],
-        masses=[-1, .25, .25, .125, .125, .25],
-        alpha=0.95,
+        **d,
         relax_w=False,
         relax_y=False,
         disjunctive_w=0,
         use_geometric_cut_50=False,
         angles_constraint=False,
         starting_position=None,
-        use_log_obj=True
     )
 
-    m.pprint()
+    # m.pprint()
 
     solver = pyo.SolverFactory('baron')
 
@@ -563,3 +571,5 @@ if __name__ == '__main__':
     # results = solver.solve(m, tee=True)
 
     # m.display()
+
+    # display graph using visualize
