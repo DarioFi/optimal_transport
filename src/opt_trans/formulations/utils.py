@@ -70,7 +70,7 @@ def get_instance_specific_bound(masses, alpha):
 
 
 def get_instance_specific_bound_lower(masses, alpha):
-    assert masses[0] == -1
+    assert abs(masses[0] + 1) < 1e-5
     assert abs(sum(masses)) < 1e-5
     assert alpha <= 1 / 2
     assert all(masses[i] > 0 for i in range(1, len(masses)))
@@ -94,7 +94,7 @@ def get_instance_specific_bound_upper(masses, alpha):
     returns: the quantity
              r = max_{disjoint A_i,A_j, m_i <= m_j} m_i/m_j.
     """
-    assert masses[0] == -1
+    assert abs(masses[0] + 1) < 1e-8, "First mass must be -1."
     assert abs(sum(masses)) < 1e-8
     assert alpha >= 0.5
     assert all(m > 0 for m in masses[1:])

@@ -247,42 +247,52 @@
     
     TODO: FA DAVVERO PENA
 
-    The aim of this work is to study the \textit{branched optimal transport} problem, a variation of the optimal transport problem.
+    This work focuses on the study of the \textit{branched optimal transport} problem, a variation of the optimal transport problem.
 
-    The first mathematical formulation of an \textit{optimal transport} problem was given by Gaspard Monge in 1781~\cite[Monge]{monge1781mémoire}.
-    In his work, Monge considered the problem of moving a pile of soil from one location to another (in fact, a special case of the problem is known as the \textit{Earth-mover distance}).
-    The modern formulation of the problem is due to Kantorovich~\cite[Kantorovich 1958]{Kantorovich1958}, almost two centuries later.
-    The language used by Kantorovich is that of \textit{measure theory} and formally the problem is stated as follows:
-    given $X \subset \R^d$, two probability measures $\mu_0, \mu_1$ on $X$ with finite and equal mass, a cost function $c: X \times X \to \R^+$ find a transport map $T: X \to X$ that realizes the following infimum:
+    The first mathematical formulation of the \textit{optimal transport} problem was given by Gaspard Monge in 1781~\cite{monge1781mémoire}.
+    In his work, Monge considered the problem of moving a pile of soil from one location to another (a setting that inspired the definition of the \textit{Earth-mover distance} \cite{EDM}).
+    The modern formulation of the problem is due to Kantorovich~\cite{Kantorovich1958}, almost two centuries later.
+
+    Kantorovich stated the problem using the language of \textit{measure theory} as follows:
+
+    Given $X \subset \R^d$, two probability measures $\mu_0, \mu_1$ on $X$ with finite and equal mass, a cost function $c: X \times X \to \R^+$, the goal is to find a transport map
+     $T: X \to X$ that realizes the following infimum:
     \begin{equation}
         \inf \left\{ \int_X c(x, T(x)) d\mu_0(x) \, : \, T_\# \mu_0 = \mu_1 \right\}
         \label{eq:monge}
     \end{equation}
 
-    Intuitively the cost function $c(x,y)$ represents the cost of moving a unit mass from $x$ to $y$, and the functional to be minimized represents is the sum (integral)
-    over all the particles that need to be moved. Importantly, the particles do not interact with each other and there is no notion of \textit{path} involved in the transport.
-    This formulation is very generic and flexible: many authors and studies consider restrictions with extra assumptions (e.g. $c$ is a distance function, $X$ is a compact/convex set, etc.)
-    while other study even more general settings (e.g. $X$ is a generic metric space).
-    Nevertheless, all of the above choices lead to interesting paths that will be briefly explored in the literature review (todo: ha senso dirlo?)
-    and this work will also juggle between different assumptions, particularly in the computational study where the problem is restricted to atomic measures.
-
+    Intuitively the cost function $c(x,y)$ represents the cost of moving a unit mass from $x$ to $y$, 
+    and the functional to be minimized represents the total cost, obtained by integrating over all transported mass.
+    
+    Importantly, this model assumes non-interacting particles, and therefore has no notion of \textit{path} involved in the transport.
+    
+    Since Monge and Kantorovich, the problem has been studied extensively and many variations have been proposed.
+    In particular, it is possible to both impose extra assumptions (such as assuming $c$ is a distance function or that $X$ is a compact/convex set) 
+    or to extend the problem to more general settings (such as when $X$ is a generic metric space).
+    
 
     \subsection{Branched optimal transport}
 
-    The model proposed by Monge, although very interesting, often does not describe well real-world situations. Its main issue
-    lies in the linearity of the cost function: in many systems there is an incentive to transport multiple particles along the same path
-    at a sublinear cost.
-    TODO: TAKE SOME EXAMPLES FROM BERNOT BOOK
+    The model proposed by Monge, although very interesting, often fails to describe well real-world situations. 
+    
+    The key limitation is the linearity of the cost function: in many systems transporting multiple particles along the same path 
+    incurs in a sublinear cost.
 
-    Some motivating examples are transportation networks~\cite[TODO]{gilbert1967minimum}, drainage networks~\cite[TODO]{lee1976low}, gas pipelines~\cite[TODO]{bhaskaran1979optimal}, etc.
-    Similar phenomena can be observed also in nature, for example in the formation of trees~\cite[TODO]{TODO} or in the structure of blood vessels~\cite[TODO]{TODO}.
-    TODO: add images maybe
+    Relevant examples include transportation networks~\cite{gilbert1967minimum}, drainage networks~\cite{lee1976low}, gas pipelines~\cite{bhaskaran1979optimal}, etc.
+    Similar phenomena can also be observed in nature, for example in the formation of trees~\cite{xia2007formation} or in the structure of blood vessels \cite{west2001general}~\cite{west1997general}.
+        
+    TODO: add images  \\
+    TODO: grammar correction done up until here \\
 
-    The first formulation of this idea is due to Gilbert~\cite[TODO]{TODO} which proposed it in TODO.
+    The first formulation of this idea is due to Gilbert~\cite{gilbert1967minimum} which proposed it in 1967.
     Originally the problem was formulated as a variation of the minimum cost flow problem, so it was defined on a finite graph in a context of operational research.
     
     In the beginning of the 1900s complexity theory was born etc. 
-    TODO: add 21 NP hard problems Karp reference and maybe write that you will expand on this in the section about computation
+
+    \cite{karp2010reducibility}
+    TODO: maybe write that you will expand on this in the section about computation
+
 
     A more abstract formulation will be presented here, as it is both useful and possible to derive most structural results in this general setting, up to some assumptions.
     TODO: non so se aggiungere controllare a fine stesura. 
@@ -290,7 +300,7 @@
 
     There are two ways to formulate the problem, called \textit{Lagrangian} and \textit{Eulerian} formulations, which are equivalent in the sense that they yield the same optimal transport plan
     when it exists. The Lagrangian formulation uses more basic mathematical machinery and is more intuitive, while the Eulerian formulation can leverage more advanced tools from geometric measure theory.
-    Below both formulations with their many properties will be stated, together with the equivalence theorem. The notation and naming conventions used, together with the main lemmas are taken from~\cite[Chapter 1 - TODO]{Bernot}.
+    Below both formulations with their many properties will be stated, together with the equivalence theorem. The notation and naming conventions used, together with the main lemmas are taken from~\cite[Chapter 2 - 5]{Bernot}.
 
     \subsubsection{Lagrangian formulation}
 
@@ -463,13 +473,15 @@
 
         \cite[Theorem ?]{well_posedness}
         The finite graph structure of optimal traffic plans holds for all $\alpha$.
-        todo: properly understand the assumptions and extend this result
+        todo: properly understand the assumptions 
     \end{theorem}
 
     Now that a finite graph structure is established, it is possible to ask questions about the topology of this graph.
     One of the first question that can be asked, and extremely interesting for the computational aspect, regards the degree of the branching points, which is number of branches that can be connected to a vertex.
     The degree problem has to be tackled with care, as it depends on the dimension of the space. The simplest case is the planar Euclidean Steiner tree, and a proof 
     that for $\alpha > \frac{1}{2}$ the degree of a vertex is at most 3 is given~\cite{Bernot} but there is now the stronger following theorem:
+
+    TODO: this needs to be proved in general for any alpha, using the regularity result of de rosa
 
     \begin{theorem}
         \textbf{Degree in $\R^2$ \cite[Theorem 3]{degree3}}
@@ -572,10 +584,7 @@
 
     
 
-    \subsection{More advanced results}
-    TODO: does it make sense? is there more literature review?
-
-    Using this formalism one of the most important open questions \cite[Chapter 15, question 1]{Bernot} has been solved in \cite{well_posedness} leading to the following theorem:
+    Using the Eulerian formalism one of the most important open questions \cite[Chapter 15, question 1]{Bernot} has been solved in \cite{well_posedness} leading to the following theorem:
 
     \begin{theorem}
         \textbf{Stability of optimal transport paths} 
@@ -595,6 +604,8 @@
     TODO: per il brodo si può aggiungere le definizioni di convergenza e correnti
     
     \section{Novel theoretical results}
+
+    TODO: the extra graph structure result should be added here if we can manage to prove it
 
     In this section, the main results are presented, which provide lower bounds on the angles between edges.
     These bounds depend either on the specific instance of the problem $(\mu^{\pm}, N, \alpha)$ or only on the pair $(N, \alpha)$.
@@ -723,7 +734,7 @@
         \end{equation}
 
         Furthermore, the degree is bounded by $C \left( \frac{\theta_{\max}}{2}, N \right)$, where $\theta_{\max}$
-        is the angle that realizes the maximum in equation~\ref{eq:bound_general_direction}.
+        is the angle that realizes the maximum in equation~\ref{eq:bound_general_direction} and $C$ is the function defined in~\ref{definition:spherical_cap_results}.
 
         \begin{proof}
             By combining lemmas~\ref{lemma:bound_opposite_direction} and~\ref{lemma:difference_bound_decreasing}, along with~\cite[Lemma 12.5]{Bernot}, one can obtain a bound on $\cos \theta$ that applies to all masses and depends only on $\alpha$.
@@ -744,19 +755,20 @@
 
     \subsection{Instance specific bounds}
 
-    In the usual computational setting, the set $M$ is known in advance and the formulation can therefore include 
-    precomputed information (as done also in \ref{geometric_cuts}). In this specific case, it is possible to improve the bound on the angle by 
-    computing the supremum in equation~\ref{lemma:bound_general_direction} only over the possible flows that can be achieved with the masses in $M$.
+    In most computational settings, the set of masses $M$ is known in advance and the formulation can therefore include 
+    precomputed information. This approach is done, for example, in \cite[Eq (50)]{pinto2020new}, which is discussed in \ref{todo: write my geometric cut section}
+    In this context, it is possible to improve the bound on the angle by 
+    computing the supremum in equation~\ref{lemma:bound_general_direction} only those flows realizable with the masses in $M$.
+    The analysis is further restrited to the single-source case, which implies that  the optimal solution is a tree.
+    Due to the loop-free property of the optimal solution, it is known that the flows on the edges are combinations
+    of the masses in $M$.     
+    Therefore, the bound can be maximized under this constraint to find the minimal angle achievable 
+    for a given problem instance.
 
-    The analysis is further restrited to the case where there is only one source and therefore the optimal solution is a tree.
-    In this case, thanks to the loop-free property of the optimal solution, it is known that the masses on the edges are
-    combinations of masses in $M$. Thus, the bound can be maximized under this constraint to find the smallest
-    angle that can be achieved in a specific instance of the problem. TODO: ugly
 
     \begin{lemma}
         \label{lemma:degree_definition}
         Given an instance of a DBT problem with a single source ($p_0$), with masses $M=\{-1, m_1, \dots, m_n\}$
-            {\color{red} why did you add $-1$ to the set of masses?}
         such that $\sum_{i =1}^{n} m_i = 1$, terminals $P=\{p_0, p_1, \dots, p_n\}$ and
         a cost parameter $\alpha \in (0,1)$, consider a branching point $s$ with two branches attached to it,
         calling the angle between them $\theta$ and defining $m_{\min} = \min_{i \in P^+} m_i$ it holds that:
@@ -772,7 +784,7 @@
         If $\alpha > 1/2$, define the ratio $r$ as:
         \begin{equation}
             \label{eq:ratio_definition}
-            r = \max \left\{ \frac{m_i}{m_j} \text{  s.t.  } A_i, A_j \subseteq M, A_i \cap A_j = \emptyset, m_i = \sum_{k \in A_i} m_k, m_j = \sum_{k \in A_j} m_k, m_i \le m_j \right\}
+            r = \max \left\{ \frac{m_1}{m_2} \text{  s.t.  } A_1, A_2 \subseteq M, A_1 \cap A_2 = \emptyset, m_1 = \sum_{k \in A_1} m_k, m_2 = \sum_{k \in A_2} m_k, m_1 \le m_2 \right\}
         \end{equation}
 
         Then the following bound holds:
@@ -793,6 +805,8 @@
         Where $C$ is the function defined in~\ref{definition:spherical_cap_results}.
     \end{lemma}
 
+    TODO: above lemma has formatting issues
+    
     \begin{corollary}
         At a branching point outside of the support of $P$, conservation of flow holds. Therefore, there is
         at least one incoming edge and one outgoing edge. Given this, the bound can be slightly improved using a strategy
@@ -800,16 +814,42 @@
     \end{corollary}
     
     \begin{remark}
-        Finding $r$ as in~\ref{eq:ratio_definition} is likely a computationally difficult problem, so a heuristic approach could be used to find a good approximation.
-        However, since an upper bound on the ratio (rather than a lower bound) is required, the problem becomes more challenging—
-        a feasible solution is not sufficient, and a relaxation guarantee or a dual solution is needed. Empirical observations
-        from (TODO: include experiments from the notebooks) and~\ref{fig:first_bound_a_ge_1-2} indicate that for most mass distributions,
-        there exist subsets with a ratio close to 1, and that even with a $30\%$ error, little is gained in terms of improvement.
-        Therefore, from a computational standpoint, it may be reasonable to use $2^{2\alpha - 1} - 1$ as the bound.
+        Finding $r$ as in~\ref{eq:ratio_definition} is almost equivalent to the subset sum problem, an NP-hard problem where the goal is to determine whether two disjoint subsets with equal sum exist.
+        To compute $r$, the goal is to find two disjoint subsets with a sum that is as close as possible, using the ratio as a measure of closeness.
+        (TODO: quasi meriterebbe una sua proof, insomma è una riduzione NP-hard)
+        There is therefore a natural reduction, if one can compute the ratio $r$ in polynomial time, 
+        then it is possible to solve the subset sum problem in polynomial time by testing whether $r=1$, which proves that finding $r$ is NP-hard.
+        Luckily, when dealing with the DBT problem, $n \le 10$, so the amount of subsets to test is order of $2^{10} \approx 1000$, 
+        which is feasible in practice.
+        It is worth noting that in practice, also an upper bound on $r$ can be used, but clearly $r\le1$ and finding whether $r=1$ 
+        is NP-hard, as already mentioned.
+        In practice, due to the random nature of the mass distributions, it is more useful to try to understand the distribution of
+        $r$, instead of performing a worst-case complexity analysis. As evincible from figure \ref{fig:first_bound_a_ge_1-2}, even with 
+        a ratio of $r=0.7$, the bound is already very close to the optimal value. This, together with the fact that by sampling 
+        random masses, the probability of finding a ratio $r$ close to 1 is very high, leads to the conclusion that for practical 
+        purposes, it is reasonable to use $2^{2\alpha - 1} - 1$ as the bound. This is further supported by the experiments in 
+        \ref{fig:bounds_alpha_0_0.5_with_experiments} and \ref{fig:bounds_alpha_0_1_with_experiments}, with commented results.
+        
     \end{remark}
-    
+
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{bounds_alpha_0_1_with_experiments}
+        \centering
+        \caption{Plot of the instance specific bound for varying $\alpha$. Clearly, for $\alpha \ge 1/2$, the bound is practically exact to the theoretical value even at $n=5$. Reported error bars are the standard deviation of $20$ random instances.}
+        \label{fig:bounds_alpha_0_1_with_experiments}
+    \end{figure}
+
+    \begin{figure}[h]
+        \includegraphics[scale=0.5]{bounds_alpha_0_0.5_with_experiments}
+        \centering
+        \caption{Zoom-in of the instance specific bound for $\alpha \le 1/2$ with the same methodology as in figure~\ref{fig:bounds_alpha_0_1_with_experiments}. In this case,
+        the bound is significantly lower, even at $n=300$, showing that this instance-specific approach can lead to better formulations.}
+        \label{fig:bounds_alpha_0_0.5_with_experiments}
+    \end{figure}
 
     \begin{proof}
+        TODO: needs to be checked.
 
         The proof proceeds in a manner similar to~\ref{lemma:bound_general_direction}, but instead of taking the $\sup$
         over $m_1, m_2 \in [0,1]$, the maximization is performed under the constraint that the masses on the branches $m_i, m_j$ are combinations of masses in $M$.
@@ -817,7 +857,7 @@
         Two bounds must be considered: the first applies to the case where both edges flow outward,
         while the second applies to the case where one edge flows outward and the other inward.
     
-        % TODO: consider renaming "first/second bound" to more descriptive labels
+        TODO: consider renaming "first/second bound" to more descriptive labels
     
         \subsubsection*{Optimizing the first bound}
         The goal is to maximize:
@@ -880,7 +920,7 @@
     \begin{figure}[h]
         \includegraphics[scale=0.5]{f_diff_m1_m2}
         \centering
-        \caption{Plot of the second bound}
+        \caption{Plot of the second bound TODO: c'è già l'altra figura quindi questa magari possiamo toglierla}
         \label{fig:second_bound}
     \end{figure}
 
@@ -921,7 +961,7 @@
 
     \end{proof}
 
-    \subsection{Uniform bound on length of fibers}
+    \subsection{Uniform bound on length of fibers OLD}
 
     As mentioned in the open problems section of~\cite[Chapter 15, question 13]{Bernot}, one of the open questions is whether the length of the fibers
     $\chi(\omega, \cdot)$ is uniformly bounded. The first step is to prove this result for fixed $\mu^\pm$ and then extend to a uniform bound over all the possible measures.
@@ -1001,6 +1041,84 @@
     and its optimal transport parametrization is more complex than a straight line but I wouldn't know how to use this.
 
     TODO: maybe add the new way to propose a contradiction as the set with existence that i have saved as a picture of a whiteboard
+
+
+    \subsection{Uniform bound on length of fibers NEW}
+
+    As mentioned in the open problems section of~\cite[Chapter 15, question 13]{Bernot}, one of the open questions is whether the length of the fibers
+    $\chi(\omega, \cdot)$ is uniformly bounded. The first step is to prove this result for fixed $\mu^\pm$ and then extend to a uniform bound over all the possible measures.
+    This section is dedicated to an attempt to prove this result: the only conclusion drawn is that the length of the fibers is uniformly bounded if along any 
+    trajectory the density of the fiber decreases at most polynomially. This is quite informative as it shows that the hard part of the problem regards only the instances
+    where the density decays faster than polynomially, which also imply that fibers over some length $L$ do not contribute much to the cost of the optimal solution.
+
+    The proof is based on a contradiction argument: we assume that there exists a fiber with arbitrarily large length and show the existence of a better competitor.
+    TODO: include picture of the taglio and cucito technique.
+
+    What we want to show is that, for fixed $\alpha$, $\mu^+$ and $\mu^-$, the optimal transport parametrization $\chi$
+    is equibounded in the sense that there is no path $\gamma$ that is non self-intersecting and such that $|\gamma(t)|_\chi$ is decreasing and positive
+    for every $t$.
+    The idea of the proof is to assume that there is such a path and show that it is not optimal by finding a better competitor.
+    Without loss of generality, we can assume that $\gamma$ is parametrized by arc length and that $\gamma(0) = 1$.
+    We define a competitor $\tilde\chi$ as the union of two paths, $\tilde{\gamma}$ and $\tilde{\psi}$, defined as follows:
+    \begin{align*}
+        |\tilde{\gamma}(t)| &= |\gamma(t)| - |\gamma(K)| \quad \text{for } t \in [0, K] \\
+        |\tilde{\gamma}(t)| &= |\gamma(t)| \quad \text{for } t \in [K, \infty) \\
+        \tilde{\gamma}(t) &= \gamma(t) \quad \text{for } t \in [0, \infty) \\
+        |\tilde{\psi}(t)| &= \gamma(K) \\
+        \tilde{\psi}(t) &= \text{Straight line from } \gamma(0) \text{ to } \gamma(K)
+    \end{align*}
+
+    Basically, we cut from the beginning of $\gamma$ the part that is longer than $|\gamma(K)|$ and we add a straight line from
+    $\gamma(0)$ to $\gamma(K)$. We can arbitrarily start from 0 as we can just shift the path to the right and look at the restriction,
+    rescaling it so that it has mass 1.
+
+    Therefore, the inequality to show is:
+    \begin{align}
+        E^\alpha(\tilde{\chi}) - E^\alpha(\chi) &\le 0  \\
+        \int_0^K \gamma(t)^\alpha - \left[ \gamma(t) - \gamma(K) \right] ^ \alpha &> \gamma(t)^\alpha diam(X) \label{eq:inequality_to_show}
+    \end{align}
+
+    The key idea is to leverage the following bound:
+    \begin{align}
+        x^\alpha - (x - a)^\alpha &= x^\alpha \left[ 1 - \left( 1 - \frac{a}{x} \right)^\alpha\right] \\
+        &\ge (2a)^\alpha \left[ 1 - \left( 1 - \frac{1}{2} \right)^\alpha\right] \quad \text{for } x \ge 2a \\
+        &= (2a)^\alpha \left[ 1 - 2^{-\alpha} \right] \\
+    \end{align}
+
+    We can now substitute $x=\gamma(t)$ and $a=\gamma(K)$, which gives us:
+    \begin{equation}
+        \gamma(t)^\alpha - \left[ \gamma(t) - \gamma(K) \right] ^ \alpha \ge (2\gamma(K))^\alpha \left[ 1 - 2^{-\alpha} \right] = C_\alpha \gamma(K)^\alpha        
+    \end{equation}
+
+    With $C_\alpha > 0$ constant that depends only on $\alpha$.
+    Therefore, we can rewrite the LHS of inequality~\ref{eq:inequality_to_show} as:
+    \begin{align}
+        \int_0^K \gamma(t)^\alpha - \left[ \gamma(t) - \gamma(K) \right] ^ \alpha  \, dt &\ge \int_0^{\tau(K)} \gamma(t)^\alpha - \left[ \gamma(t) - \gamma(K) \right] ^ \alpha \, dt \\
+        &\ge C_\alpha \int_0^{\tau(K)} \gamma(K)^\alpha \, dt \\
+    \end{align}
+
+    Where $\tau(K) = \sup \{ t \in [0,K] : \gamma(t) \ge 2\gamma(K) \}$.
+
+    Then, \ref{eq:inequality_to_show} is true if:
+    \begin{equation}
+        C_\alpha \tau(K) \gamma(K)^\alpha \ge \gamma(K)^\alpha diam(X)
+    \end{equation}
+    For some $K > 0$. This amounts to showing that $\tau(K) \to \infty$ as $K \to \infty$.
+
+    It is known that $\gamma$ is a decreasing positive function that converges to $0$ as $t \to \infty$. 
+    
+    Therefore, for any arbitrarily large $T$, there exists a $T' > T$ such that $\gamma(T') < \gamma(T) / 2$.
+    This implies that $\tau(T') \ge T$, which means that $\tau(K) \to \infty$ as $K \to \infty$.
+    Crucially, the strict inequality $\gamma(t) > 0$ has been used, equivalently to saying that the path $\gamma$ 
+    always has positive mass.
+
+    Therefore, it has been shown that the length of a single fiber is bounded, which is a first step towards 
+    proving that the length of all fibers is uniformly bounded.
+    
+
+
+
+
 
     \subsection{Conterexamples (todo: find a more evocative name)}
 
@@ -1436,7 +1554,7 @@
     To achieve this we introduce additional bilinear terms $w_{ij}$ in order to make the objective function convex.
     TODO: fix margins and use the new name in the other text
     \begin{align}
-        \text{(DBTQ)}: \; & \\
+        \text{(DBTQ)}: \; & \label{formulation:dbtq} \\
         \textbf{y-polytope:} \quad & \sum_{t \in T \setminus \{1\}} y_{s,s'} + \sum_{s' \in S, s < s'} y_{s,s'} = 2 \quad \forall s \in S \quad \text{(each Steiner has two kids)} \\
         & \sum_{s' \in S, s' < s} y_{s',s} = 1 \quad \forall s \in S \setminus \{1\} \quad \text{(each Steiner has a Steiner parent)} \\
         & \sum_{s \in S} y_{s,t} = 1 \quad \forall t \in T \quad \text{(each terminal is a leaf)} \\
@@ -1527,7 +1645,7 @@
         \label{tab:relaxation_results}
     \end{table*}
 
-    In \ref{dbtq TODO} there are two non-linear constraints: $w$ is a bilinear term and $y$ is a binary variable. 
+    In \ref{formulation:dbtq} there are two non-linear constraints: $w$ is a bilinear term and $y$ is a binary variable. 
     It is interesting to study the quality of the solution obtained by relaxing such constraints. For the binary constraints,
     $y$ is relaxed to be a continuous variable in $[0,1]$ and for the bilinear term $w=xy$ the \textit{McCormick envelope} is used:
     \begin{align}
@@ -1600,8 +1718,6 @@
     \subsection{Implementing flows}
 
     In order to solve the problem with alpha != 0 we need to implement the flow constraints as in the \ref{todo}.
-
-    todo: graph with performance of this method
 
 
     \begin{figure}[h]
@@ -1689,7 +1805,7 @@
     For instance, the case of a logarithmic cost function has been studied and results are plotted in TODO: aggiungi immagini
 
     It is also possible to add in the objective a cost for each junction $x$. This double counts branching points with degeneracy, so one needs to be careful when using it
-    but as a proof of concept, the performance has been plotted in TODO: FAI GRAFICO along with some example solutions TOOD: FAI PURE QUESTO.
+    but as a proof of concept, the performance has been plotted in TODO: graph with some example solutions 
 
     Of course, some of the properties of the solution might change: in the backbone formulation \ref{dbtq} the only assumptions are the tree structure and the
     convex hull property. Stronger results, such as \ref{geometric 50 cut} are not guaranteed to hold anymore and should be disabled in the solver.
